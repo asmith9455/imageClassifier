@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="dataTypes">
+      <UniqueIdentifier>{3c12c444-98cf-4070-95b8-96168127cdc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="classifierAlgorithms">
+      <UniqueIdentifier>{e2028767-afbe-4def-89de-190be5bb0b74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="trainingDataManager">
+      <UniqueIdentifier>{f5c43ee6-e06a-4bd8-88d8-7f5951d12af8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system">
+      <UniqueIdentifier>{8cac47db-71df-4435-90ef-bc503481b924}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="testing">
+      <UniqueIdentifier>{720a55b5-d895-48a6-b6bb-2793da45978c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\classifierAlgorithms\ColourStatisticsAnalyzer.cpp">
+      <Filter>classifierAlgorithms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\classifierAlgorithms\ImageClassifier.cpp">
+      <Filter>classifierAlgorithms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\classifierAlgorithms\ImageSequence.cpp">
+      <Filter>classifierAlgorithms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\system\SystemCall.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main.cpp" />
+    <ClCompile Include="..\..\dataTypes\Img.cpp">
+      <Filter>dataTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dataTypes\RgbHistogram.cpp">
+      <Filter>dataTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\trainingDataManager\ImgDbManager.cpp">
+      <Filter>trainingDataManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ProgramManager.cpp" />
+    <ClCompile Include="..\..\testing\testing.cpp">
+      <Filter>testing</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\classifierAlgorithms\ColourStatisticsAnalyzer.h">
+      <Filter>classifierAlgorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\classifierAlgorithms\ImageClassifier.h">
+      <Filter>classifierAlgorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\classifierAlgorithms\ImageSequence.h">
+      <Filter>classifierAlgorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\system\applicationDefines.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\system\SystemCall.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dataTypes\Img.h">
+      <Filter>dataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dataTypes\RgbHistogram.h">
+      <Filter>dataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\trainingDataManager\ImgDbManager.h">
+      <Filter>trainingDataManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ProgramManager.h" />
+    <ClInclude Include="..\..\testing\testing.h">
+      <Filter>testing</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
