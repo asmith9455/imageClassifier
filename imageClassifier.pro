@@ -12,6 +12,24 @@ TARGET = imageClassifier
 TEMPLATE = app
 
 
+#add the various project subfolder to the includepath so that changes to project structure don't require lots of changes to include statements.
+INCLUDEPATH +=  $$PWD/classifierAlgorithms\
+                C:\opencv_3_2_0\build\include\
+                $$PWD/dataTypes\
+                $$PWD/system\
+                $$PWD/testing\
+                $$PWD/trainingDataManager\
+
+#link against opencv
+LIBS += C:/opencv_3_2_0/build/x64/vc14/lib/opencv_world320.lib
+
+
+#add the opencvdll location to the system path
+QMAKE_EXTRA_TARGETS += customtarget1
+customtarget1.target = dummy
+customtarget1.commands = set PATH=C:\opencv_3_2_0\build\x64\vc14\bin;$(PATH)
+PRE_TARGETDEPS += dummy
+
 SOURCES += main.cpp\
         mainwindow.cpp \
     classifierAlgorithms/ColourStatisticsAnalyzer.cpp \

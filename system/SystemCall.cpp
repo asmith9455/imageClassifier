@@ -21,16 +21,16 @@ vector<string> SystemCall::get_all_files_names_within_folder(string folder)
 {
 	vector<string> names;
 	string search_path = folder + "/*.*";
-	WIN32_FIND_DATA fd;
-	HANDLE hFind = ::FindFirstFile(search_path.c_str(), &fd);
+    LPWIN32_FIND_DATAA fd = NULL;
+    HANDLE hFind = ::FindFirstFileA(search_path.c_str(), fd);
 	if (hFind != INVALID_HANDLE_VALUE) {
 		do {
 			// read all (real) files in current folder
 			// , delete '!' read other 2 default folder . and ..
-			if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-				names.push_back(fd.cFileName);
+            if (!(fd->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+                names.push_back(fd->cFileName);
 			}
-		} while (::FindNextFile(hFind, &fd));
+        } while (::FindNextFileA(hFind, fd));
 		::FindClose(hFind);
 	}
 	return names;

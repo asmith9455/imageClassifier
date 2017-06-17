@@ -19,7 +19,7 @@ public:
 	cv::Mat imageAt(int index);
 	std::string imagePathAt(int index);
 	std::string imageFileNameAt(int index);
-	int getimageCount();
+    size_t getimageCount();
 	std::string getDirectory();
 
 	static ImageSequence getRandomImageSequence(ImageSequence seq, int numElements);

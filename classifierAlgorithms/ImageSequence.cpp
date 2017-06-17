@@ -10,8 +10,8 @@ ImageSequence::ImageSequence(std::string _directory)
 	imageFileNames.clear();
 	std::vector<std::string> files = SystemCall::get_all_files_names_within_folder(directory);
 
-	int filesLength = files.size();
-	for (int i = 0; i < filesLength; i++)
+    size_t filesLength = files.size();
+    for (size_t i = 0; i < filesLength; i++)
 	{
 		std::string filename = files[i];
 		std::string path = directory + "/" + filename;
@@ -44,7 +44,7 @@ std::string ImageSequence::imageFileNameAt(int index)
 	return imageFileNames[index];
 }
 
-int ImageSequence::getimageCount()
+size_t ImageSequence::getimageCount()
 {
 	return images.size();
 }
