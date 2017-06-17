@@ -1,8 +1,0 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
-
-/_vs/imageClassifier/x64/Debug
-/_vs/x64/Debug
-/_vs/imageClassifier.VC.db
-/_vs/.vs/imageClassifier/v14

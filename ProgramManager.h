@@ -1,7 +1,7 @@
 #pragma once
-#include "applicationDefines.h"
-#include "ColourStatisticsAnalyzer.h"
-#include "ImageSequence.h"
+#include <applicationDefines.h>
+#include <ColourStatisticsAnalyzer.h>
+#include <ImageSequence.h>
 
 #include <iostream>
 #include <chrono>
