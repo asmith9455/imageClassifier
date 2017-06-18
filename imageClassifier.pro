@@ -14,17 +14,19 @@ TEMPLATE = app
 
 #add the various project subfolder to the includepath so that changes to project structure don't require lots of changes to include statements.
 INCLUDEPATH +=  $$PWD/classifierAlgorithms\
-                C:\opencv_3_2_0\build\include\
+                C:/opencv_3_2_0/build/include\
+                C:/sqlite3\
                 $$PWD/dataTypes\
                 $$PWD/system\
                 $$PWD/testing\
                 $$PWD/trainingDataManager\
 
 #link against opencv
-LIBS += C:/opencv_3_2_0/build/x64/vc14/lib/opencv_world320.lib
+LIBS += C:/opencv_3_2_0/build/x64/vc14/lib/opencv_world320.lib\
+        C:/sqlite3/sqlite3.lib
 
 
-#add the opencvdll location to the system path
+#add the opencvdll location to the system path for building the program
 QMAKE_EXTRA_TARGETS += customtarget1
 customtarget1.target = dummy
 customtarget1.commands = set PATH=C:\opencv_3_2_0\build\x64\vc14\bin;$(PATH)
@@ -40,7 +42,8 @@ SOURCES += main.cpp\
     system/SystemCall.cpp \
     testing/testing.cpp \
     trainingDataManager/ImgDbManager.cpp \
-    ProgramManager.cpp
+    ProgramManager.cpp \
+    manageTrainingDataForm.cpp
 
 HEADERS  += mainwindow.h \
     classifierAlgorithms/ColourStatisticsAnalyzer.h \
@@ -52,9 +55,11 @@ HEADERS  += mainwindow.h \
     system/SystemCall.h \
     testing/testing.h \
     trainingDataManager/ImgDbManager.h \
-    ProgramManager.h
+    ProgramManager.h \
+    manageTrainingDataForm.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    manageTrainingDataForm.ui
 
 DISTFILES += \
     README.md
