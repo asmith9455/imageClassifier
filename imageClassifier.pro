@@ -11,6 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = imageClassifier
 TEMPLATE = app
 
+QT += sql
 
 #add the various project subfolder to the includepath so that changes to project structure don't require lots of changes to include statements.
 INCLUDEPATH +=  $$PWD/classifierAlgorithms\

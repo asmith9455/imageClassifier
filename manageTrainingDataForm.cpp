@@ -209,6 +209,8 @@ void manageTrainingDataForm::on_btn_addCaptureDevice_clicked()
 
     storeCaptureDevice(name, imageWidth, imageHeight, bytesPerPixel);
 
+    updateCaptureDeviceTableFromDb();
+
 }
 
 void manageTrainingDataForm::on_btn_selectDatabase_clicked()
@@ -218,4 +220,90 @@ void manageTrainingDataForm::on_btn_selectDatabase_clicked()
                                tr("(*.sqlite)"));
 
     this->currentDbPath = fileName;
+
+    QSqlDatabase test = QSqlDatabase::addDatabase("QSQLITE");
+    test.setDatabaseName(fileName);
+
+    updateCaptureDeviceTableFromDb();
+
+}
+
+void manageTrainingDataForm::updateCaptureDeviceTableFromDb()
+{
+    QSqlDatabase test = QSqlDatabase::addDatabase("QSQLITE");
+    test.setDatabaseName(this->currentDbPath);
+
+    if (!test.open())
+    {
+        QMessageBox::critical(this, "Error", "Could not update capture device table.",
+            QMessageBox::Ok);
+        return;
+    }
+
+    QSqlTableModel *model = new QSqlTableModel(this,test);
+    model->setTable("captureDevices");
+    model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    model->select();
+    model->setHeaderData(0, Qt::Horizontal, tr("id"));
+    model->setHeaderData(1, Qt::Horizontal, tr("name"));
+    model->setHeaderData(2, Qt::Horizontal, tr("imageWidth"));
+    model->setHeaderData(3, Qt::Horizontal, tr("imageHeight"));
+    model->setHeaderData(4, Qt::Horizontal, tr("bytesPerPixel"));
+    ui->tableView_captureDevices->setModel(model);
+
+    test.close();
+
+}
+
+void manageTrainingDataForm::on_btn_deleteSelectedCaptureDevice_clicked()
+{
+    QItemSelectionModel *select = ui->tableView_captureDevices->selectionModel();
+
+    bool selectionMade = select->hasSelection();
+
+    if (!selectionMade)
+    {
+        QMessageBox::information(this, "Information", "No selection made - nothing will be deleted.",
+            QMessageBox::Ok);
+    }
+
+    QModelIndexList rows = select->selectedRows();
+
+    for(int i=0; i< rows.count(); i++)
+    {
+        QModelIndex index = rows.at(i); //get the current row
+        int id = index.sibling(index.row(), 0).data().toInt();    //get the id (primary key) of the capture device to delete
+
+        //run an sql query to delete the device
+        sqlite3 *db;
+        int rc;
+
+        rc = sqlite3_open(this->currentDbPath.toLatin1().data(), &db);
+
+        sqlite3_stmt *dat = NULL;
+        char** errMsg = NULL;
+
+        QString sqlqstr = "DELETE FROM captureDevices WHERE id = " + QString::number(id) + ";";
+
+
+
+        rc = sqlite3_exec(db, sqlqstr.toLatin1().data(), &manageTrainingDataForm::nullCallback, dat, errMsg);
+
+        if (rc != SQLITE_OK)
+        {
+            QString errMsg2;
+            errMsg2 = QString("Deletion failed.");
+            QMessageBox::critical(this, "Error", errMsg2,
+                QMessageBox::Ok);
+        }
+
+        sqlite3_close(db);
+
+    }
+
+    updateCaptureDeviceTableFromDb();
+
+
+
+    //select->selectedColumns();
 }
