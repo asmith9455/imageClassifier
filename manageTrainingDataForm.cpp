@@ -18,11 +18,26 @@ int manageTrainingDataForm::nullCallback(void *NotUsed, int argc, char **argv, c
     return 0;
 }
 
+
+
+
+
 void manageTrainingDataForm::on_btn_createImgDb_clicked()
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Create Image Database"),
                                "C:/",
                                tr("(*.sqlite)"));
+
+    if (dbOpened)
+    {
+        database.close();
+    }
+    else
+    {
+        database = QSqlDatabase::addDatabase("QSQLITE");
+    }
+
+    database.setDatabaseName(fileName);
 
     sqlite3 *db;
     int rc; // This line
@@ -94,7 +109,6 @@ void manageTrainingDataForm::on_btn_createImgDb_clicked()
     sql = "CREATE TABLE images("\
                 "id                                       INTEGER PRIMARY KEY NOT NULL,"\
                 "image                                    BLOB NOT NULL,"\
-                "captureDate                              TEXT NOT NULL,"\
                 "captureDevice                            INTEGER,"\
                 "FOREIGN KEY(captureDevice) REFERENCES 	  captureDevices(id)"\
                 ");";
@@ -163,53 +177,17 @@ void manageTrainingDataForm::on_btn_createImgDb_clicked()
 
     sqlite3_close(db);
 
-    this->currentDbPath = fileName;
-
-}
-
-void manageTrainingDataForm::storeCaptureDevice(QString name, QString imageWidth, QString imageHeight, QString bytesPerPixel)
-{
-    sqlite3 *db;
-    int rc;
-
-    rc = sqlite3_open(this->currentDbPath.toLatin1().data(), &db);
-
-    sqlite3_stmt *dat = NULL;
-    char** errMsg = NULL;
-    QString sqlqstr = "INSERT INTO captureDevices (name, imageWidth, imageHeight, bytesPerPixel) VALUES (\""
-            + name + "\", "
-            + imageWidth + ", "
-            + imageHeight + ", "
-            + bytesPerPixel+");";
-
-
-
-    rc = sqlite3_exec(db, sqlqstr.toLatin1().data(), &manageTrainingDataForm::nullCallback, dat, errMsg);
-
-    if (rc != SQLITE_OK)
+    if (!database.open())
     {
-        QString errMsg2;
-        if (rc == 19)
-            errMsg2 = QString("Identical capture device already exists in database.");
-        else
-            errMsg2 = QString("Failed to add the capture device to the database. Make sure the database exists.");
-        QMessageBox::critical(this, "Error", errMsg2,
+        QMessageBox::critical(this, "Error", "Could not open a connection to the database.",
             QMessageBox::Ok);
+        dbOpened = false;
+        return;
     }
+    dbOpened = true;
 
-    sqlite3_close(db);
-}
+    ui->label_status->setText("Created and opened database " + database.databaseName());
 
-void manageTrainingDataForm::on_btn_addCaptureDevice_clicked()
-{
-    QString name = ui->lineEdit_name->text();
-    QString imageWidth = ui->lineEdit_imageWidth->text();
-    QString imageHeight = ui->lineEdit_imageHeight->text();
-    QString bytesPerPixel = ui->lineEdit_bytesPerPixel->text();
-
-    storeCaptureDevice(name, imageWidth, imageHeight, bytesPerPixel);
-
-    updateCaptureDeviceTableFromDb();
 
 }
 
@@ -219,28 +197,205 @@ void manageTrainingDataForm::on_btn_selectDatabase_clicked()
                                "C:/",
                                tr("(*.sqlite)"));
 
-    this->currentDbPath = fileName;
 
-    QSqlDatabase test = QSqlDatabase::addDatabase("QSQLITE");
-    test.setDatabaseName(fileName);
+    if (dbOpened)
+    {
+        database.close();
+    }
+
+    database = QSqlDatabase::addDatabase("QSQLITE");
+    database.setDatabaseName(fileName);
+
+    if (!database.open())
+    {
+        QMessageBox::critical(this, "Error", "Could not open a connection to the database.",
+            QMessageBox::Ok);
+        dbOpened = false;
+        return;
+    }
+    dbOpened = true;
+
+    updateAllTables();
+
+    ui->label_status->setText("Selected database " + database.databaseName());
+
+}
+
+
+
+
+
+
+void manageTrainingDataForm::storeCaptureDevice(QString name, int imageWidth, int imageHeight, int bytesPerPixel)
+{
+
+    QSqlQuery qry;
+
+    qry.prepare("INSERT INTO captureDevices (name, imageWidth, imageHeight, bytesPerPixel)"
+                    "VALUES(:W_name,:W_imageWidth,:W_imageHeight,:W_bytesPerPixel)");
+
+    qry.bindValue(":W_name",name);
+    qry.bindValue(":W_imageWidth",imageWidth);
+    qry.bindValue(":W_imageHeight",imageHeight);
+    qry.bindValue(":W_bytesPerPixel",bytesPerPixel);
+
+    if (!qry.exec())
+    {
+        QMessageBox::critical(this, "Error", "Could not insert the capturedevice. Error is: " + qry.lastError().text(),
+            QMessageBox::Ok);
+        return;
+    }
+    ui->label_status->setText("Inserted capture device " + name + " into " + database.databaseName());
+
+}
+
+void manageTrainingDataForm::storeProperty(QString propertyName)
+{
+    QSqlQuery qry;
+
+    qry.prepare("INSERT INTO properties (property)"
+                    "VALUES(:W_name)");
+
+    qry.bindValue(":W_name",propertyName);
+
+    if (!qry.exec())
+    {
+        QMessageBox::critical(this, "Error", "Could not insert the property. Error is: " + qry.lastError().text(),
+            QMessageBox::Ok);
+        return;
+    }
+    ui->label_status->setText("Inserted property " + propertyName + " into " + database.databaseName());
+}
+
+QByteArray manageTrainingDataForm::mat2ByteArray(const cv::Mat &image)
+{
+    QByteArray byteArray;
+    QDataStream stream( &byteArray, QIODevice::WriteOnly );
+    stream << image.type();
+    stream << image.rows;
+    stream << image.cols;
+    const size_t data_size = image.cols * image.rows * image.elemSize();
+    QByteArray data = QByteArray::fromRawData( (const char*)image.ptr(), data_size );
+    stream << data;
+    return byteArray;
+}
+
+cv::Mat manageTrainingDataForm::byteArray2Mat(const QByteArray & byteArray)
+{
+    QDataStream stream(byteArray);
+    int matType, rows, cols;
+    QByteArray data;
+    stream >> matType;
+    stream >> rows;
+    stream >> cols;
+    stream >> data;
+    cv::Mat mat( rows, cols, matType, (void*)data.data() );
+    return mat.clone();
+}
+
+void manageTrainingDataForm::storeImage(int captureDeviceReference, cv::Mat image)
+{
+    QSqlQuery qry;
+
+    qry.prepare("INSERT INTO images (image, captureDevice)"
+                    "VALUES(:W_image, :W_captureDevice)");
+
+    qry.bindValue(":W_image",manageTrainingDataForm::mat2ByteArray(image));
+    qry.bindValue(":W_captureDevice",captureDeviceReference);
+
+    if (!qry.exec())
+    {
+        QMessageBox::critical(this, "Error", "Could not insert the property. Error is: " + qry.lastError().text(),
+            QMessageBox::Ok);
+        return;
+    }
+    ui->label_status->setText("Inserted image into " + database.databaseName());
+}
+
+
+
+
+
+void manageTrainingDataForm::on_btn_addCaptureDevice_clicked()
+{
+    QString name = ui->lineEdit_name->text();
+    QString imageWidth = ui->lineEdit_imageWidth->text();
+    QString imageHeight = ui->lineEdit_imageHeight->text();
+    QString bytesPerPixel = ui->lineEdit_bytesPerPixel->text();
+
+    storeCaptureDevice(name, imageWidth.toInt(), imageHeight.toInt(), bytesPerPixel.toInt());
 
     updateCaptureDeviceTableFromDb();
 
 }
 
-void manageTrainingDataForm::updateCaptureDeviceTableFromDb()
+void manageTrainingDataForm::on_btn_addProperty_clicked()
 {
-    QSqlDatabase test = QSqlDatabase::addDatabase("QSQLITE");
-    test.setDatabaseName(this->currentDbPath);
+    QString name = ui->lineEdit_propertyName->text();
 
-    if (!test.open())
+    storeProperty(name);
+
+    updatePropertiesTableFromDb();
+}
+
+void manageTrainingDataForm::on_btn_selectImageToAdd_clicked()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Select Image Database"),
+                               "C:/",
+                               tr("Images(*.png *.bmp *.tiff *.jpg *.gif);;Any(*.*)"));
+
+
+    imgToStore = cv::imread(fileName.toStdString(), CV_LOAD_IMAGE_COLOR);
+    ui->label_selectedPic->setPixmap(QPixmap(fileName));
+    ui->label_selectedPic->setScaledContents(true);
+
+    ui->label_status->setText("Loaded picture at " + fileName );
+    ui->label_imageStatus->setText("Picture from disk: " + fileName);
+
+}
+
+void manageTrainingDataForm::on_btn_addImgToDb_clicked()
+{
+    QItemSelectionModel *select = ui->tableView_captureDevicesForImage->selectionModel();
+
+    bool selectionMade = select->hasSelection();
+
+    if (!selectionMade)
     {
-        QMessageBox::critical(this, "Error", "Could not update capture device table.",
+        QMessageBox::information(this, "Information", "Please select a capture device.",
             QMessageBox::Ok);
         return;
     }
 
-    QSqlTableModel *model = new QSqlTableModel(this,test);
+    QModelIndexList rows = select->selectedRows();
+
+    QModelIndex index = rows.at(0); //get the first selected capture device
+
+    int id = index.sibling(index.row(), 0).data().toInt();    //get the id (primary key) of the capture device to delete - this will be used as the foreign key in the images table
+
+    storeImage(id, this->imgToStore);
+
+
+    ui->label_status->setText("Added image to database at " + database.databaseName());
+}
+
+
+
+
+
+
+
+void manageTrainingDataForm::updateAllTables()
+{
+    updateCaptureDeviceTableFromDb();
+    updatePropertiesTableFromDb();
+    updateImagesTableFromDb();
+}
+
+void manageTrainingDataForm::updateCaptureDeviceTableFromDb()
+{
+
+    QSqlTableModel *model = new QSqlTableModel(this,database);
     model->setTable("captureDevices");
     model->setEditStrategy(QSqlTableModel::OnManualSubmit);
     model->select();
@@ -250,10 +405,39 @@ void manageTrainingDataForm::updateCaptureDeviceTableFromDb()
     model->setHeaderData(3, Qt::Horizontal, tr("imageHeight"));
     model->setHeaderData(4, Qt::Horizontal, tr("bytesPerPixel"));
     ui->tableView_captureDevices->setModel(model);
-
-    test.close();
+    ui->tableView_captureDevicesForImage->setModel(model);
 
 }
+
+void manageTrainingDataForm::updatePropertiesTableFromDb()
+{
+
+    QSqlTableModel *model = new QSqlTableModel(this,database);
+    model->setTable("properties");
+    model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    model->select();
+    model->setHeaderData(0, Qt::Horizontal, tr("id"));
+    model->setHeaderData(1, Qt::Horizontal, tr("property"));
+    ui->tableView_properties->setModel(model);
+
+}
+
+void manageTrainingDataForm::updateImagesTableFromDb()
+{
+    QSqlTableModel *model = new QSqlTableModel(this,database);
+    model->setTable("images");
+    model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    model->select();
+    model->setHeaderData(0, Qt::Horizontal, tr("id"));
+    model->setHeaderData(1, Qt::Horizontal, tr("image"));
+    model->setHeaderData(2, Qt::Horizontal, tr("captureDevice"));
+    ui->tableView_images->setModel(model);
+}
+
+
+
+
+
 
 void manageTrainingDataForm::on_btn_deleteSelectedCaptureDevice_clicked()
 {
@@ -265,7 +449,10 @@ void manageTrainingDataForm::on_btn_deleteSelectedCaptureDevice_clicked()
     {
         QMessageBox::information(this, "Information", "No selection made - nothing will be deleted.",
             QMessageBox::Ok);
+        return;
     }
+
+    std::vector<QString> deletedDevs;
 
     QModelIndexList rows = select->selectedRows();
 
@@ -273,37 +460,118 @@ void manageTrainingDataForm::on_btn_deleteSelectedCaptureDevice_clicked()
     {
         QModelIndex index = rows.at(i); //get the current row
         int id = index.sibling(index.row(), 0).data().toInt();    //get the id (primary key) of the capture device to delete
+        QString name = index.sibling(index.row(), 1).data().toString();
+        deletedDevs.push_back(name);
 
         //run an sql query to delete the device
-        sqlite3 *db;
-        int rc;
-
-        rc = sqlite3_open(this->currentDbPath.toLatin1().data(), &db);
-
-        sqlite3_stmt *dat = NULL;
-        char** errMsg = NULL;
-
         QString sqlqstr = "DELETE FROM captureDevices WHERE id = " + QString::number(id) + ";";
 
+        QSqlQuery tmp = database.exec(sqlqstr);
 
-
-        rc = sqlite3_exec(db, sqlqstr.toLatin1().data(), &manageTrainingDataForm::nullCallback, dat, errMsg);
-
-        if (rc != SQLITE_OK)
-        {
-            QString errMsg2;
-            errMsg2 = QString("Deletion failed.");
-            QMessageBox::critical(this, "Error", errMsg2,
+        if (!tmp.exec())
+            QMessageBox::critical(this, "Error", "Could not delete the capturedevice. Error is: " + tmp.lastError().text(),
                 QMessageBox::Ok);
-        }
-
-        sqlite3_close(db);
 
     }
 
     updateCaptureDeviceTableFromDb();
 
+    QString statusMessage = "Deleted ";
+
+    for(size_t i = 0; i < deletedDevs.size(); i++)
+    {
+        if (i == deletedDevs.size()-1 && i>0)
+            statusMessage += " and ";
+
+        statusMessage += deletedDevs[i];
+
+        if (i != deletedDevs.size()-1 && deletedDevs.size()>2)
+            statusMessage += ", ";
+    }
+    statusMessage += " from " + database.databaseName();\
+
+    ui->label_status->setText(statusMessage);
+
+}
+
+void manageTrainingDataForm::on_btn_deleteProperty_clicked()
+{
+    QItemSelectionModel *select = ui->tableView_properties->selectionModel();
+
+    bool selectionMade = select->hasSelection();
+
+    if (!selectionMade)
+    {
+        QMessageBox::information(this, "Information", "No selection made - nothing will be deleted.",
+            QMessageBox::Ok);
+        return;
+    }
+
+    std::vector<QString> deletedProps;
+
+    QModelIndexList rows = select->selectedRows();
+
+    for(int i=0; i< rows.count(); i++)
+    {
+        QModelIndex index = rows.at(i); //get the current row
+        int id = index.sibling(index.row(), 0).data().toInt();    //get the id (primary key) of the property to delete
+        QString name = index.sibling(index.row(), 1).data().toString();
+        deletedProps.push_back(name);
+
+        //run an sql query to delete the device
+        QString sqlqstr = "DELETE FROM properties WHERE id = " + QString::number(id) + ";";
+
+        QSqlQuery tmp = database.exec(sqlqstr);
+
+        if (!tmp.exec())
+            QMessageBox::critical(this, "Error", "Could not delete the property. Error is: " + tmp.lastError().text(),
+                QMessageBox::Ok);
+
+    }
+
+    updatePropertiesTableFromDb();
+
+    QString statusMessage = "Deleted ";
+
+    for(size_t i = 0; i < deletedProps.size(); i++)
+    {
+        if (i == deletedProps.size()-1 && i>0)
+            statusMessage += " and ";
+
+        statusMessage += deletedProps[i];
+
+        if (i != deletedProps.size()-1 && deletedProps.size()>2)
+            statusMessage += ", ";
+    }
+    statusMessage += " from " + database.databaseName();\
+
+    ui->label_status->setText(statusMessage);
+}
 
 
-    //select->selectedColumns();
+
+
+
+void manageTrainingDataForm::on_tableView_images_doubleClicked(const QModelIndex &index)
+{
+
+    int id = index.sibling(index.row(), 0).data().toInt();
+    QByteArray bytes = index.sibling(index.row(), 1).data().toByteArray();
+    int capDevice = index.sibling(index.row(), 2).data().toInt();
+
+
+
+    cv::Mat img = manageTrainingDataForm::byteArray2Mat(bytes);
+
+
+
+    ui->label_status->setText("Opened image "+QString(id)+" from the images table in " + database.databaseName());
+
+
+
+    std::string title = "Image ID: "+ std::to_string(id) + ", Capture Device ID: " + std::to_string(capDevice);
+    cv::resize(img,img,cv::Size(1280,720));
+    cv::imshow(title,img);
+    cv::waitKey(0);
+    cv::destroyAllWindows();
 }

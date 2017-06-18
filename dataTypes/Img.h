@@ -3,4 +3,5 @@ class Img
 {
 public:
 	Img();
+
 };
