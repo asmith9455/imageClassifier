@@ -48,6 +48,8 @@ private slots:
 
     void on_tableView_images_doubleClicked(const QModelIndex &index);
 
+    void on_btn_removeImgFromDb_clicked();
+
 private:
     Ui::manageTrainingDataForm *ui;
     static int nullCallback(void *NotUsed, int argc, char **argv, char **azColName);
@@ -55,7 +57,7 @@ private:
     static cv::Mat byteArray2Mat(const QByteArray & byteArray);
 
 
-    void storeCaptureDevice(QString name, int imageWidth, int imageHeight, int bytesPerPixel);
+    void storeCaptureDevice(QString name, int imageWidth, int imageHeight, int bitsPerPixel);
     void storeProperty(QString propertyName);
     void storeImage(int captureDeviceReference, cv::Mat image);
 
