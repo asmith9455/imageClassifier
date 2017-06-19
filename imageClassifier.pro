@@ -44,7 +44,8 @@ SOURCES += main.cpp\
     testing/testing.cpp \
     trainingDataManager/ImgDbManager.cpp \
     ProgramManager.cpp \
-    manageTrainingDataForm.cpp
+    manageTrainingDataForm.cpp \
+    ClickableLabel.cpp
 
 HEADERS  += mainwindow.h \
     classifierAlgorithms/ColourStatisticsAnalyzer.h \
@@ -57,7 +58,8 @@ HEADERS  += mainwindow.h \
     testing/testing.h \
     trainingDataManager/ImgDbManager.h \
     ProgramManager.h \
-    manageTrainingDataForm.h
+    manageTrainingDataForm.h \
+    ClickableLabel.h
 
 FORMS    += mainwindow.ui \
     manageTrainingDataForm.ui

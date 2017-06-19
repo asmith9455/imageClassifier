@@ -78,7 +78,7 @@
        <bool>false</bool>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="tabWidgetPage1">
        <attribute name="title">
@@ -325,7 +325,7 @@
           <x>450</x>
           <y>0</y>
           <width>751</width>
-          <height>491</height>
+          <height>531</height>
          </rect>
         </property>
         <property name="autoFillBackground">
@@ -337,6 +337,9 @@
         <property name="text">
          <string>(Select an image)</string>
         </property>
+        <property name="scaledContents">
+         <bool>true</bool>
+        </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>
@@ -345,9 +348,9 @@
         <property name="geometry">
          <rect>
           <x>450</x>
-          <y>500</y>
+          <y>510</y>
           <width>751</width>
-          <height>31</height>
+          <height>20</height>
          </rect>
         </property>
         <property name="text">
@@ -363,7 +366,7 @@
           <x>0</x>
           <y>300</y>
           <width>441</width>
-          <height>241</height>
+          <height>231</height>
          </rect>
         </property>
         <property name="editTriggers">
@@ -383,7 +386,7 @@
          <rect>
           <x>10</x>
           <y>130</y>
-          <width>381</width>
+          <width>231</width>
           <height>111</height>
          </rect>
         </property>
@@ -399,12 +402,12 @@
          <rect>
           <x>10</x>
           <y>10</y>
-          <width>381</width>
+          <width>231</width>
           <height>111</height>
          </rect>
         </property>
        </widget>
-       <widget class="QLabel" name="label_picToDrawOn">
+       <widget class="ClickableLabel" name="label_picToDrawOn">
         <property name="geometry">
          <rect>
           <x>400</x>
@@ -421,6 +424,9 @@
         </property>
         <property name="text">
          <string>(Select an image by double clicking a row)</string>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -442,20 +448,7 @@
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QPushButton" name="pushButton">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>250</y>
-          <width>151</width>
-          <height>23</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Add Outer Contour</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_2">
+       <widget class="QPushButton" name="btn_startContour">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -465,10 +458,23 @@
          </rect>
         </property>
         <property name="text">
-         <string>Add Inner Contour</string>
+         <string>Start Contour</string>
         </property>
        </widget>
        <widget class="QPushButton" name="pushButton_3">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>280</y>
+          <width>221</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Delete Segmented Region</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btn_endOuterContour">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -478,7 +484,56 @@
          </rect>
         </property>
         <property name="text">
-         <string>Delete Selected Contour</string>
+         <string>End Contour</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_4">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>310</y>
+          <width>221</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Add Segmented Region to Database</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="radioBtn_selectOuterContour">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>250</y>
+          <width>111</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Outer Contour</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="radioBtn_selectInnerContour">
+        <property name="geometry">
+         <rect>
+          <x>110</x>
+          <y>250</y>
+          <width>111</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Inner Contour</string>
+        </property>
+       </widget>
+       <widget class="QTreeView" name="treeView_segRegionPoints">
+        <property name="geometry">
+         <rect>
+          <x>250</x>
+          <y>10</y>
+          <width>141</width>
+          <height>261</height>
+         </rect>
         </property>
        </widget>
       </widget>
@@ -492,6 +547,13 @@
    <zorder>tabWidget</zorder>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ClickableLabel</class>
+   <extends>QLabel</extends>
+   <header>clickableLabel.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>

@@ -17,6 +17,8 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include <ClickableLabel.h>
+
 namespace Ui {
 class manageTrainingDataForm;
 }
@@ -50,6 +52,9 @@ private slots:
 
     void on_btn_removeImgFromDb_clicked();
 
+    void on_tableView_imagesForSegRegions_doubleClicked(const QModelIndex &index);
+
+    void on_label_picToDrawOn_clicked(int mouseX, int mouseY);
 private:
     Ui::manageTrainingDataForm *ui;
     static int nullCallback(void *NotUsed, int argc, char **argv, char **azColName);

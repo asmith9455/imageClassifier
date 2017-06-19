@@ -6,6 +6,10 @@ manageTrainingDataForm::manageTrainingDataForm(QWidget *parent) :
     ui(new Ui::manageTrainingDataForm)
 {
     ui->setupUi(this);
+
+    QObject::connect(ui->label_picToDrawOn, SIGNAL(clicked(int)),
+                         this, SLOT(on_label_picToDrawOn_clicked(int)));
+
 }
 
 manageTrainingDataForm::~manageTrainingDataForm()
@@ -228,8 +232,11 @@ void manageTrainingDataForm::on_btn_selectDatabase_clicked()
 
 }
 
-
-
+void manageTrainingDataForm::on_label_picToDrawOn_clicked(int mouseX, int mouseY)
+{
+    QMessageBox::information(this, "Information", "X: " + QString::number(mouseX) + " Y: " + QString::number(mouseY),
+        QMessageBox::Ok);
+}
 
 
 
@@ -359,7 +366,7 @@ void manageTrainingDataForm::on_btn_selectImageToAdd_clicked()
 
 
     ui->label_selectedPic->setPixmap(QPixmap(fileName));
-    ui->label_selectedPic->setScaledContents(true);
+
 
     ui->label_status->setText("Loaded picture at " + fileName );
     ui->label_imageStatus->setText("Picture from disk: " + fileName);
@@ -716,7 +723,7 @@ void manageTrainingDataForm::on_tableView_images_doubleClicked(const QModelIndex
 
 
 
-    ui->label_status->setText("Opened image "+QString(id)+" from the images table in " + database.databaseName());
+    ui->label_status->setText("Opened image with id "+QString::number(id)+" from the images table in " + database.databaseName());
 
 
 
@@ -728,3 +735,17 @@ void manageTrainingDataForm::on_tableView_images_doubleClicked(const QModelIndex
 }
 
 
+void manageTrainingDataForm::on_tableView_imagesForSegRegions_doubleClicked(const QModelIndex &index)
+{
+    int id = index.sibling(index.row(), 0).data().toInt();
+    QByteArray bytes = index.sibling(index.row(), 1).data().toByteArray();
+    //int capDevice = index.sibling(index.row(), 2).data().toInt();
+
+    cv::Mat img = manageTrainingDataForm::byteArray2Mat(bytes);
+
+    cv::cvtColor(img, img, CV_BGR2RGB);
+
+    ui->label_status->setText("Opened image with id "+QString::number(id)+" from the images table in " + database.databaseName());
+
+    ui->label_picToDrawOn->setPixmap(QPixmap::fromImage(QImage(img.data, img.cols, img.rows, img.step, QImage::Format_RGB888)));
+}
