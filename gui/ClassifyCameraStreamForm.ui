@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1051</width>
-    <height>636</height>
+    <height>711</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -33,7 +33,7 @@
    <property name="geometry">
     <rect>
      <x>530</x>
-     <y>310</y>
+     <y>10</y>
      <width>512</width>
      <height>288</height>
     </rect>
@@ -51,7 +51,7 @@
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLabel" name="label_classifiedImageBinary">
+  <widget class="QLabel" name="label_classifiedImagePpBinary">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -64,7 +64,7 @@
     <enum>QFrame::Box</enum>
    </property>
    <property name="text">
-    <string>(Classified Image - Binary)</string>
+    <string>(Classified Image - PostProcessed - Binary)</string>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -95,11 +95,11 @@
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLabel" name="label_classifiedImagePostProcessed">
+  <widget class="QLabel" name="label_classifiedImagePpRecoloured">
    <property name="geometry">
     <rect>
      <x>530</x>
-     <y>10</y>
+     <y>310</y>
      <width>512</width>
      <height>288</height>
     </rect>
@@ -108,13 +108,91 @@
     <enum>QFrame::Box</enum>
    </property>
    <property name="text">
-    <string>(Classified Image - PostProcessed)</string>
+    <string>(Classified Image - PostProcessed - Recoloured)</string>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_processingFrameRate">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>600</y>
+     <width>211</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Processing Time:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_timeToGrabFrame">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>620</y>
+     <width>211</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Time to Grab Frame:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_timeToClassify">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>640</y>
+     <width>211</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Time to Classify:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_timeToPostProcess">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>660</y>
+     <width>211</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Time to PostProcess:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_timeToConvert">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>680</y>
+     <width>211</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Time to Convert:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_timeToDisplay">
+   <property name="geometry">
+    <rect>
+     <x>530</x>
+     <y>610</y>
+     <width>211</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Time to Display:</string>
    </property>
   </widget>
  </widget>

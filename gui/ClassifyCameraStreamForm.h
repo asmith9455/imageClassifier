@@ -48,6 +48,9 @@ private:
     cv::Mat img;
     ImageClassifier* ic;
     ColourStatisticsAnalyzer* csa;
+    double dif;
+    std::chrono::high_resolution_clock::time_point frameTime1, frameTime2, frameTime3, frameTime4, frameTime5, frameTime6;
+
 };
 
 #endif // CLASSIFYCAMERASTREAMFORM_H

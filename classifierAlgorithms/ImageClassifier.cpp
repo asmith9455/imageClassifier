@@ -23,7 +23,7 @@ ImageClassifier::ClassifiedImage ImageClassifier::classifyImage(
 	int numShiftsX = img.cols / tileWidth;
 	int numShiftsY = img.rows / tileHeight;
 
-	cv::Mat binImgMat = cv::Mat(cv::Size(numShiftsX, numShiftsY), CV_8U);
+    cv::Mat binImgMat = cv::Mat(cv::Size(numShiftsX, numShiftsY), CV_8U);
 
 	//BinaryImage binImg(numShiftsY, numShiftsX);
 
