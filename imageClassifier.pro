@@ -20,6 +20,7 @@ INCLUDEPATH +=  $$PWD/classifierAlgorithms\
                 $$PWD/dataTypes\
                 $$PWD/system\
                 $$PWD/testing\
+                $$PWD/gui\
                 $$PWD/trainingDataManager\
 
 #link against opencv
@@ -45,7 +46,9 @@ SOURCES += main.cpp\
     trainingDataManager/ImgDbManager.cpp \
     ProgramManager.cpp \
     manageTrainingDataForm.cpp \
-    ClickableLabel.cpp
+    ClickableLabel.cpp \
+    gui/TreeModel.cpp \
+    gui/TreeItem.cpp
 
 HEADERS  += mainwindow.h \
     classifierAlgorithms/ColourStatisticsAnalyzer.h \
@@ -59,7 +62,10 @@ HEADERS  += mainwindow.h \
     trainingDataManager/ImgDbManager.h \
     ProgramManager.h \
     manageTrainingDataForm.h \
-    ClickableLabel.h
+    ClickableLabel.h \
+    dataTypes/Point2.h \
+    gui/TreeModel.h \
+    gui/TreeItem.h
 
 FORMS    += mainwindow.ui \
     manageTrainingDataForm.ui

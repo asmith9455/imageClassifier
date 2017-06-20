@@ -18,6 +18,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <ClickableLabel.h>
+#include <Point2.h>
+
 
 namespace Ui {
 class manageTrainingDataForm;
@@ -28,6 +30,12 @@ class manageTrainingDataForm : public QDialog
     Q_OBJECT
 
 public:
+
+    enum POLY_DRAWING_MODE
+    {
+        NOT_DRAWING, DRAWING_OUTER_CONTOUR, DRAWING_INNER_CONTOUR
+    };
+
     explicit manageTrainingDataForm(QWidget *parent = 0);
     ~manageTrainingDataForm();
 
@@ -55,6 +63,10 @@ private slots:
     void on_tableView_imagesForSegRegions_doubleClicked(const QModelIndex &index);
 
     void on_label_picToDrawOn_clicked(int mouseX, int mouseY);
+    void on_btn_startContour_clicked();
+
+    void on_btn_endContour_clicked();
+
 private:
     Ui::manageTrainingDataForm *ui;
     static int nullCallback(void *NotUsed, int argc, char **argv, char **azColName);
@@ -72,6 +84,13 @@ private:
     void updateImagesTableFromDb();
 
     cv::Mat imgToStore;
+
+    cv::Mat imgToDrawOn;
+    std::vector<Point2<int>> outerContour;
+    std::vector<std::vector<Point2<int>>> innerContours;
+    POLY_DRAWING_MODE currentDrawingMode = POLY_DRAWING_MODE::NOT_DRAWING;
+    void redrawSegmentedRegion();
+
 
     QSqlDatabase database;
     bool dbOpened = false;

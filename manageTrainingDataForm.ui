@@ -474,7 +474,10 @@
          <string>Delete Segmented Region</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="btn_endOuterContour">
+       <widget class="QPushButton" name="btn_endContour">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -511,6 +514,9 @@
         </property>
         <property name="text">
          <string>Outer Contour</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
        <widget class="QRadioButton" name="radioBtn_selectInnerContour">

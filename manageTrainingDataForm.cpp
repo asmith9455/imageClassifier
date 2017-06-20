@@ -234,8 +234,23 @@ void manageTrainingDataForm::on_btn_selectDatabase_clicked()
 
 void manageTrainingDataForm::on_label_picToDrawOn_clicked(int mouseX, int mouseY)
 {
-    QMessageBox::information(this, "Information", "X: " + QString::number(mouseX) + " Y: " + QString::number(mouseY),
-        QMessageBox::Ok);
+    //mouse co-ordinates relative to the top left corner of the image are mouseX and mouseY
+
+    int imgX = (imgToDrawOn.cols * mouseX) / ui->label_picToDrawOn->width();
+    int imgY = (imgToDrawOn.rows * mouseY) / ui->label_picToDrawOn->height();
+
+
+    //we will store the locations for the image itself, rather than the locations on the image in the gui
+
+    Point2<int> newPoint(imgX,imgY);
+
+    if(currentDrawingMode == DRAWING_OUTER_CONTOUR)
+        outerContour.push_back(newPoint);
+    else if (currentDrawingMode == DRAWING_INNER_CONTOUR)
+        innerContours.back().push_back(newPoint);
+
+
+
 }
 
 
@@ -743,9 +758,45 @@ void manageTrainingDataForm::on_tableView_imagesForSegRegions_doubleClicked(cons
 
     cv::Mat img = manageTrainingDataForm::byteArray2Mat(bytes);
 
+    imgToDrawOn = img.clone();
+
     cv::cvtColor(img, img, CV_BGR2RGB);
 
     ui->label_status->setText("Opened image with id "+QString::number(id)+" from the images table in " + database.databaseName());
 
     ui->label_picToDrawOn->setPixmap(QPixmap::fromImage(QImage(img.data, img.cols, img.rows, img.step, QImage::Format_RGB888)));
 }
+
+void manageTrainingDataForm::on_btn_startContour_clicked()
+{
+    if (ui->radioBtn_selectOuterContour->isChecked())
+    {
+        currentDrawingMode = POLY_DRAWING_MODE::DRAWING_OUTER_CONTOUR;
+        outerContour.clear();
+    }
+    else if (ui->radioBtn_selectInnerContour->isChecked())
+    {
+        currentDrawingMode = POLY_DRAWING_MODE::DRAWING_INNER_CONTOUR;
+        std::vector<Point2<int>> tmp;
+        innerContours.push_back(tmp);
+    }
+    ui->btn_startContour->setEnabled(false);
+    ui->btn_endContour->setEnabled(true);
+
+}
+
+void manageTrainingDataForm::on_btn_endContour_clicked()
+{
+
+    ui->btn_startContour->setEnabled(true);
+    ui->btn_endContour->setEnabled(false);
+
+    if (outerContour.size()>0)
+        outerContour.push_back(outerContour[0]);
+    else if (innerContours.back().size() > 0)
+        innerContours.back().push_back(innerContours.back()[0]);
+
+    currentDrawingMode = POLY_DRAWING_MODE::NOT_DRAWING;
+}
+
+
