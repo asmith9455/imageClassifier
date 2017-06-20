@@ -13,15 +13,19 @@ TEMPLATE = app
 
 QT += sql
 
+CONFIG += c++11
+
 #add the various project subfolder to the includepath so that changes to project structure don't require lots of changes to include statements.
 INCLUDEPATH +=  $$PWD/classifierAlgorithms\
-                C:/opencv_3_2_0/build/include\
-                C:/sqlite3\
                 $$PWD/dataTypes\
                 $$PWD/system\
                 $$PWD/testing\
                 $$PWD/gui\
-                $$PWD/trainingDataManager\
+                $$PWD/trainingDataManager
+
+win32{
+INCLUDEPATH +=  C:/opencv_3_2_0/build/include\
+                C:/sqlite3
 
 #link against opencv
 LIBS += C:/opencv_3_2_0/build/x64/vc14/lib/opencv_world320.lib\
@@ -33,7 +37,13 @@ QMAKE_EXTRA_TARGETS += customtarget1
 customtarget1.target = dummy
 customtarget1.commands = set PATH=C:\opencv_3_2_0\build\x64\vc14\bin;$(PATH)
 PRE_TARGETDEPS += dummy
+}
 
+gcc*{
+LIBS += -L/usr/lib -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc -lopencv_videoio
+
+LIBS += -lsqlite3
+}
 SOURCES += main.cpp\
         mainwindow.cpp \
     classifierAlgorithms/ColourStatisticsAnalyzer.cpp \

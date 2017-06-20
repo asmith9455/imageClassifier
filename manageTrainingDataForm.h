@@ -11,7 +11,7 @@
 #include <QtSql/QSqlTableModel>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
-#include <QPixMap>
+#include <QPixmap>
 #include <QGraphicsPixmapItem>
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
@@ -115,7 +115,7 @@ private:
     QString getStringFromContourVector(std::vector<std::vector<Point2<int>>> vec);
     std::vector<Point2<int>> getContourFromString(QString str);
     std::vector<std::vector<Point2<int>>> getContourVectorFromString(QString str);
-    void manageTrainingDataForm::clearContours();
+    void clearContours();
 
     QSqlDatabase database;
     bool dbOpened = false;
