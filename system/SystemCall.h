@@ -1,8 +1,6 @@
 #pragma once
 
-#include "applicationDefines.h"
 #include <stdexcept>
-
 
 #ifdef Windows
 #include <Windows.h>

@@ -15,6 +15,9 @@ QT += sql
 
 CONFIG += c++11
 
+
+DEFINES+=EnableUserPause=1
+
 #add the various project subfolder to the includepath so that changes to project structure don't require lots of changes to include statements.
 INCLUDEPATH +=  $$PWD/classifierAlgorithms\
                 $$PWD/dataTypes\
@@ -24,6 +27,8 @@ INCLUDEPATH +=  $$PWD/classifierAlgorithms\
                 $$PWD/trainingDataManager
 
 win32{
+DEFINES+=Windows=1
+
 INCLUDEPATH +=  C:/opencv_3_2_0/build/include\
                 C:/sqlite3
 
@@ -40,6 +45,9 @@ PRE_TARGETDEPS += dummy
 }
 
 gcc*{
+DEFINES+=Linux=1
+DEFINES+=TX1=1
+
 LIBS += -L/usr/lib -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc -lopencv_videoio
 
 LIBS += -lsqlite3
@@ -66,7 +74,6 @@ HEADERS  += mainwindow.h \
     classifierAlgorithms/ImageSequence.h \
     dataTypes/Img.h \
     dataTypes/RgbHistogram.h \
-    system/applicationDefines.h \
     system/SystemCall.h \
     testing/testing.h \
     trainingDataManager/ImgDbManager.h \

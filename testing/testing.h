@@ -1,5 +1,4 @@
 #pragma once
-#include "applicationDefines.h"
 #include "ColourStatisticsAnalyzer.h"
 #include "ImageSequence.h"
 
