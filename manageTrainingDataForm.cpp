@@ -1,6 +1,8 @@
 #include "manageTrainingDataForm.h"
 #include "ui_manageTrainingDataForm.h"
 
+//TODO: make this code modular.
+
 manageTrainingDataForm::manageTrainingDataForm(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::manageTrainingDataForm)

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1469</width>
-    <height>673</height>
+    <width>1588</width>
+    <height>691</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,11 +18,31 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>1451</width>
+     <width>1571</width>
      <height>661</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout1" rowstretch="0,0,0">
+    <item row="2" column="0" colspan="3">
+     <widget class="QLabel" name="label_status">
+      <property name="text">
+       <string>Hello.</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QPushButton" name="btn_createImgDb">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+        <horstretch>1</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Create Database</string>
+      </property>
+     </widget>
+    </item>
     <item row="1" column="0">
      <widget class="QPushButton" name="btn_selectDatabase">
       <property name="sizePolicy">
@@ -46,26 +66,6 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="1">
-     <widget class="QPushButton" name="btn_createImgDb">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-        <horstretch>1</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Create Database</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0" colspan="3">
-     <widget class="QLabel" name="label_status">
-      <property name="text">
-       <string>Hello.</string>
-      </property>
-     </widget>
-    </item>
     <item row="0" column="0" colspan="3">
      <widget class="QTabWidget" name="tabWidget">
       <property name="sizePolicy">
@@ -78,11 +78,11 @@
        <bool>false</bool>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tabWidgetPage1">
        <attribute name="title">
-        <string>Capture Devices</string>
+        <string>Capture Devices and Properties</string>
        </attribute>
        <widget class="QWidget" name="gridLayoutWidget_2">
         <property name="geometry">
@@ -138,7 +138,14 @@
           </widget>
          </item>
          <item row="5" column="0" colspan="4">
-          <widget class="QTableView" name="tableView_captureDevices"/>
+          <widget class="QTableView" name="tableView_captureDevices">
+           <property name="editTriggers">
+            <set>QAbstractItemView::NoEditTriggers</set>
+           </property>
+           <property name="alternatingRowColors">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="label_4">
@@ -198,72 +205,86 @@
          </item>
         </layout>
        </widget>
-      </widget>
-      <widget class="QWidget" name="tab">
-       <attribute name="title">
-        <string>Properties</string>
-       </attribute>
-       <widget class="QLabel" name="label_5">
+       <widget class="QGroupBox" name="groupBox">
         <property name="geometry">
          <rect>
-          <x>20</x>
-          <y>30</y>
-          <width>31</width>
-          <height>21</height>
+          <x>1170</x>
+          <y>20</y>
+          <width>381</width>
+          <height>541</height>
          </rect>
         </property>
-        <property name="text">
-         <string>Name</string>
+        <property name="title">
+         <string>Properties</string>
         </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="lineEdit_propertyName">
-        <property name="geometry">
-         <rect>
-          <x>60</x>
-          <y>30</y>
-          <width>113</width>
-          <height>20</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QTableView" name="tableView_properties">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>130</y>
-          <width>691</width>
-          <height>221</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="btn_deleteProperty">
-        <property name="geometry">
-         <rect>
-          <x>530</x>
-          <y>100</y>
-          <width>181</width>
-          <height>23</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Delete Property</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="btn_addProperty">
-        <property name="geometry">
-         <rect>
-          <x>256</x>
-          <y>100</y>
-          <width>121</width>
-          <height>23</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Add Property</string>
-        </property>
+        <widget class="QLineEdit" name="lineEdit_propertyName">
+         <property name="geometry">
+          <rect>
+           <x>50</x>
+           <y>30</y>
+           <width>121</width>
+           <height>20</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_5">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>30</y>
+           <width>31</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Name</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_deleteProperty">
+         <property name="geometry">
+          <rect>
+           <x>180</x>
+           <y>70</y>
+           <width>181</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Delete Property</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_addProperty">
+         <property name="geometry">
+          <rect>
+           <x>50</x>
+           <y>70</y>
+           <width>121</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Add Property</string>
+         </property>
+        </widget>
+        <widget class="QTableView" name="tableView_properties">
+         <property name="geometry">
+          <rect>
+           <x>50</x>
+           <y>100</y>
+           <width>311</width>
+           <height>371</height>
+          </rect>
+         </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="alternatingRowColors">
+          <bool>true</bool>
+         </property>
+        </widget>
        </widget>
       </widget>
       <widget class="QWidget" name="tabWidgetPage2">
@@ -273,8 +294,8 @@
        <widget class="QPushButton" name="btn_removeImgFromDb">
         <property name="geometry">
          <rect>
-          <x>260</x>
-          <y>270</y>
+          <x>580</x>
+          <y>290</y>
           <width>181</width>
           <height>23</height>
          </rect>
@@ -286,8 +307,8 @@
        <widget class="QPushButton" name="btn_addImgToDb">
         <property name="geometry">
          <rect>
-          <x>0</x>
-          <y>270</y>
+          <x>390</x>
+          <y>290</y>
           <width>181</width>
           <height>23</height>
          </rect>
@@ -299,18 +320,24 @@
        <widget class="QTableView" name="tableView_captureDevicesForImage">
         <property name="geometry">
          <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>441</width>
-          <height>231</height>
+          <x>10</x>
+          <y>10</y>
+          <width>751</width>
+          <height>271</height>
          </rect>
+        </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <property name="alternatingRowColors">
+         <bool>true</bool>
         </property>
        </widget>
        <widget class="QPushButton" name="btn_selectImageToAdd">
         <property name="geometry">
          <rect>
-          <x>0</x>
-          <y>240</y>
+          <x>10</x>
+          <y>290</y>
           <width>181</width>
           <height>23</height>
          </rect>
@@ -322,10 +349,10 @@
        <widget class="QLabel" name="label_selectedPic">
         <property name="geometry">
          <rect>
-          <x>450</x>
-          <y>0</y>
-          <width>751</width>
-          <height>531</height>
+          <x>770</x>
+          <y>10</y>
+          <width>781</width>
+          <height>571</height>
          </rect>
         </property>
         <property name="autoFillBackground">
@@ -363,10 +390,10 @@
        <widget class="QTableView" name="tableView_images">
         <property name="geometry">
          <rect>
-          <x>0</x>
-          <y>300</y>
-          <width>441</width>
-          <height>231</height>
+          <x>10</x>
+          <y>320</y>
+          <width>751</width>
+          <height>261</height>
          </rect>
         </property>
         <property name="editTriggers">
@@ -406,11 +433,17 @@
           <height>111</height>
          </rect>
         </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <property name="alternatingRowColors">
+         <bool>true</bool>
+        </property>
        </widget>
        <widget class="ClickableLabel" name="label_picToDrawOn">
         <property name="geometry">
          <rect>
-          <x>650</x>
+          <x>770</x>
           <y>10</y>
           <width>791</width>
           <height>571</height>
@@ -437,7 +470,7 @@
          <rect>
           <x>10</x>
           <y>340</y>
-          <width>631</width>
+          <width>751</width>
           <height>241</height>
          </rect>
         </property>
@@ -550,7 +583,7 @@
          <rect>
           <x>420</x>
           <y>10</y>
-          <width>221</width>
+          <width>341</width>
           <height>321</height>
          </rect>
         </property>
@@ -561,6 +594,11 @@
          <bool>true</bool>
         </property>
        </widget>
+      </widget>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string/>
+       </attribute>
       </widget>
      </widget>
     </item>
