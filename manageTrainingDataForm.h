@@ -19,7 +19,11 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <ClickableLabel.h>
 #include <Point2.h>
-
+#include <vector>
+#include <QTreeWidgetItem>
+#include <QPainter>
+#include <QPaintDevice>
+#include <QPen>
 
 namespace Ui {
 class manageTrainingDataForm;
@@ -67,6 +71,16 @@ private slots:
 
     void on_btn_endContour_clicked();
 
+
+    void on_btn_clearContours_clicked();
+
+
+    void on_btn_addSegmentedRegionToDb_clicked();
+
+    void on_btn_deleteSegmentedRegion_clicked();
+
+    void on_tableView_segmentedRegions_doubleClicked(const QModelIndex &index);
+
 private:
     Ui::manageTrainingDataForm *ui;
     static int nullCallback(void *NotUsed, int argc, char **argv, char **azColName);
@@ -77,20 +91,31 @@ private:
     void storeCaptureDevice(QString name, int imageWidth, int imageHeight, int bitsPerPixel);
     void storeProperty(QString propertyName);
     void storeImage(int captureDeviceReference, cv::Mat image);
+    int storeSegmentedRegion(int imgRef, QString outerPoly, QString innerPoly);
 
     void updateAllTables();
     void updateCaptureDeviceTableFromDb();
     void updatePropertiesTableFromDb();
     void updateImagesTableFromDb();
+    void updateSegmentedRegionsTableFromDb();
+    void updatePropertiesForSegmentedRegionsTableFromDb();
 
     cv::Mat imgToStore;
 
-    cv::Mat imgToDrawOn;
+    cv::Mat imgToDrawOn, imgToDrawOnRGB;
+    int imgToDrawOnId = -1;
     std::vector<Point2<int>> outerContour;
     std::vector<std::vector<Point2<int>>> innerContours;
     POLY_DRAWING_MODE currentDrawingMode = POLY_DRAWING_MODE::NOT_DRAWING;
     void redrawSegmentedRegion();
-
+    QTreeWidgetItem* outerContourParent;
+    std::vector<QTreeWidgetItem> outerContourPoints;
+    std::vector<QTreeWidgetItem> innerContourParents;
+    QString getStringFromContour(std::vector<Point2<int>> vec);
+    QString getStringFromContourVector(std::vector<std::vector<Point2<int>>> vec);
+    std::vector<Point2<int>> getContourFromString(QString str);
+    std::vector<std::vector<Point2<int>>> getContourVectorFromString(QString str);
+    void manageTrainingDataForm::clearContours();
 
     QSqlDatabase database;
     bool dbOpened = false;

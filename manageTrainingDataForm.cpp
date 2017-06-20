@@ -10,6 +10,16 @@ manageTrainingDataForm::manageTrainingDataForm(QWidget *parent) :
     QObject::connect(ui->label_picToDrawOn, SIGNAL(clicked(int)),
                          this, SLOT(on_label_picToDrawOn_clicked(int)));
 
+    QStringList headerLabels;
+    headerLabels.append("Points");
+
+    //ui->treeWidget_segRegionPoints->setHeaderLabels(headerLabels);
+
+    //outerContourParent = new QTreeWidgetItem(ui->treeWidget_segRegionPoints,QStringList(QObject::tr("OuterContours")));
+
+    //ui->treeWidget_segRegionPoints->expandItem(outerContourParent);
+    //ui->treeWidget_segRegionPoints->show();
+
 }
 
 manageTrainingDataForm::~manageTrainingDataForm()
@@ -244,15 +254,62 @@ void manageTrainingDataForm::on_label_picToDrawOn_clicked(int mouseX, int mouseY
 
     Point2<int> newPoint(imgX,imgY);
 
+    QString newPointString = "[" + QString::number(imgX) + ", " + QString::number(imgY) + "]";
+
     if(currentDrawingMode == DRAWING_OUTER_CONTOUR)
+    {
         outerContour.push_back(newPoint);
+        //outerContourPoints.push_back(QTreeWidgetItem(QStringList(QObject::tr(newPointString.toStdString().c_str()))));
+        //outerContourParent.addChild(&(outerContourPoints[outerContourPoints.size()-1]));
+        //outerContourParent.addChild(new QTreeWidgetItem(QStringList(QObject::tr(newPointString.toStdString().c_str()))));
+    }
     else if (currentDrawingMode == DRAWING_INNER_CONTOUR)
+    {
         innerContours.back().push_back(newPoint);
+        //innerContourParents.back()->addChild(new QTreeWidgetItem(QStringList(QObject::tr(newPointString))));
+    }
 
-
+    redrawSegmentedRegion();
 
 }
 
+void manageTrainingDataForm::redrawSegmentedRegion()
+{
+
+
+    QPixmap tmpPixMap = QPixmap::fromImage(QImage(imgToDrawOnRGB.data, imgToDrawOnRGB.cols, imgToDrawOnRGB.rows, imgToDrawOnRGB.step, QImage::Format_RGB888));
+
+    QPainter tmp(&tmpPixMap);
+    QPen pen(Qt::green, 10, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+    tmp.setPen(pen);
+
+    for(size_t i = 1; i < outerContour.size(); i++)
+    {
+        Point2<int> p1 = outerContour[i-1];
+        Point2<int> p2 = outerContour[i];
+        if (p1.x == p2.x && p1.y == p2.y)
+            continue;
+        tmp.drawLine(p1.x, p1.y, p2.x, p2.y);
+    }
+
+    pen = QPen(Qt::red, 10, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+    tmp.setPen(pen);
+
+    for(size_t j = 0; j < innerContours.size(); j++)
+    {
+        for(size_t i = 1; i < innerContours[j].size(); i++)
+        {
+            Point2<int> p1 = innerContours[j][i-1];
+            Point2<int> p2 = innerContours[j][i];
+            if (p1.x == p2.x && p1.y == p2.y)
+                continue;
+            tmp.drawLine(p1.x, p1.y, p2.x, p2.y);
+        }
+    }
+
+    ui->label_picToDrawOn->setPixmap(tmpPixMap);
+
+}
 
 
 void manageTrainingDataForm::storeCaptureDevice(QString name, int imageWidth, int imageHeight, int bitsPerPixel)
@@ -342,7 +399,27 @@ void manageTrainingDataForm::storeImage(int captureDeviceReference, cv::Mat imag
     ui->label_status->setText("Inserted image into " + database.databaseName());
 }
 
+int manageTrainingDataForm::storeSegmentedRegion(int imgRef, QString outerPoly, QString innerPoly)
+{
+    QSqlQuery qry;
 
+    qry.prepare("INSERT INTO segmentedRegions (imageReference, outerContour, innerContours)"
+                    "VALUES(:W_imageReference, :W_outerContour, :W_innerContours)");
+
+    qry.bindValue(":W_imageReference", imgRef);
+    qry.bindValue(":W_outerContour",outerPoly);
+    qry.bindValue(":W_innerContours",innerPoly);
+
+    if (!qry.exec())
+    {
+        QMessageBox::critical(this, "Error", "Could not insert the segmented region. Error is: " + qry.lastError().text(),
+            QMessageBox::Ok);
+        return -1;
+    }
+    ui->label_status->setText("Inserted segmented region into " + database.databaseName());
+
+    return qry.lastInsertId().toInt();
+}
 
 
 
@@ -489,10 +566,63 @@ void manageTrainingDataForm::on_btn_addImgToDb_clicked()
     updateImagesTableFromDb();
 }
 
+void manageTrainingDataForm::on_btn_addSegmentedRegionToDb_clicked()
+{
+    QItemSelectionModel *select = ui->tableView_propertiesOfSegRegions->selectionModel();
+
+    if (select == NULL)
+    {
+        QMessageBox::information(this, "Information", "Please make a property selection.",
+            QMessageBox::Ok);
+        return;
+    }
+
+    bool selectionMade = select->hasSelection();
+
+    if (!selectionMade)
+    {
+        QMessageBox::information(this, "Information", "Please make a property selection.",
+            QMessageBox::Ok);
+        return;
+    }
+
+
+    //insert segmented region
+    int regionRef = storeSegmentedRegion(imgToDrawOnId, getStringFromContour(outerContour), getStringFromContourVector(innerContours));
+
+    if (regionRef == -1)
+        return;
 
 
 
+    QModelIndexList rows = select->selectedRows();
 
+    for (int i = 0; i < rows.count(); i++)
+    {
+        QModelIndex index = rows.at(i); //get the first selected capture device
+
+        int propertyID = index.sibling(index.row(), 0).data().toInt();    //get the property id
+
+        QSqlQuery query;
+        query.prepare("INSERT INTO regionProperties (propertyReference, segmentedRegionReference) VALUES (:W_propertyRef, :W_segRegRef);");
+        query.bindValue(":W_propertyRef", propertyID);
+        query.bindValue(":W_segRegRef", regionRef);
+
+        if(!query.exec())
+        {
+            QMessageBox::critical(this, "Error", "Could not insert property for segmented region. Error is: " + query.lastError().text(),
+                QMessageBox::Ok);
+        }
+    }
+
+
+
+    ui->label_status->setText("Added segmented region and properties to database at " + database.databaseName());
+
+    updateSegmentedRegionsTableFromDb();
+
+
+}
 
 
 void manageTrainingDataForm::updateAllTables()
@@ -500,6 +630,8 @@ void manageTrainingDataForm::updateAllTables()
     updateCaptureDeviceTableFromDb();
     updatePropertiesTableFromDb();
     updateImagesTableFromDb();
+    updateSegmentedRegionsTableFromDb();
+    updatePropertiesForSegmentedRegionsTableFromDb();
 }
 
 void manageTrainingDataForm::updateCaptureDeviceTableFromDb()
@@ -529,7 +661,7 @@ void manageTrainingDataForm::updatePropertiesTableFromDb()
     model->setHeaderData(0, Qt::Horizontal, tr("id"));
     model->setHeaderData(1, Qt::Horizontal, tr("property"));
     ui->tableView_properties->setModel(model);
-    ui->tableView_propertiesForSegRegions->setModel(model);
+    ui->tableView_propertiesOfSegRegions->setModel(model);
 
 }
 
@@ -546,8 +678,64 @@ void manageTrainingDataForm::updateImagesTableFromDb()
     ui->tableView_imagesForSegRegions->setModel(model);
 }
 
+void manageTrainingDataForm::updateSegmentedRegionsTableFromDb()
+{
+    QSqlTableModel *model = new QSqlTableModel(this,database);
+    model->setTable("segmentedRegions");
 
 
+    /*QItemSelectionModel *select = ui->tableView_captureDevicesForImage->selectionModel();
+    bool setfilter = !(select == NULL) && select->hasSelection();
+
+    if (setfilter)
+    {
+        QModelIndexList rows = select->selectedRows();
+
+        QModelIndex index = rows.at(0); //get the first selected image
+
+        int id = index.sibling(index.row(), 0).data().toInt();    //get the id (primary key) of the reference image
+
+    }*/
+    if (imgToDrawOnId != -1)
+        model->setFilter("imageReference = " + QString::number(imgToDrawOnId));
+
+    model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    model->select();
+    model->setHeaderData(0, Qt::Horizontal, tr("id"));
+    model->setHeaderData(1, Qt::Horizontal, tr("imageReference"));
+    model->setHeaderData(2, Qt::Horizontal, tr("outerContour"));
+    model->setHeaderData(2, Qt::Horizontal, tr("innerContours"));
+    ui->tableView_segmentedRegions->setModel(model);
+}
+
+void manageTrainingDataForm::updatePropertiesForSegmentedRegionsTableFromDb()
+{
+    QSqlTableModel *model = new QSqlTableModel(this,database);
+    model->setTable("regionProperties");
+
+    QItemSelectionModel *select = ui->tableView_segmentedRegions->selectionModel();
+    bool setfilter = !(select == NULL) && select->hasSelection();
+    int id;
+    QModelIndexList si = select->selectedIndexes();
+    if (setfilter && si.count() > 0)
+    {
+        QModelIndex index = si.at(0); //get the first selectedRegion
+
+        id = index.sibling(index.row(), 0).data().toInt();    //get the id (primary key) of the selectedRegion
+
+        model->setFilter("segmentedRegionReference = " + QString::number(id));
+
+    }
+    //if (imgToDrawOnId != -1)
+    //    model->setFilter("imageReference = " + QString::number(imgToDrawOnId));
+
+    model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    model->select();
+    model->setHeaderData(2, Qt::Horizontal, tr("segmentedRegionReference"));
+    model->setHeaderData(1, Qt::Horizontal, tr("propertyReference"));
+    model->setHeaderData(0, Qt::Horizontal, tr("id"));
+    ui->tableView_propertiesForSegmentedRegions->setModel(model);
+}
 
 
 
@@ -583,7 +771,7 @@ void manageTrainingDataForm::on_btn_deleteSelectedCaptureDevice_clicked()
         QSqlQuery tmp = database.exec(sqlqstr);
 
         if (!tmp.exec())
-            QMessageBox::critical(this, "Error", "Could not delete capture device with id = " + QString(i) + ". Error is: " + tmp.lastError().text(),
+            QMessageBox::critical(this, "Error", "Could not delete capture device with id = " + QString::number(i) + ". Error is: " + tmp.lastError().text(),
                 QMessageBox::Ok);
 
     }
@@ -642,7 +830,7 @@ void manageTrainingDataForm::on_btn_deleteProperty_clicked()
         QSqlQuery tmp = database.exec(sqlqstr);
 
         if (!tmp.exec())
-            QMessageBox::critical(this, "Error", "Could not delete property with id = " + QString(i) + ". Error is: " + tmp.lastError().text(),
+            QMessageBox::critical(this, "Error", "Could not delete property with id = " + QString::number(i) + ". Error is: " + tmp.lastError().text(),
                 QMessageBox::Ok);
 
     }
@@ -699,7 +887,7 @@ void manageTrainingDataForm::on_btn_removeImgFromDb_clicked()
         QSqlQuery tmp = database.exec(sqlqstr);
 
         if (!tmp.exec())
-            QMessageBox::critical(this, "Error", "Could not delete image with id = " + QString(i) + ". Error is: " + tmp.lastError().text(),
+            QMessageBox::critical(this, "Error", "Could not delete image with id = " + QString::number(i) + ". Error is: " + tmp.lastError().text(),
                 QMessageBox::Ok);
     }
 
@@ -722,6 +910,60 @@ void manageTrainingDataForm::on_btn_removeImgFromDb_clicked()
     ui->label_status->setText(statusMessage);
 
 }
+
+void manageTrainingDataForm::on_btn_deleteSegmentedRegion_clicked()
+{
+    QItemSelectionModel *select = ui->tableView_segmentedRegions->selectionModel();
+
+    bool selectionMade = select->hasSelection();
+
+    QModelIndexList rows = select->selectedRows();
+
+    if (!selectionMade || rows.count() == 0)
+    {
+        QMessageBox::information(this, "Information", "No selection made - nothing will be deleted.",
+            QMessageBox::Ok);
+        return;
+    }
+
+
+
+    int count = 0;
+    for(int i=0; i< rows.count(); i++)
+    {
+        QModelIndex index = rows.at(i); //get the current row
+        int id = index.sibling(index.row(), 0).data().toInt();    //get the id (primary key) of the segmented region to delete
+        count++;
+
+
+        QString sqlqstr = "DELETE FROM regionProperties WHERE segmentedRegionReference = " + QString::number(id) + ";";
+
+        QSqlQuery tmp = database.exec(sqlqstr);
+
+        if (!tmp.exec())
+            QMessageBox::critical(this, "Error", "Could not delete properties associated with region with id = " + QString::number(id) + ". Error is: " + tmp.lastError().text(),
+                QMessageBox::Ok);
+
+
+        //run an sql query to delete the device
+        sqlqstr = "DELETE FROM segmentedRegions WHERE id = " + QString::number(id) + ";";
+
+        tmp = database.exec(sqlqstr);
+
+        if (!tmp.exec())
+            QMessageBox::critical(this, "Error", "Could not delete segmented region with id = " + QString::number(id) + ". Error is: " + tmp.lastError().text(),
+                QMessageBox::Ok);
+
+
+    }
+
+    updateSegmentedRegionsTableFromDb();
+
+    QString statusMessage = "Deleted " + QString::number(count) + " segmented region(s) and their associated properties from " + database.databaseName();\
+
+    ui->label_status->setText(statusMessage);
+}
+
 
 
 
@@ -759,12 +1001,16 @@ void manageTrainingDataForm::on_tableView_imagesForSegRegions_doubleClicked(cons
     cv::Mat img = manageTrainingDataForm::byteArray2Mat(bytes);
 
     imgToDrawOn = img.clone();
+    imgToDrawOnId = id;
+    cv::cvtColor(imgToDrawOn, imgToDrawOnRGB, CV_BGR2RGB);
 
     cv::cvtColor(img, img, CV_BGR2RGB);
 
     ui->label_status->setText("Opened image with id "+QString::number(id)+" from the images table in " + database.databaseName());
 
     ui->label_picToDrawOn->setPixmap(QPixmap::fromImage(QImage(img.data, img.cols, img.rows, img.step, QImage::Format_RGB888)));
+
+    updateAllTables();
 }
 
 void manageTrainingDataForm::on_btn_startContour_clicked()
@@ -778,6 +1024,8 @@ void manageTrainingDataForm::on_btn_startContour_clicked()
     {
         currentDrawingMode = POLY_DRAWING_MODE::DRAWING_INNER_CONTOUR;
         std::vector<Point2<int>> tmp;
+        //QString tmpString = "InnerContour " + QString::number(innerContours.size());
+        //innerContourParents.push_back(QTreeWidgetItem(ui->treeWidget_segRegionPoints,QStringList(QObject::tr(tmpString.toStdString().c_str()))));
         innerContours.push_back(tmp);
     }
     ui->btn_startContour->setEnabled(false);
@@ -791,12 +1039,181 @@ void manageTrainingDataForm::on_btn_endContour_clicked()
     ui->btn_startContour->setEnabled(true);
     ui->btn_endContour->setEnabled(false);
 
-    if (outerContour.size()>0)
+    if (currentDrawingMode == DRAWING_OUTER_CONTOUR && outerContour.size()>0)
         outerContour.push_back(outerContour[0]);
-    else if (innerContours.back().size() > 0)
+    if (currentDrawingMode == DRAWING_INNER_CONTOUR && innerContours.back().size() > 0)
         innerContours.back().push_back(innerContours.back()[0]);
 
+    redrawSegmentedRegion();
+
     currentDrawingMode = POLY_DRAWING_MODE::NOT_DRAWING;
+
+    std::vector<std::vector<Point2<int>>> vecTmp = getContourVectorFromString(getStringFromContourVector(innerContours));
+
+
+    /*QMessageBox::information(this, "Information", "Outer contour: " + getStringFromContour(outerContour) + "Outer contour (r): " + getStringFromContour(getContourFromString(getStringFromContour(outerContour))),
+        QMessageBox::Ok);
+
+    QMessageBox::information(this, "Information", "Inner contours: " + getStringFromContourVector(innerContours) + "\nInner contours (r): " + getStringFromContourVector(vecTmp),
+        QMessageBox::Ok);*/
 }
 
 
+
+QString manageTrainingDataForm::getStringFromContour(std::vector<Point2<int>> vec)
+{
+    std::vector<std::vector<Point2<int>>> tmpVec;
+    tmpVec.push_back(vec);
+
+    return getStringFromContourVector(tmpVec);
+}
+
+QString manageTrainingDataForm::getStringFromContourVector(std::vector<std::vector<Point2<int>>> vec)
+{
+    QString tmp = "[";
+    QString tmp2;
+    for(size_t i = 0; i < vec.size(); i++)
+    {
+
+        tmp += "[";
+        tmp2 = "";
+
+        for(size_t j = 0; j < vec[i].size(); j++)
+        {
+            tmp2 += "[" + QString::number(vec[i][j].x) + "," + QString::number(vec[i][j].y) +"]";
+        }
+        tmp += tmp2;
+
+        tmp += "]";
+    }
+    tmp +="]";
+    return tmp;
+}
+
+std::vector<Point2<int>> manageTrainingDataForm::getContourFromString(QString qstr)
+{
+    std::vector<std::vector<Point2<int>>> vec = getContourVectorFromString(qstr);
+    return vec[0];
+}
+
+std::vector<std::vector<Point2<int>>> manageTrainingDataForm::getContourVectorFromString(QString qstr)
+{
+    std::vector<std::vector<Point2<int>>> vec;
+    int depth = 0;
+    std::string tmp = "";
+    int xTmp, yTmp;
+
+    std::string str = qstr.toStdString();
+
+    enum mode { readingX, readingY, parsingSyms };
+
+    mode pMode = parsingSyms;
+
+    for(size_t i = 0; i < str.size(); i++)
+    {
+        char c = str.at(i);
+        if (c == '[')
+        {
+            depth++;
+            if (depth == 2)
+                vec.push_back(std::vector<Point2<int>>());
+        }
+        else if (c==']')
+        {
+            depth--;
+
+        }
+        if (depth == 0)
+            break;
+
+        if(pMode == readingX)
+        {
+            if(c == ',')
+            {
+                xTmp = std::stoi(tmp);
+                pMode = readingY;
+                tmp = "";
+                continue;
+            }
+            else
+                tmp += c;
+        }
+
+        if(pMode == readingY)
+        {
+            if(depth == 2)
+            {
+                yTmp = std::stoi(tmp);
+                vec.back().push_back(Point2<int>(xTmp, yTmp));
+                pMode = parsingSyms;
+                tmp = "";
+            }
+            else
+                tmp += c;
+        }
+
+        if(depth == 3 && pMode == parsingSyms)
+            pMode = readingX;
+
+    }
+    return vec;
+}
+
+void manageTrainingDataForm::on_btn_clearContours_clicked()
+{
+    clearContours();
+}
+
+void manageTrainingDataForm::clearContours()
+{
+    if(ui->radioBtn_selectOuterContour->isChecked())
+        outerContour.clear();
+    else if (ui->radioBtn_selectInnerContour->isChecked())
+        innerContours.clear();
+
+
+
+    redrawSegmentedRegion();
+}
+
+
+
+
+
+
+
+void manageTrainingDataForm::on_tableView_segmentedRegions_doubleClicked(const QModelIndex &index)
+{
+    int imgRef = index.sibling(index.row(), 1).data().toInt();
+    QString outer = index.sibling(index.row(), 2).data().toString();
+    QString inner = index.sibling(index.row(), 3).data().toString();
+
+    outerContour = getContourFromString(outer);
+    innerContours = getContourVectorFromString(inner);
+
+    //grab the associated image from the database
+    QSqlQuery query;
+    query.prepare("SELECT image FROM images WHERE id = :W_id;");
+    query.bindValue(":W_id", imgRef);
+
+    if(!query.exec())
+    {
+        QMessageBox::critical(this, "Error", "Could not get image. Error is: " + query.lastError().text(),
+            QMessageBox::Ok);
+        return;
+    }
+
+
+
+    if( query.next() )
+    {
+        QByteArray imgArray = query.value(0).toByteArray();
+        imgToDrawOn = byteArray2Mat(imgArray);
+        cv::cvtColor(imgToDrawOn, imgToDrawOnRGB, CV_BGR2RGB);
+        imgToDrawOnId = imgRef;
+    }
+
+    redrawSegmentedRegion();
+    updatePropertiesForSegmentedRegionsTableFromDb();
+
+}
