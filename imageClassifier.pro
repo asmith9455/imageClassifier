@@ -46,7 +46,7 @@ PRE_TARGETDEPS += dummy
 
 gcc*{
 DEFINES+=Linux=1
-DEFINES+=TX1=1
+DEFINES+=TX1=1      #comment out if not building on the TX1
 
 LIBS += -L/usr/lib -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc -lopencv_videoio
 
@@ -61,12 +61,11 @@ SOURCES += main.cpp\
     dataTypes/RgbHistogram.cpp \
     system/SystemCall.cpp \
     testing/testing.cpp \
-    trainingDataManager/ImgDbManager.cpp \
     ProgramManager.cpp \
-    manageTrainingDataForm.cpp \
-    ClickableLabel.cpp \
-    gui/TreeModel.cpp \
-    gui/TreeItem.cpp
+    trainingDataManager/manageTrainingDataForm.cpp \
+    gui/ClickableLabel.cpp \
+    gui/ClassifyCameraStreamForm.cpp \
+    dataTypes/CvQt.cpp
 
 HEADERS  += mainwindow.h \
     classifierAlgorithms/ColourStatisticsAnalyzer.h \
@@ -76,16 +75,16 @@ HEADERS  += mainwindow.h \
     dataTypes/RgbHistogram.h \
     system/SystemCall.h \
     testing/testing.h \
-    trainingDataManager/ImgDbManager.h \
     ProgramManager.h \
-    manageTrainingDataForm.h \
-    ClickableLabel.h \
     dataTypes/Point2.h \
-    gui/TreeModel.h \
-    gui/TreeItem.h
+    trainingDataManager/manageTrainingDataForm.h \
+    gui/ClickableLabel.h \
+    gui/ClassifyCameraStreamForm.h \
+    dataTypes/CvQt.h
 
 FORMS    += mainwindow.ui \
-    manageTrainingDataForm.ui
+    trainingDataManager/manageTrainingDataForm.ui \
+    gui/ClassifyCameraStreamForm.ui
 
 DISTFILES += \
     README.md

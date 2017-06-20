@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QMessageBox>
 
 namespace Ui {
 class MainWindow;
@@ -17,6 +18,8 @@ public:
 
 private slots:
     void on_pushButton_clicked();
+
+    void on_btn_classifyCameraStream_clicked();
 
 private:
     Ui::MainWindow *ui;
