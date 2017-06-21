@@ -3,4 +3,8 @@ Complete tool set for training data creation and image classification (currently
 
 Training data creation builds sqlite3 databases of images and segmented areas within the stored images.
 
-TODO: list currently implemented algorithms.
+Currently implemented algorithms include:
+
+* Texture Classifiers
+
+    * ColourStatisticsAnalyzer (uses colour histograms clustering)
