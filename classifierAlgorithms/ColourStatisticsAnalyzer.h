@@ -1,11 +1,11 @@
 #pragma once
 
-#include "ImageClassifier.h"
+#include "TextureClassifier.h"
 #include "ImageSequence.h"
 #include "RgbHistogram.h"
 #include <exception>
 
-class ColourStatisticsAnalyzer : public ImageClassifier
+class ColourStatisticsAnalyzer : public TextureClassifier
 {
 	double safetyFactor;
 	int tileWidth, tileHeight;
@@ -26,7 +26,7 @@ public:
 
 	ColourStatisticsAnalyzer(
 		vector<ImageSequence> _imageSequences_road,
-		vector<ImageSequence> _imageSequences_notRoad, 
+        vector<ImageSequence> _imageSequences_notRoad,
 		double _safetyFactor);
 
 	vector<vector<RgbHistogram>> rgbHistograms;

@@ -356,31 +356,7 @@ void manageTrainingDataForm::storeProperty(QString propertyName)
     ui->label_status->setText("Inserted property " + propertyName + " into " + database.databaseName());
 }
 
-QByteArray manageTrainingDataForm::mat2ByteArray(const cv::Mat &image)
-{
-    QByteArray byteArray;
-    QDataStream stream( &byteArray, QIODevice::WriteOnly );
-    stream << image.type();
-    stream << image.rows;
-    stream << image.cols;
-    const size_t data_size = image.cols * image.rows * image.elemSize();
-    QByteArray data = QByteArray::fromRawData( (const char*)image.ptr(), data_size );
-    stream << data;
-    return byteArray;
-}
 
-cv::Mat manageTrainingDataForm::byteArray2Mat(const QByteArray & byteArray)
-{
-    QDataStream stream(byteArray);
-    int matType, rows, cols;
-    QByteArray data;
-    stream >> matType;
-    stream >> rows;
-    stream >> cols;
-    stream >> data;
-    cv::Mat mat( rows, cols, matType, (void*)data.data() );
-    return mat.clone();
-}
 
 void manageTrainingDataForm::storeImage(int captureDeviceReference, cv::Mat image)
 {
@@ -389,7 +365,7 @@ void manageTrainingDataForm::storeImage(int captureDeviceReference, cv::Mat imag
     qry.prepare("INSERT INTO images (image, captureDevice)"
                     "VALUES(:W_image, :W_captureDevice)");
 
-    qry.bindValue(":W_image",manageTrainingDataForm::mat2ByteArray(image));
+    qry.bindValue(":W_image",CvQt::mat_2_qbytearray(image));
     qry.bindValue(":W_captureDevice",captureDeviceReference);
 
     if (!qry.exec())
@@ -622,6 +598,7 @@ void manageTrainingDataForm::on_btn_addSegmentedRegionToDb_clicked()
     ui->label_status->setText("Added segmented region and properties to database at " + database.databaseName());
 
     updateSegmentedRegionsTableFromDb();
+    updatePropertiesForSegmentedRegionsTableFromDb();
 
 
 }
@@ -960,6 +937,7 @@ void manageTrainingDataForm::on_btn_deleteSegmentedRegion_clicked()
     }
 
     updateSegmentedRegionsTableFromDb();
+    updatePropertiesForSegmentedRegionsTableFromDb();
 
     QString statusMessage = "Deleted " + QString::number(count) + " segmented region(s) and their associated properties from " + database.databaseName();\
 
@@ -978,7 +956,7 @@ void manageTrainingDataForm::on_tableView_images_doubleClicked(const QModelIndex
 
 
 
-    cv::Mat img = manageTrainingDataForm::byteArray2Mat(bytes);
+    cv::Mat img = CvQt::qbytearray_2_mat(bytes);
 
 
 
@@ -1000,7 +978,7 @@ void manageTrainingDataForm::on_tableView_imagesForSegRegions_doubleClicked(cons
     QByteArray bytes = index.sibling(index.row(), 1).data().toByteArray();
     //int capDevice = index.sibling(index.row(), 2).data().toInt();
 
-    cv::Mat img = manageTrainingDataForm::byteArray2Mat(bytes);
+    cv::Mat img = CvQt::qbytearray_2_mat(bytes);
 
     imgToDrawOn = img.clone();
     imgToDrawOnId = id;
@@ -1210,7 +1188,7 @@ void manageTrainingDataForm::on_tableView_segmentedRegions_doubleClicked(const Q
     if( query.next() )
     {
         QByteArray imgArray = query.value(0).toByteArray();
-        imgToDrawOn = byteArray2Mat(imgArray);
+        imgToDrawOn = CvQt::qbytearray_2_mat(imgArray);
         cv::cvtColor(imgToDrawOn, imgToDrawOnRGB, CV_BGR2RGB);
         imgToDrawOnId = imgRef;
     }

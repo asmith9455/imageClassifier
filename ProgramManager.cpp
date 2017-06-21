@@ -97,7 +97,7 @@ void ProgramManager::trainClassifyDisplaySingleImage()
 	ColourStatisticsAnalyzer csa1(imgSequences_road_reduced, imgSequences_notRoad, 0.01);
 	std::cout << "Done." << std::endl;
 
-	ImageClassifier* ic = &csa1;
+    TextureClassifier* ic = &csa1;
 
 	std::cout << "csa 1 const image size: " << ic->getTileHeight() << " rows x " << ic->getTileWidth() << " cols" << std::endl;
 
@@ -176,9 +176,9 @@ void ProgramManager::trainClassifyDisplaySingleImage()
 
 		std::cout << "Read image to test of dimension " << img.cols << " by " << img.rows << std::endl;
 
-		ImageClassifier::ClassifiedImage classImg = ic->classifyImage(img, true, true);
+        TextureClassifier::ClassifiedImage classImg = ic->classifyImage(img, true, true);
 
-		ImageClassifier::ClassifiedImage classImgPP = ic->postProcessImage(classImg);
+        TextureClassifier::ClassifiedImage classImgPP = ic->postProcessImage(classImg);
 
 		//GaussianBlur(classImg.binaryImageMat, classImg.binaryImageMat, Size(3, 3), 0, 0);
 

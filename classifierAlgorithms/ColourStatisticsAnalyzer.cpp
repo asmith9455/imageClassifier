@@ -1,9 +1,9 @@
-#include "ColourStatisticsAnalyzer.h"
+#include <ColourStatisticsAnalyzer.h>
 
 ColourStatisticsAnalyzer::ColourStatisticsAnalyzer(
 	vector<ImageSequence> _imageSequences_road,
 	vector<ImageSequence> _imageSequences_notRoad, double _safetyFactor) :
-	ImageClassifier(_imageSequences_road, _imageSequences_notRoad)
+    TextureClassifier(_imageSequences_road, _imageSequences_notRoad)
 {
 	safetyFactor = _safetyFactor;
 }
@@ -83,7 +83,7 @@ void ColourStatisticsAnalyzer::generateThresholds()
 			sumThresB += tmp;
 		}
 
-		
+        // we can probably combine these double conversions with the calculations in the push back to avoid double alltogether
 		double avgThresR = (double)sumThresR / (double)rgbHistograms[i].size();
 		double avgThresG = (double)sumThresG / (double)rgbHistograms[i].size();
 		double avgThresB = (double)sumThresB / (double)rgbHistograms[i].size();
@@ -120,6 +120,7 @@ bool ColourStatisticsAnalyzer::isRoad(Mat img)
 	RgbHistogram histo(img);
 	int tempR, tempG, tempB;
 	bool match = false;
+
 	for (int i = 0; i < averageRgbHistograms.size(); i++)
 	{
 		tempR = RgbHistogram::similarityR(histo, averageRgbHistograms[i]);

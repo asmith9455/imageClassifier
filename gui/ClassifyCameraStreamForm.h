@@ -42,11 +42,13 @@ private:
     void startClassify();
     //void displayVideo();
     QTimer* timer;
+    bool timerInitialized = false;
     const char* gst = "nvcamerasrc ! video/x-raw(memory:NVMM), width=(int)2592, height=(int)1458, format=(string)I420, framerate=(fraction)30/1 ! nvvidconv flip-method=2 ! video/x-raw, format=(string)I420 ! videoconvert ! video/x-raw, format=(string)BGR ! appsink";
     //const char* gst =  "nvcamerasrc ! video/x-raw(memory:NVMM), width=(int)1280, height=(int)720, format=(string)I420, framerate=(fraction)120/1 ! nvvidconv flip-method=2 ! video/x-raw, format=(string)I420 ! videoconvert ! video/x-raw, format=(string)BGR ! appsink";
     VideoCapture cap;
     cv::Mat img;
-    ImageClassifier* ic;
+    TextureClassifier* ic;
+    bool csaInitialized = false;
     ColourStatisticsAnalyzer* csa;
     double dif;
     std::chrono::high_resolution_clock::time_point frameTime1, frameTime2, frameTime3, frameTime4, frameTime5, frameTime6;

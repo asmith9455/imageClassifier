@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="btn_manageTrainingImages">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -24,10 +24,23 @@
      </rect>
     </property>
     <property name="text">
-     <string>Manage Training Data</string>
+     <string>Manage Training Images</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btn_classifyCameraStream">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>90</y>
+      <width>161</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Classify Camera Stream</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_trainTextureClassifier">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -37,7 +50,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Classify Camera Stream</string>
+     <string>Train Texture Classifier</string>
     </property>
    </widget>
   </widget>
@@ -47,7 +60,7 @@
      <x>0</x>
      <y>0</y>
      <width>400</width>
-     <height>19</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

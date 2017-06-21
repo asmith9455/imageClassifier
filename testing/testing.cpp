@@ -102,7 +102,7 @@ int test0001()
 	std::cout << "csa 1 const image size: " << csa1.getTileHeight() << " rows x " << csa1.getTileWidth() << " cols" << std::endl;
 	std::cout << "csa 2 const image size: " << csa2.getTileHeight() << " rows x " << csa2.getTileWidth() << " cols" << std::endl;
 
-	ImageClassifier* ic = &csa1;
+    TextureClassifier* ic = &csa1;
 
 	std::cout << "Training model (1)... ";
 	csa1.analyze();
@@ -181,7 +181,7 @@ int test0001()
 
 		std::cout << "Read image to test of dimension " << img.cols << " by " << img.rows << std::endl;
 
-		ImageClassifier::ClassifiedImage classImg = ic->classifyImage(img, true, true);
+        TextureClassifier::ClassifiedImage classImg = ic->classifyImage(img, true, true);
 
 		//GaussianBlur(classImg.binaryImageMat, classImg.binaryImageMat, Size(3, 3), 0, 0);
 

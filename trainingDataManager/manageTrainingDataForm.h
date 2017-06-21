@@ -24,6 +24,7 @@
 #include <QPainter>
 #include <QPaintDevice>
 #include <QPen>
+#include <CvQt.h>
 
 namespace Ui {
 class manageTrainingDataForm;
@@ -84,8 +85,7 @@ private slots:
 private:
     Ui::manageTrainingDataForm *ui;
     static int nullCallback(void *NotUsed, int argc, char **argv, char **azColName);
-    static QByteArray mat2ByteArray(const cv::Mat &image);
-    static cv::Mat byteArray2Mat(const QByteArray & byteArray);
+
 
 
     void storeCaptureDevice(QString name, int imageWidth, int imageHeight, int bitsPerPixel);

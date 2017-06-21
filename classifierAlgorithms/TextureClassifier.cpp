@@ -1,6 +1,6 @@
-#include "ImageClassifier.h"
+#include "TextureClassifier.h"
 
-ImageClassifier::ImageClassifier(
+TextureClassifier::TextureClassifier(
 	std::vector<ImageSequence> _imageSequences_road,
 	std::vector<ImageSequence> _imageSequences_notRoad)
 {
@@ -8,7 +8,7 @@ ImageClassifier::ImageClassifier(
 	imageSequences_notRoad = _imageSequences_notRoad;	
 }
 
-ImageClassifier::ClassifiedImage ImageClassifier::classifyImage(
+TextureClassifier::ClassifiedImage TextureClassifier::classifyImage(
 	cv::Mat imgToClassify,
 	bool genBinaryImg,
 	bool genColouredImg)
@@ -82,18 +82,18 @@ ImageClassifier::ClassifiedImage ImageClassifier::classifyImage(
 
 	
 
-	ImageClassifier::ClassifiedImage cImg(img, binImgMat, imgToClassify);
+    TextureClassifier::ClassifiedImage cImg(img, binImgMat, imgToClassify);
 
 	return cImg;
 }
 
-ImageClassifier::ClassifiedImage ImageClassifier::postProcessImage(ImageClassifier::ClassifiedImage classifiedImg)
+TextureClassifier::ClassifiedImage TextureClassifier::postProcessImage(TextureClassifier::ClassifiedImage classifiedImg)
 {
 	cv::Mat newColouredImg = classifiedImg.originalImage.clone();
 	cv::Mat newBinaryImg = classifiedImg.binaryImageMat.clone();
 	cv::Mat newOriginalImg = classifiedImg.originalImage.clone();
 
-	ImageClassifier::ClassifiedImage cImg(newColouredImg, newBinaryImg, newOriginalImg);
+    TextureClassifier::ClassifiedImage cImg(newColouredImg, newBinaryImg, newOriginalImg);
 
 
 	//perform some post processing on the image to remove noise
@@ -170,6 +170,7 @@ ImageClassifier::ClassifiedImage ImageClassifier::postProcessImage(ImageClassifi
 
 	return cImg;
 }
+
 
 //ImageClassifier::ClassifiedImage ImageClassifier::classifyImage(
 //	vector<ImageClassifier> classifiers,

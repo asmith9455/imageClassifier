@@ -1,4 +1,4 @@
-#include "ClassifyCameraStreamForm.h"
+#include <ClassifyCameraStreamForm.h>
 #include "ui_ClassifyCameraStreamForm.h"
 
 ClassifyCameraStreamForm::ClassifyCameraStreamForm(QWidget *parent) :
@@ -12,7 +12,10 @@ ClassifyCameraStreamForm::ClassifyCameraStreamForm(QWidget *parent) :
 ClassifyCameraStreamForm::~ClassifyCameraStreamForm()
 {
     delete ui;
-    delete timer;
+    if (timerInitialized)
+        delete timer;
+    if (csaInitialized)
+        delete csa;
 }
 
 
@@ -90,6 +93,7 @@ void ClassifyCameraStreamForm::startClassify()
 
 
     cout << "Initializing ColourStatisticsAnalyzer... ";
+    csaInitialized = true;
     csa = new ColourStatisticsAnalyzer(imgSequences_road_reduced, imgSequences_notRoad, 0.1);
 
 
@@ -117,7 +121,7 @@ void ClassifyCameraStreamForm::startClassify()
     //these options do not improve latency
     //cap.set(CV_CAP_PROP_BUFFERSIZE, 3);
     //cap.set(CV_CAP_PROP_FPS, 30);
-
+    timerInitialized = true;
     timer = new QTimer(this);
 
     connect(timer, SIGNAL(timeout()), this, SLOT(displayVideo()));
@@ -137,11 +141,11 @@ void ClassifyCameraStreamForm::displayVideo()
 
     frameTime2 = std::chrono::high_resolution_clock::now();
 
-    ImageClassifier::ClassifiedImage classImg = ic->classifyImage(img, true, true);
+    TextureClassifier::ClassifiedImage classImg = ic->classifyImage(img, true, true);
 
     frameTime3 = std::chrono::high_resolution_clock::now();
 
-    ImageClassifier::ClassifiedImage classImgPP = ic->postProcessImage(classImg);
+    TextureClassifier::ClassifiedImage classImgPP = ic->postProcessImage(classImg);
 
     frameTime4 = std::chrono::high_resolution_clock::now();
 

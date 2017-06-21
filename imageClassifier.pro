@@ -26,7 +26,11 @@ INCLUDEPATH +=  $$PWD/classifierAlgorithms\
                 $$PWD/gui\
                 $$PWD/trainingDataManager
 
-win32{
+win32
+
+{
+
+
 DEFINES+=Windows=1
 
 INCLUDEPATH +=  C:/opencv_3_2_0/build/include\
@@ -42,6 +46,8 @@ QMAKE_EXTRA_TARGETS += customtarget1
 customtarget1.target = dummy
 customtarget1.commands = set PATH=C:\opencv_3_2_0\build\x64\vc14\bin;$(PATH)
 PRE_TARGETDEPS += dummy
+
+
 }
 
 gcc*{
@@ -55,8 +61,7 @@ LIBS += -lsqlite3
 SOURCES += main.cpp\
         mainwindow.cpp \
     classifierAlgorithms/ColourStatisticsAnalyzer.cpp \
-    classifierAlgorithms/ImageClassifier.cpp \
-    classifierAlgorithms/ImageSequence.cpp \
+    dataTypes/ImageSequence.cpp \
     dataTypes/Img.cpp \
     dataTypes/RgbHistogram.cpp \
     system/SystemCall.cpp \
@@ -65,12 +70,14 @@ SOURCES += main.cpp\
     trainingDataManager/manageTrainingDataForm.cpp \
     gui/ClickableLabel.cpp \
     gui/ClassifyCameraStreamForm.cpp \
-    dataTypes/CvQt.cpp
+    dataTypes/CvQt.cpp \
+    gui/TrainTextureClassifierForm.cpp \
+    trainingDataManager/TrainingImageDbWrapper.cpp \
+    dataTypes/ImageSequence.cpp \
+    classifierAlgorithms/TextureClassifier.cpp
 
 HEADERS  += mainwindow.h \
     classifierAlgorithms/ColourStatisticsAnalyzer.h \
-    classifierAlgorithms/ImageClassifier.h \
-    classifierAlgorithms/ImageSequence.h \
     dataTypes/Img.h \
     dataTypes/RgbHistogram.h \
     system/SystemCall.h \
@@ -80,11 +87,19 @@ HEADERS  += mainwindow.h \
     trainingDataManager/manageTrainingDataForm.h \
     gui/ClickableLabel.h \
     gui/ClassifyCameraStreamForm.h \
-    dataTypes/CvQt.h
+    dataTypes/CvQt.h \
+    gui/TrainTextureClassifierForm.h \
+    trainingDataManager/TrainingImageDbWrapper.h \
+    dataTypes/ImageSequence.h \
+    dataTypes/Contour.h \
+    dataTypes/SegmentedRegion.h \
+    dataTypes/SegmentedImage.h \
+    classifierAlgorithms/TextureClassifier.h
 
 FORMS    += mainwindow.ui \
     trainingDataManager/manageTrainingDataForm.ui \
-    gui/ClassifyCameraStreamForm.ui
+    gui/ClassifyCameraStreamForm.ui \
+    gui/TrainTextureClassifierForm.ui
 
 DISTFILES += \
     README.md
