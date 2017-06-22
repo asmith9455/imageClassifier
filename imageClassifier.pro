@@ -74,7 +74,8 @@ SOURCES += main.cpp\
     gui/TrainTextureClassifierForm.cpp \
     trainingDataManager/TrainingImageDbWrapper.cpp \
     dataTypes/ImageSequence.cpp \
-    classifierAlgorithms/TextureClassifier.cpp
+    classifierAlgorithms/TextureClassifier.cpp \
+    dataTypes/ConverterMethods.cpp
 
 HEADERS  += mainwindow.h \
     classifierAlgorithms/ColourStatisticsAnalyzer.h \
@@ -94,7 +95,8 @@ HEADERS  += mainwindow.h \
     dataTypes/Contour.h \
     dataTypes/SegmentedRegion.h \
     dataTypes/SegmentedImage.h \
-    classifierAlgorithms/TextureClassifier.h
+    classifierAlgorithms/TextureClassifier.h \
+    dataTypes/ConverterMethods.h
 
 FORMS    += mainwindow.ui \
     trainingDataManager/manageTrainingDataForm.ui \

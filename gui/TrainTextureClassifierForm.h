@@ -7,6 +7,8 @@
 #include <QMessageBox>
 #include <QSqlQuery>
 #include <QSqlTableModel>
+#include <TrainingImageDbWrapper.h>
+#include <ImageSequence.h>
 
 namespace Ui {
 class TrainClassifierForm;
@@ -20,9 +22,13 @@ public:
     explicit TrainClassifierForm(QWidget *parent = 0);
     ~TrainClassifierForm();
 
+private slots:
+    void on_btn_generateImages_clicked();
+
 private:
     Ui::TrainClassifierForm *ui;
     void updatePropertiesFromDb();
+    QString dbPath;
 };
 
 #endif // TRAINCLASSIFIERFORM_H

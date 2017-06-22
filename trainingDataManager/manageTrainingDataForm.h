@@ -25,6 +25,7 @@
 #include <QPaintDevice>
 #include <QPen>
 #include <CvQt.h>
+#include <ConverterMethods.h>
 
 namespace Ui {
 class manageTrainingDataForm;
@@ -108,13 +109,6 @@ private:
     std::vector<std::vector<Point2<int>>> innerContours;
     POLY_DRAWING_MODE currentDrawingMode = POLY_DRAWING_MODE::NOT_DRAWING;
     void redrawSegmentedRegion();
-    QTreeWidgetItem* outerContourParent;
-    std::vector<QTreeWidgetItem> outerContourPoints;
-    std::vector<QTreeWidgetItem> innerContourParents;
-    QString getStringFromContour(std::vector<Point2<int>> vec);
-    QString getStringFromContourVector(std::vector<std::vector<Point2<int>>> vec);
-    std::vector<Point2<int>> getContourFromString(QString str);
-    std::vector<std::vector<Point2<int>>> getContourVectorFromString(QString str);
     void clearContours();
 
     QSqlDatabase database;

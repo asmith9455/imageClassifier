@@ -10,10 +10,11 @@ template<typename T>
 class SegmentedImage
 {
 protected:
+
+public:
+    int imgID, captureDeviceID;
     cv::Mat img;
     std::vector<SegmentedRegion<T>> segmentedRegions;
-    std::vector<std::string> properties;
-public:
     SegmentedImage(){}
 };
 

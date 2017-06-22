@@ -8,10 +8,11 @@ class SegmentedRegion
 {
 
 protected:
-    Contour<T> outerContour;
-    std::vector<Contour<T>> innerContours;
+
 
 public:
+    Contour<T> outerContour;
+    std::vector<Contour<T>> innerContours;
     int imgID, segmentedRegionID;
     std::vector<int> propertyIDs;
     SegmentedRegion(){}

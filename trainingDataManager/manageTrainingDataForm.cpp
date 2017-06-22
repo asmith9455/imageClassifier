@@ -566,7 +566,9 @@ void manageTrainingDataForm::on_btn_addSegmentedRegionToDb_clicked()
 
 
     //insert segmented region
-    int regionRef = storeSegmentedRegion(imgToDrawOnId, getStringFromContour(outerContour), getStringFromContourVector(innerContours));
+    int regionRef = storeSegmentedRegion(imgToDrawOnId,
+                                         ConverterMethods::getStringFromContour(outerContour),
+                                         ConverterMethods::getStringFromContourVector(innerContours));
 
     if (regionRef == -1)
         return;
@@ -1024,11 +1026,15 @@ void manageTrainingDataForm::on_btn_endContour_clicked()
     if (currentDrawingMode == DRAWING_INNER_CONTOUR && innerContours.back().size() > 0)
         innerContours.back().push_back(innerContours.back()[0]);
 
+
+
     redrawSegmentedRegion();
 
     currentDrawingMode = POLY_DRAWING_MODE::NOT_DRAWING;
 
-    std::vector<std::vector<Point2<int>>> vecTmp = getContourVectorFromString(getStringFromContourVector(innerContours));
+    /*std::vector<std::vector<Point2<int>>> vecTmp =
+            ConverterMethods::getContourVectorFromString(
+                ConverterMethods::getStringFromContourVector(innerContours));*/
 
 
     /*QMessageBox::information(this, "Information", "Outer contour: " + getStringFromContour(outerContour) + "Outer contour (r): " + getStringFromContour(getContourFromString(getStringFromContour(outerContour))),
@@ -1040,104 +1046,7 @@ void manageTrainingDataForm::on_btn_endContour_clicked()
 
 
 
-QString manageTrainingDataForm::getStringFromContour(std::vector<Point2<int>> vec)
-{
-    std::vector<std::vector<Point2<int>>> tmpVec;
-    tmpVec.push_back(vec);
 
-    return getStringFromContourVector(tmpVec);
-}
-
-QString manageTrainingDataForm::getStringFromContourVector(std::vector<std::vector<Point2<int>>> vec)
-{
-    QString tmp = "[";
-    QString tmp2;
-    for(size_t i = 0; i < vec.size(); i++)
-    {
-
-        tmp += "[";
-        tmp2 = "";
-
-        for(size_t j = 0; j < vec[i].size(); j++)
-        {
-            tmp2 += "[" + QString::number(vec[i][j].x) + "," + QString::number(vec[i][j].y) +"]";
-        }
-        tmp += tmp2;
-
-        tmp += "]";
-    }
-    tmp +="]";
-    return tmp;
-}
-
-std::vector<Point2<int>> manageTrainingDataForm::getContourFromString(QString qstr)
-{
-    std::vector<std::vector<Point2<int>>> vec = getContourVectorFromString(qstr);
-    return vec[0];
-}
-
-std::vector<std::vector<Point2<int>>> manageTrainingDataForm::getContourVectorFromString(QString qstr)
-{
-    std::vector<std::vector<Point2<int>>> vec;
-    int depth = 0;
-    std::string tmp = "";
-    int xTmp, yTmp;
-
-    std::string str = qstr.toStdString();
-
-    enum mode { readingX, readingY, parsingSyms };
-
-    mode pMode = parsingSyms;
-
-    for(size_t i = 0; i < str.size(); i++)
-    {
-        char c = str.at(i);
-        if (c == '[')
-        {
-            depth++;
-            if (depth == 2)
-                vec.push_back(std::vector<Point2<int>>());
-        }
-        else if (c==']')
-        {
-            depth--;
-
-        }
-        if (depth == 0)
-            break;
-
-        if(pMode == readingX)
-        {
-            if(c == ',')
-            {
-                xTmp = std::stoi(tmp);
-                pMode = readingY;
-                tmp = "";
-                continue;
-            }
-            else
-                tmp += c;
-        }
-
-        if(pMode == readingY)
-        {
-            if(depth == 2)
-            {
-                yTmp = std::stoi(tmp);
-                vec.back().push_back(Point2<int>(xTmp, yTmp));
-                pMode = parsingSyms;
-                tmp = "";
-            }
-            else
-                tmp += c;
-        }
-
-        if(depth == 3 && pMode == parsingSyms)
-            pMode = readingX;
-
-    }
-    return vec;
-}
 
 void manageTrainingDataForm::on_btn_clearContours_clicked()
 {
@@ -1168,8 +1077,8 @@ void manageTrainingDataForm::on_tableView_segmentedRegions_doubleClicked(const Q
     QString outer = index.sibling(index.row(), 2).data().toString();
     QString inner = index.sibling(index.row(), 3).data().toString();
 
-    outerContour = getContourFromString(outer);
-    innerContours = getContourVectorFromString(inner);
+    outerContour = ConverterMethods::getContourFromString(outer);
+    innerContours = ConverterMethods::getContourVectorFromString(inner);
 
     //grab the associated image from the database
     QSqlQuery query;

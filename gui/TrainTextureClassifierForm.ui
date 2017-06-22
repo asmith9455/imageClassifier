@@ -214,7 +214,7 @@
      <string>tileWidth (px)</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="btn_generateImages">
     <property name="geometry">
      <rect>
       <x>210</x>
@@ -383,6 +383,19 @@
      <string>Success Rate:</string>
     </property>
    </widget>
+  </widget>
+  <widget class="QPushButton" name="btn_trainAndTest">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>540</y>
+     <width>111</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Train and Test</string>
+   </property>
   </widget>
  </widget>
  <resources/>
