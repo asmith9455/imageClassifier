@@ -5,6 +5,8 @@
 #include <Point2.h>
 #include <vector>
 #include <Contour.h>
+#include <ImageSequence.h>
+#include <SegmentedRegion.h>
 
 class ConverterMethods
 {
@@ -17,6 +19,42 @@ public:
 
     static Contour<int> getContourClassFromString(QString qstr);
     static std::vector<Contour<int>> ConverterMethods::getContourClassVectorFromString(QString qstr);
+
+    template<typename T>
+    static ImageSequence getImageSequenceFromSegmentedRegion(
+            cv::Mat img, SegmentedRegion<T> segRgn, int tileWidth, int tileHeight)
+    {
+        //segmentedRegion contains 1 outer contour (representing a polygon that bounds an area)
+        //and a list of inner contours (representing polygons that represent holes)
+        ImageSequence imSeq;
+
+        int xPos = 0, yPos = 0;
+
+        while (true)
+        {
+            while (true)
+            {
+                //this is the subimage to add to the image sequence
+                cv::Mat subImg = img(cv::Range(yPos, yPos + tileHeight), cv::Range(xPos, xPos + tileWidth));
+
+                bool contained = segRgn.containsRectangle(
+                            Point2<int>(xPos, yPos),
+                            Point2<int>(xPos+tileWidth, yPos+tileHeight));
+
+                if (contained)
+                    imSeq.addImg(subImg);
+
+                xPos = xPos + tileWidth;
+                if (xPos + tileWidth > img.cols)
+                    break;
+            }
+            xPos = 0;
+            yPos = yPos + tileHeight;
+            if (yPos + tileHeight > img.rows)
+                break;
+        }
+        return imSeq;
+    }
 };
 
 #endif // CONVERTERMETHODS_H

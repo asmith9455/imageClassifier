@@ -14,14 +14,18 @@ TrainingImageDbWrapper::TrainingImageDbWrapper()
   return seed;
 }*/
 
-std::vector<ImageSequence> TrainingImageDbWrapper::getTilesWithSingleProperty(QString dbFilePath, int captureDeviceID, int propertyID)
+std::vector<ImageSequence> TrainingImageDbWrapper::getTilesWithSingleProperty
+(QString dbFilePath, int captureDeviceID, int propertyID , int tileWidth, int tileHeight)
 {
     std::vector<SegmentedImage<int>> segImgs
             = TrainingImageDbWrapper::getSegmentedImagesWithSingleProperty(dbFilePath, captureDeviceID, propertyID);
 
     //go through each segmented region in segImgs and figure out all unique property combinations we will use to create image sequences
     //map lists of property ids to lists of indices in the segImgs vector
-    std::map<std::vector<int>, std::vector<size_t>> combos;
+    std::map<std::vector<int>,
+            std::vector<std::pair<size_t, size_t>>>
+            combos;
+
     bool inMap;
 
     for (size_t i = 0; i < segImgs.size(); i++)
@@ -31,20 +35,37 @@ std::vector<ImageSequence> TrainingImageDbWrapper::getTilesWithSingleProperty(QS
             inMap = mapPair != combos.end();
 
             if (inMap)
-                mapPair->second.push_back(j);// / txtLenDbl);
+                mapPair->second.push_back(std::make_pair(i,j));// / txtLenDbl);
             else
             {
-                std::vector<size_t> tmp = {i};
+                std::vector<std::pair<size_t, size_t>> tmp = {std::make_pair(i,j)};
                 combos.insert(
-                        std::make_pair(segImgs[i].segmentedRegions[j].propertyIDs, tmp)
+                        std::make_pair(
+                                segImgs[i].segmentedRegions[j].propertyIDs,
+                                tmp)
                             );
             }
         }
 
-
-
     //create the image sequences to return
     std::vector<ImageSequence> imseqs;
+
+    //combos has all of the indices for each unique combination of properties
+    //these will be our pre-clustered image sequences
+    for (auto it : combos)
+    {
+        ImageSequence iseq;
+        for (std::pair<size_t, size_t> indexPair : it.second)
+            if (segImgs[indexPair.first].segmentedRegions[indexPair.second].hasProperty(propertyID))
+                iseq.addImgs(
+                    ConverterMethods::
+                            getImageSequenceFromSegmentedRegion(
+                                segImgs[indexPair.first].img, segImgs[indexPair.first].segmentedRegions[indexPair.second], tileWidth, tileHeight));
+            else //note that the sql queries should guarantee that each seg region has the desired property
+                throw runtime_error("There is an error in the sql select logic. All the segmented regions should have the targetPropertyID.");
+        imseqs.push_back(iseq);
+    }
+
     return imseqs;
 }
 
@@ -179,7 +200,6 @@ std::vector<SegmentedImage<int>> TrainingImageDbWrapper::getSegmentedImagesWithS
         query.prepare("SELECT captureDevice, image FROM images WHERE id = :W_id;");
         query.bindValue(":W_id", segImgs[i].imgID);
 
-
         if(!query.exec())
         {
             database.close();
@@ -194,9 +214,9 @@ std::vector<SegmentedImage<int>> TrainingImageDbWrapper::getSegmentedImagesWithS
             {
                 segImgs[i].img
                         = CvQt::qbytearray_2_mat(query.value(1).toByteArray());
-                cv::imshow("test",segImgs[i].img);
-                cv::waitKey(0);
-                cv::destroyAllWindows();
+                //cv::imshow("test",segImgs[i].img);
+                //cv::waitKey(0);
+                //cv::destroyAllWindows();
             }
             else
                 segImgs.erase(segImgs.begin() + i);
@@ -205,8 +225,6 @@ std::vector<SegmentedImage<int>> TrainingImageDbWrapper::getSegmentedImagesWithS
         if (i == 0)
             break;
     }
-
-
 
     return segImgs;
 }

@@ -120,3 +120,4 @@ std::vector<Contour<int>> ConverterMethods::getContourClassVectorFromString(QStr
 
     return cs;
 }
+

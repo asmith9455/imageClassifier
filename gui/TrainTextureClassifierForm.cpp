@@ -47,5 +47,5 @@ void TrainClassifierForm::updatePropertiesFromDb()
 
 void TrainClassifierForm::on_btn_generateImages_clicked()
 {
-    TrainingImageDbWrapper::getTilesWithSingleProperty(dbPath, 1, 1);
+    TrainingImageDbWrapper::getTilesWithSingleProperty(dbPath, 1, 1, 32, 32);
 }

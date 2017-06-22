@@ -1,6 +1,6 @@
 #include "ImageSequence.h"
 
-
+ImageSequence::ImageSequence(){}
 
 ImageSequence::ImageSequence(std::string _directory)
 {
@@ -52,6 +52,17 @@ size_t ImageSequence::getimageCount()
 std::string ImageSequence::getDirectory()
 {
 	return directory;
+}
+
+void ImageSequence::addImg(cv::Mat img)
+{
+    this->images.push_back(img);
+}
+
+void ImageSequence::addImgs(ImageSequence imseq)
+{
+    for (size_t i = 0; i < imseq.getimageCount(); i++)
+        this->images.push_back(imseq.imageAt(i));
 }
 
 //Generates an ImageSequence consisting of a pseudorandom sequence of (numElements)

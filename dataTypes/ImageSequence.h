@@ -15,6 +15,7 @@ private:
 public:
 	ImageSequence(std::string directory);
 	ImageSequence(std::vector<cv::Mat> _images, std::vector<std::string> _imageFileNames, std::string directory);
+    ImageSequence();
 
     std::vector<std::string> associatedProperties;
 	cv::Mat imageAt(int index);
@@ -22,6 +23,8 @@ public:
 	std::string imageFileNameAt(int index);
     size_t getimageCount();
 	std::string getDirectory();
+    void addImg(cv::Mat img);
+    void addImgs(ImageSequence imseq);
 
 	static ImageSequence getRandomImageSequence(ImageSequence seq, int numElements);
 	static bool imagesAreEqual(cv::Mat im1, cv::Mat im2);
