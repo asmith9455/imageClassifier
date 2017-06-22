@@ -12,7 +12,10 @@ protected:
     std::vector<Contour<T>> innerContours;
 
 public:
-    SegmentedRegion();
+    int imgID, segmentedRegionID;
+    std::vector<int> propertyIDs;
+    SegmentedRegion(){}
+
 };
 
 #endif // SEGMENTEDREGION_H

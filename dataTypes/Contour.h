@@ -11,9 +11,11 @@ protected:
     std::vector<Point2<T>> points;
 
 public:
+    Contour(){}
     Contour(std::vector<Point2<T>>  _points):points(_points)
     {
     }
+
 };
 
 #endif // CONTOUR_H

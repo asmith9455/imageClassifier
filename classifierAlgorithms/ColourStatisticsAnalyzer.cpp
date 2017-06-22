@@ -1,9 +1,9 @@
 #include <ColourStatisticsAnalyzer.h>
 
 ColourStatisticsAnalyzer::ColourStatisticsAnalyzer(
-	vector<ImageSequence> _imageSequences_road,
-	vector<ImageSequence> _imageSequences_notRoad, double _safetyFactor) :
-    TextureClassifier(_imageSequences_road, _imageSequences_notRoad)
+    vector<ImageSequence> _imageSequences_target,
+    vector<ImageSequence> _imageSequences_notTarget, double _safetyFactor) :
+    TextureClassifier(_imageSequences_target, _imageSequences_notTarget)
 {
 	safetyFactor = _safetyFactor;
 }
@@ -34,11 +34,11 @@ void ColourStatisticsAnalyzer::generateRgbHistogramsForImageSequences()
 {
 	rgbHistograms.clear();
 
-	for (int i = 0; i < imageSequences_road.size(); i++)
+    for (int i = 0; i < imageSequences_target.size(); i++)
 	{
 		vector<RgbHistogram> tmpHistos;
 
-		tmpHistos = generateRgbHistogramsForImageSequence(imageSequences_road[i]);
+        tmpHistos = generateRgbHistogramsForImageSequence(imageSequences_target[i]);
 
 		rgbHistograms.push_back(tmpHistos);
 	}
@@ -102,20 +102,20 @@ void ColourStatisticsAnalyzer::generateThresholds()
 
 //generate histograms for training data generated from a particular image
 //(each image sequence contains training data from a particular image for automatic clustering purposes)
-vector<RgbHistogram> ColourStatisticsAnalyzer::generateRgbHistogramsForImageSequence(ImageSequence roadImageSequence)
+vector<RgbHistogram> ColourStatisticsAnalyzer::generateRgbHistogramsForImageSequence(ImageSequence targetImageSequence)
 {
 	//currently generates only a single histogram for each image sequence
 	//(i.e. the vector returned will contain only 1 element).
 	//plan to extend to k histos using a clustering algo
 
 	vector<RgbHistogram> vecs;
-	vecs = RgbHistogram::getHistograms(roadImageSequence);
+    vecs = RgbHistogram::getHistograms(targetImageSequence);
 
 	return vecs;
 
 }
 
-bool ColourStatisticsAnalyzer::isRoad(Mat img)
+bool ColourStatisticsAnalyzer::isTarget(Mat img)
 {
 	RgbHistogram histo(img);
 	int tempR, tempG, tempB;
@@ -163,17 +163,17 @@ void ColourStatisticsAnalyzer::updateConstantImageSize()
 	bool constantBoolW = true, constantBoolH = true;
 	int rows, cols;
 
-	if (imageSequences_road.size() > 0 && imageSequences_road[0].getimageCount() > 0)
+    if (imageSequences_target.size() > 0 && imageSequences_target[0].getimageCount() > 0)
 	{
-		rows = imageSequences_road[0].imageAt(0).rows;
-		cols = imageSequences_road[0].imageAt(0).cols;
+        rows = imageSequences_target[0].imageAt(0).rows;
+        cols = imageSequences_target[0].imageAt(0).cols;
 	}
 
-	for (int i = 0; i < imageSequences_road.size(); i++)
-		for (int j = 0; j < imageSequences_road[i].getimageCount(); j++)
+    for (int i = 0; i < imageSequences_target.size(); i++)
+        for (int j = 0; j < imageSequences_target[i].getimageCount(); j++)
 		{
-			constantBoolH = constantBoolH && imageSequences_road[i].imageAt(j).rows == rows;
-			constantBoolW = constantBoolW && imageSequences_road[i].imageAt(j).cols == cols;
+            constantBoolH = constantBoolH && imageSequences_target[i].imageAt(j).rows == rows;
+            constantBoolW = constantBoolW && imageSequences_target[i].imageAt(j).cols == cols;
 		}
 
 	if (constantBoolH)

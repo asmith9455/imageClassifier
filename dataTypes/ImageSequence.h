@@ -16,6 +16,7 @@ public:
 	ImageSequence(std::string directory);
 	ImageSequence(std::vector<cv::Mat> _images, std::vector<std::string> _imageFileNames, std::string directory);
 
+    std::vector<std::string> associatedProperties;
 	cv::Mat imageAt(int index);
 	std::string imagePathAt(int index);
 	std::string imageFileNameAt(int index);

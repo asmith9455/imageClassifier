@@ -1,11 +1,11 @@
 #include "TextureClassifier.h"
 
 TextureClassifier::TextureClassifier(
-	std::vector<ImageSequence> _imageSequences_road,
-	std::vector<ImageSequence> _imageSequences_notRoad)
+    std::vector<ImageSequence> _imageSequences_target,
+    std::vector<ImageSequence> _imageSequences_notTarget)
 {
-	imageSequences_road = _imageSequences_road;
-	imageSequences_notRoad = _imageSequences_notRoad;	
+    imageSequences_target = _imageSequences_target;
+    imageSequences_notTarget = _imageSequences_notTarget;
 }
 
 TextureClassifier::ClassifiedImage TextureClassifier::classifyImage(
@@ -41,13 +41,13 @@ TextureClassifier::ClassifiedImage TextureClassifier::classifyImage(
 			//waitKey(0);
 			//destroyAllWindows();
 
-			bool isRoad = false;
+            bool isTarget = false;
 
-			isRoad = this->isRoad(subImg);
+            isTarget = this->isTarget(subImg);
 
 			if (genColouredImg)
 			{
-				if (isRoad)
+                if (isTarget)
 				{
 					subImg.forEach<cv::Point3_<uint8_t>>([&](cv::Point3_<uint8_t>& pixel, const int position[]) -> void {
 						pixel.y = 255;	//set to green
@@ -64,7 +64,7 @@ TextureClassifier::ClassifiedImage TextureClassifier::classifyImage(
 			//binImg.setElement(bMapY, bMapX, isRoad);
 
 			if (genBinaryImg)
-				binImgMat.at<uchar>(bMapY, bMapX) = (isRoad) ? 255 : 0;
+                binImgMat.at<uchar>(bMapY, bMapX) = (isTarget) ? 255 : 0;
 
 			bMapX++;
 

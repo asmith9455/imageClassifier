@@ -25,51 +25,51 @@ int test0001()
 		"/home/ubuntu/image_database/image_database_objects/32x32"
 	};
 	#endif
-	vector<ImageSequence> imgSequences_notRoad, imgSequences_road;
+    vector<ImageSequence> imgSequences_notTarget, imgSequences_target;
 
-	int roadImageTotal = 0;
-	int notRoadImageTotal = 0;
-	int roadImageTotalForTraining = 0;
+    int targetImageTotal = 0;
+    int nottargetImageTotal = 0;
+    int targetImageTotalForTraining = 0;
 
 	for (int i = 0; i < baseDir.size(); i++)
 	{
 		#ifdef Windows
-		string notRoadDir = baseDir[i] + "\\notRoad";
-		string roadDir = baseDir[i] + "\\road";
+        string nottargetDir = baseDir[i] + "\\nottarget";
+        string targetDir = baseDir[i] + "\\target";
 		#endif
 
 		#ifdef Linux
-		string notRoadDir = baseDir[i] + "/notRoad";
-		string roadDir = baseDir[i] + "/road";
+        string nottargetDir = baseDir[i] + "/nottarget";
+        string targetDir = baseDir[i] + "/target";
 		#endif
 
-		ImageSequence roadSeq(roadDir);
-		ImageSequence notRoadSeq(notRoadDir);
+        ImageSequence targetSeq(targetDir);
+        ImageSequence nottargetSeq(nottargetDir);
 
-		roadImageTotal+=roadSeq.getimageCount();
-		notRoadImageTotal+=notRoadSeq.getimageCount();
+        targetImageTotal+=targetSeq.getimageCount();
+        nottargetImageTotal+=nottargetSeq.getimageCount();
 
-		imgSequences_notRoad.push_back(notRoadSeq);
-		imgSequences_road.push_back(roadSeq);
+        imgSequences_notTarget.push_back(nottargetSeq);
+        imgSequences_target.push_back(targetSeq);
 	}
 
-	vector<ImageSequence> imgSequences_road_reduced;
+    vector<ImageSequence> imgSequences_target_reduced;
 
 	double fractionUsedForTraining = 1.0;
 
-    std::cout << "Using the following fraction of road images as training data: " << fractionUsedForTraining << std::endl;
+    std::cout << "Using the following fraction of target images as training data: " << fractionUsedForTraining << std::endl;
 
-	for (int i = 0; i < imgSequences_road.size(); i++)
+    for (int i = 0; i < imgSequences_target.size(); i++)
 	{
-		int numImgs = (int)(fractionUsedForTraining * (double)imgSequences_road[i].getimageCount());
-		ImageSequence imgSequence_road_reduced = ImageSequence::getRandomImageSequence(imgSequences_road[i], numImgs);
-		imgSequences_road_reduced.push_back(imgSequence_road_reduced);
-		roadImageTotalForTraining += imgSequence_road_reduced.getimageCount();
+        int numImgs = (int)(fractionUsedForTraining * (double)imgSequences_target[i].getimageCount());
+        ImageSequence imgSequence_target_reduced = ImageSequence::getRandomImageSequence(imgSequences_target[i], numImgs);
+        imgSequences_target_reduced.push_back(imgSequence_target_reduced);
+        targetImageTotalForTraining += imgSequence_target_reduced.getimageCount();
 	}
 
 
-	//imshow("orig", imgSequences_road[0].imageAt(0));
-	//imshow("new", imgSequences_road_reduced[0].imageAt(0));
+    //imshow("orig", imgSequences_target[0].imageAt(0));
+    //imshow("new", imgSequences_target_reduced[0].imageAt(0));
 
 	//waitKey(0);                                          // Wait for a keystroke in the window
 	//destroyAllWindows();
@@ -78,24 +78,24 @@ int test0001()
 
 	std::cout << "Done." << std::endl;
 
-	std::cout<<"Read a total of "<<roadImageTotal<<" road images."<<std::endl;
-	std::cout<<"Read a total of "<<notRoadImageTotal<<" notRoad images."<<std::endl;
+    std::cout<<"Read a total of "<<targetImageTotal<<" target images."<<std::endl;
+    std::cout<<"Read a total of "<<nottargetImageTotal<<" nottarget images."<<std::endl;
 
-	std::cout<<"Selected a total of "<<roadImageTotalForTraining<<" road images for training."<<std::endl;
+    std::cout<<"Selected a total of "<<targetImageTotalForTraining<<" target images for training."<<std::endl;
 
-	if (roadImageTotal == 0)
+    if (targetImageTotal == 0)
 		throw runtime_error("Training Data not found.");
 
 
 	std::cout << "Initializing ColourStatisticsAnalyzer... ";
-	ColourStatisticsAnalyzer csa1(imgSequences_road_reduced, imgSequences_notRoad, 0.1);
+    ColourStatisticsAnalyzer csa1(imgSequences_target_reduced, imgSequences_notTarget, 0.1);
 
 
-	ColourStatisticsAnalyzer csa2(imgSequences_road_reduced, imgSequences_notRoad, 0.1);
+    ColourStatisticsAnalyzer csa2(imgSequences_target_reduced, imgSequences_notTarget, 0.1);
 	std::cout << "Done." << std::endl;
 
-	bool imgIsEqual = ImageSequence::imagesAreEqual(csa1.imageSequences_road[0].imageAt(0), csa2.imageSequences_road[0].imageAt(0));
-	bool imgsEqual = ImageSequence::imagesSequencesAreEqual(csa1.imageSequences_road[0], csa2.imageSequences_road[0]);
+    bool imgIsEqual = ImageSequence::imagesAreEqual(csa1.imageSequences_target[0].imageAt(0), csa2.imageSequences_target[0].imageAt(0));
+    bool imgsEqual = ImageSequence::imagesSequencesAreEqual(csa1.imageSequences_target[0], csa2.imageSequences_target[0]);
     std::cout << "Images are equal: " << imgsEqual << std::endl;
 
 
@@ -128,21 +128,21 @@ int test0001()
 		int falseMatches = 0;
 		int falseCount = 0;
 
-		for (int i = 0; i < imgSequences_road.size(); i++)
+        for (int i = 0; i < imgSequences_target.size(); i++)
 		{
-			for (int j = 0; j < imgSequences_road[i].getimageCount(); j++)
+            for (int j = 0; j < imgSequences_target[i].getimageCount(); j++)
 			{
-				if (ic->isRoad(imgSequences_road[i].imageAt(j)))
+                if (ic->isTarget(imgSequences_target[i].imageAt(j)))
 					trueMatches++;
 				trueCount++;
 			}
 		}
 
-		for (int i = 0; i < imgSequences_notRoad.size(); i++)
+        for (int i = 0; i < imgSequences_notTarget.size(); i++)
 		{
-			for (int j = 0; j < imgSequences_notRoad[i].getimageCount(); j++)
+            for (int j = 0; j < imgSequences_notTarget[i].getimageCount(); j++)
 			{
-				if (ic->isRoad(imgSequences_notRoad[i].imageAt(j)))
+                if (ic->isTarget(imgSequences_notTarget[i].imageAt(j)))
 					falseMatches++;
 				falseCount++;
 			}
@@ -212,7 +212,7 @@ int test0001()
 		//csa1.writeHistogramData("C:\\Users\\Alex\\OneDrive\\Capstone 2017\\histogram_data\\histoData2.txt");
 		//csa1.writeAverageHistogramData("C:\\Users\\Alex\\OneDrive\\Capstone 2017\\histogram_data\\avgHistoData2.txt");
 
-		//cout << csa1.isRoad(Mat()) << std::endl;
+        //cout << csa1.istarget(Mat()) << std::endl;
 
 	}
 
@@ -225,7 +225,7 @@ int test0002()
 
 
 	Mat image;
-	image = imread("C:\\Users\\Alex\\OneDrive\\Capstone 2017\\code_alex\\road_classifier\\x64\\Debug\\testImage.jpg", CV_LOAD_IMAGE_COLOR);   // Read the file
+    image = imread("C:\\Users\\Alex\\OneDrive\\Capstone 2017\\code_alex\\target_classifier\\x64\\Debug\\testImage.jpg", CV_LOAD_IMAGE_COLOR);   // Read the file
 
 	if (!image.data)                              // Check for invalid input
 	{
@@ -261,51 +261,51 @@ int test0003()
 	};
 
 
-	vector<ImageSequence> imgSequences_notRoad, imgSequences_road;
+    vector<ImageSequence> imgSequences_notTarget, imgSequences_target;
 
-	int roadImageTotal = 0;
-	int notRoadImageTotal = 0;
-	int roadImageTotalForTraining = 0;
+    int targetImageTotal = 0;
+    int nottargetImageTotal = 0;
+    int targetImageTotalForTraining = 0;
 
 	for (int i = 0; i < baseDir.size(); i++)
 	{
 		#ifdef Windows
-		string notRoadDir = baseDir[i] + "\\notRoad";
-		string roadDir = baseDir[i] + "\\road";
+        string nottargetDir = baseDir[i] + "\\nottarget";
+        string targetDir = baseDir[i] + "\\target";
 		#endif
 
 		#ifdef Linux
-		string notRoadDir = baseDir[i] + "/notRoad";
-		string roadDir = baseDir[i] + "/road";
+        string nottargetDir = baseDir[i] + "/nottarget";
+        string targetDir = baseDir[i] + "/target";
 		#endif
 
-		ImageSequence roadSeq(roadDir);
-		ImageSequence notRoadSeq(notRoadDir);
+        ImageSequence targetSeq(targetDir);
+        ImageSequence nottargetSeq(nottargetDir);
 
-		roadImageTotal+=roadSeq.getimageCount();
-		notRoadImageTotal+=notRoadSeq.getimageCount();
+        targetImageTotal+=targetSeq.getimageCount();
+        nottargetImageTotal+=nottargetSeq.getimageCount();
 
-		imgSequences_notRoad.push_back(notRoadSeq);
-		imgSequences_road.push_back(roadSeq);
+        imgSequences_notTarget.push_back(nottargetSeq);
+        imgSequences_target.push_back(targetSeq);
 	}
 
-	vector<ImageSequence> imgSequences_road_reduced;
+    vector<ImageSequence> imgSequences_target_reduced;
 
 	double fractionUsedForTraining = 1.0;
 
-    std::cout << "Using the following fraction of road images as training data: " << fractionUsedForTraining << std::endl;
+    std::cout << "Using the following fraction of target images as training data: " << fractionUsedForTraining << std::endl;
 
-	for (int i = 0; i < imgSequences_road.size(); i++)
+    for (int i = 0; i < imgSequences_target.size(); i++)
 	{
-		int numImgs = (int)(fractionUsedForTraining * (double)imgSequences_road[i].getimageCount());
-		ImageSequence imgSequence_road_reduced = ImageSequence::getRandomImageSequence(imgSequences_road[i], numImgs);
-		imgSequences_road_reduced.push_back(imgSequence_road_reduced);
-		roadImageTotalForTraining += imgSequence_road_reduced.getimageCount();
+        int numImgs = (int)(fractionUsedForTraining * (double)imgSequences_target[i].getimageCount());
+        ImageSequence imgSequence_target_reduced = ImageSequence::getRandomImageSequence(imgSequences_target[i], numImgs);
+        imgSequences_target_reduced.push_back(imgSequence_target_reduced);
+        targetImageTotalForTraining += imgSequence_target_reduced.getimageCount();
 	}
 
 
-	//imshow("orig", imgSequences_road[0].imageAt(0));
-	//imshow("new", imgSequences_road_reduced[0].imageAt(0));
+    //imshow("orig", imgSequences_target[0].imageAt(0));
+    //imshow("new", imgSequences_target_reduced[0].imageAt(0));
 
 	//waitKey(0);                                          // Wait for a keystroke in the window
 	//destroyAllWindows();
@@ -314,17 +314,17 @@ int test0003()
 
 	std::cout << "Done." << std::endl;
 
-	std::cout<<"Read a total of "<<roadImageTotal<<" road images."<<std::endl;
-	std::cout<<"Read a total of "<<notRoadImageTotal<<" notRoad images."<<std::endl;
+    std::cout<<"Read a total of "<<targetImageTotal<<" target images."<<std::endl;
+    std::cout<<"Read a total of "<<nottargetImageTotal<<" nottarget images."<<std::endl;
 
-	std::cout<<"Selected a total of "<<roadImageTotalForTraining<<" road images for training."<<std::endl;
+    std::cout<<"Selected a total of "<<targetImageTotalForTraining<<" target images for training."<<std::endl;
 
-	if (roadImageTotal == 0)
+    if (targetImageTotal == 0)
 		throw runtime_error("Training Data not found.");
 
 
 	std::cout << "Initializing ColourStatisticsAnalyzer... ";
-	ColourStatisticsAnalyzer csa1(imgSequences_road_reduced, imgSequences_notRoad, 0.1);
+    ColourStatisticsAnalyzer csa1(imgSequences_target_reduced, imgSequences_notTarget, 0.1);
 
 
 	//std::cout << "csa 1 const image size: " << csa1.constImageSize() << std::endl;
