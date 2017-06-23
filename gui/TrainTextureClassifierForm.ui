@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>643</width>
-    <height>568</height>
+    <width>966</width>
+    <height>589</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>550</x>
-     <y>530</y>
+     <x>870</x>
+     <y>550</y>
      <width>81</width>
      <height>32</height>
     </rect>
@@ -33,9 +33,9 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>440</y>
+     <y>490</y>
      <width>351</width>
-     <height>101</height>
+     <height>91</height>
     </rect>
    </property>
    <property name="title">
@@ -46,12 +46,15 @@
      <rect>
       <x>10</x>
       <y>30</y>
-      <width>151</width>
+      <width>171</width>
       <height>17</height>
      </rect>
     </property>
     <property name="text">
-     <string>Colour Statistics Analyzer</string>
+     <string>Use Colour Statistics Analyzer</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_safetyFactor">
@@ -62,6 +65,12 @@
       <width>113</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="text">
+     <string>0.05</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
@@ -78,81 +87,45 @@
     </property>
    </widget>
   </widget>
-  <widget class="QGroupBox" name="groupBox_2">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>350</y>
-     <width>351</width>
-     <height>80</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>Image Classifier Settings</string>
-   </property>
-   <widget class="QLineEdit" name="lineEdit_trainingImageFraction">
-    <property name="geometry">
-     <rect>
-      <x>210</x>
-      <y>30</y>
-      <width>113</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>30</y>
-      <width>191</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Fraction of Images To Use For Training</string>
-    </property>
-   </widget>
-  </widget>
   <widget class="QGroupBox" name="groupBox_3">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>20</y>
-     <width>351</width>
-     <height>321</height>
+     <y>140</y>
+     <width>681</width>
+     <height>341</height>
     </rect>
    </property>
    <property name="title">
-    <string>Property Settings</string>
+    <string>Property and Training Settings</string>
    </property>
-   <widget class="QTableView" name="tableView_properties">
+   <widget class="QTableView" name="tableView_propertiesTarget">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>20</y>
-      <width>331</width>
-      <height>192</height>
+      <y>41</y>
+      <width>311</width>
+      <height>171</height>
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label_4">
+   <widget class="QLabel" name="label_numNonTargetTiles">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>300</y>
+      <x>350</x>
+      <y>240</y>
       <width>291</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Number of Negative Tiles:</string>
+     <string>Number of nonTarget Tiles (Total):</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
-      <x>8</x>
+      <x>130</x>
       <y>250</y>
       <width>71</width>
       <height>20</height>
@@ -162,49 +135,55 @@
      <string>tileHeight (px)</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_safetyFactor_3">
+   <widget class="QLineEdit" name="lineEdit_tileHeight">
     <property name="geometry">
      <rect>
-      <x>80</x>
+      <x>200</x>
       <y>250</y>
       <width>111</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string/>
+     <string>16</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_safetyFactor_2">
+   <widget class="QLineEdit" name="lineEdit_tileWidth">
     <property name="geometry">
      <rect>
-      <x>80</x>
+      <x>200</x>
       <y>220</y>
       <width>111</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string/>
+     <string>16</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QLabel" name="label_numTargetTiles">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>280</y>
+      <x>350</x>
+      <y>220</y>
       <width>291</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Number of Positive Tiles:</string>
+     <string>Number of Target Tiles (Total):</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>132</x>
       <y>220</y>
       <width>71</width>
       <height>20</height>
@@ -218,7 +197,7 @@
     <property name="geometry">
      <rect>
       <x>210</x>
-      <y>230</y>
+      <y>310</y>
       <width>101</width>
       <height>23</height>
      </rect>
@@ -227,12 +206,103 @@
      <string>Generate Images</string>
     </property>
    </widget>
+   <widget class="QTableView" name="tableView_propertiesNonTarget">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>41</y>
+      <width>321</width>
+      <height>171</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_16">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>121</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Target Property</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_17">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>20</y>
+      <width>121</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>nonTarget Property</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_trainingImageFraction">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>280</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0.3</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>280</y>
+      <width>191</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Fraction of Images To Use For Training</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_numTargetTilesTraining">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>260</y>
+      <width>291</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Number of Target Tiles (Training):</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_numNonTargetTilesTraining">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>280</y>
+      <width>291</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Number of nonTarget Tiles (Training):</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QGroupBox" name="groupBox_4">
    <property name="geometry">
     <rect>
-     <x>390</x>
-     <y>20</y>
+     <x>710</x>
+     <y>50</y>
      <width>241</width>
      <height>81</height>
     </rect>
@@ -283,8 +353,8 @@
   <widget class="QGroupBox" name="groupBox_5">
    <property name="geometry">
     <rect>
-     <x>390</x>
-     <y>110</y>
+     <x>710</x>
+     <y>140</y>
      <width>241</width>
      <height>81</height>
     </rect>
@@ -296,7 +366,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>20</y>
+      <y>40</y>
       <width>221</width>
       <height>16</height>
      </rect>
@@ -309,7 +379,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>40</y>
+      <y>20</y>
       <width>221</width>
       <height>16</height>
      </rect>
@@ -335,8 +405,8 @@
   <widget class="QGroupBox" name="groupBox_6">
    <property name="geometry">
     <rect>
-     <x>390</x>
-     <y>200</y>
+     <x>710</x>
+     <y>230</y>
      <width>241</width>
      <height>81</height>
     </rect>
@@ -344,20 +414,7 @@
    <property name="title">
     <string>Results (All Tiles)</string>
    </property>
-   <widget class="QLabel" name="label_13">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>221</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>False Positives:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_14">
+   <widget class="QLabel" name="label_falsePositivesTotal">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -367,10 +424,23 @@
      </rect>
     </property>
     <property name="text">
-     <string>True Negatives:</string>
+     <string>False Positives:</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_15">
+   <widget class="QLabel" name="label_truePositivesTotal">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>221</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>True Positives:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_successRateTotal">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -387,8 +457,8 @@
   <widget class="QPushButton" name="btn_trainAndTest">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>540</y>
+     <x>710</x>
+     <y>20</y>
      <width>111</width>
      <height>23</height>
     </rect>
@@ -396,6 +466,29 @@
    <property name="text">
     <string>Train and Test</string>
    </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_7">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>681</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Capture Device Selection</string>
+   </property>
+   <widget class="QTableView" name="tableView_captureDevices">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>661</width>
+      <height>101</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>
@@ -407,8 +500,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>870</x>
+     <y>550</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -423,8 +516,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>870</x>
+     <y>550</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>

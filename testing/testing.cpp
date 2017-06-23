@@ -62,7 +62,9 @@ int test0001()
     for (int i = 0; i < imgSequences_target.size(); i++)
 	{
         int numImgs = (int)(fractionUsedForTraining * (double)imgSequences_target[i].getimageCount());
-        ImageSequence imgSequence_target_reduced = ImageSequence::getRandomImageSequence(imgSequences_target[i], numImgs);
+        std::pair<ImageSequence, ImageSequence> tmp;
+        tmp = ImageSequence::getRandomImageSequence(imgSequences_target[i], numImgs);
+        ImageSequence imgSequence_target_reduced = tmp.first;
         imgSequences_target_reduced.push_back(imgSequence_target_reduced);
         targetImageTotalForTraining += imgSequence_target_reduced.getimageCount();
 	}

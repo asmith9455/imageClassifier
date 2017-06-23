@@ -66,7 +66,6 @@ SOURCES += main.cpp\
     dataTypes/RgbHistogram.cpp \
     system/SystemCall.cpp \
     testing/testing.cpp \
-    ProgramManager.cpp \
     trainingDataManager/manageTrainingDataForm.cpp \
     gui/ClickableLabel.cpp \
     gui/ClassifyCameraStreamForm.cpp \
@@ -83,7 +82,6 @@ HEADERS  += mainwindow.h \
     dataTypes/RgbHistogram.h \
     system/SystemCall.h \
     testing/testing.h \
-    ProgramManager.h \
     dataTypes/Point2.h \
     trainingDataManager/manageTrainingDataForm.h \
     gui/ClickableLabel.h \

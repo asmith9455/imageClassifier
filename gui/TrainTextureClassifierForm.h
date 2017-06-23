@@ -25,10 +25,19 @@ public:
 private slots:
     void on_btn_generateImages_clicked();
 
+    void on_btn_trainAndTest_clicked();
+
 private:
     Ui::TrainClassifierForm *ui;
     void updatePropertiesFromDb();
+    void updateCaptureDevicesFromDb();
     QString dbPath;
+
+    //images and image counts
+    std::vector<ImageSequence>  targetImgsForTraining, targetImgsNotForTraining;
+    std::vector<ImageSequence>  nonTargetImgsForTraining, nonTargetImgsNotForTraining;
+    size_t numTargetImgsForTraining, numTargetImgsNotForTraining;
+    size_t numNonTargetImgsForTraining, numNonTargetImgsNotForTraining;
 };
 
 #endif // TRAINCLASSIFIERFORM_H

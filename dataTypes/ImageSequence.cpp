@@ -29,7 +29,7 @@ ImageSequence::ImageSequence(std::vector<cv::Mat> _images, std::vector<std::stri
 	directory = _directory;
 }
 
-cv::Mat ImageSequence::imageAt(int index)
+cv::Mat ImageSequence::imageAt(size_t index)
 {
 	return images[index];
 }
@@ -67,34 +67,39 @@ void ImageSequence::addImgs(ImageSequence imseq)
 
 //Generates an ImageSequence consisting of a pseudorandom sequence of (numElements)
 //images from the supplied ImageSeqeunce.
-ImageSequence ImageSequence::getRandomImageSequence(ImageSequence seq, int numElements)
+std::pair<ImageSequence, ImageSequence>
+ImageSequence::getRandomImageSequence
+(ImageSequence seq, double fractionToPreserve)
 {
-	int randIndex;
-	std::vector<cv::Mat> images;
-	std::vector<std::string> imageFileNames;
-	std::string directory;
+    std::pair<ImageSequence, ImageSequence> toRet;
+    size_t randIndex;
+    size_t seqIndex;
+    double numElementsD = (fractionToPreserve * (double)seq.getimageCount());
+    size_t numElements = (size_t)numElementsD;  //TODO: adjust this so that no double conversion is required (only a problem for huge datasets)
 
-	vector<int> indexSet;
+    vector<size_t> indexSet;
 
-	for (int i = 0; i < seq.getimageCount(); i++)
+    for (size_t i = 0; i < seq.getimageCount(); i++)
 		indexSet.push_back(i);
 
-	directory = seq.getDirectory();
 
-	for (int i = 0; i < numElements; i++)
+    for (size_t i = 0; i < numElements; i++)
 	{
 		randIndex = rand() % indexSet.size();
+        seqIndex = indexSet[randIndex];
 
-		int seqIndex = indexSet[randIndex];
-
-		images.push_back(seq.imageAt(seqIndex));
-		imageFileNames.push_back(seq.imageFileNameAt(seqIndex));
+        toRet.first.addImg(seq.imageAt(seqIndex));
 		indexSet.erase(indexSet.begin() + randIndex);
 	}
 
-	ImageSequence newImageSequence(images, imageFileNames, directory);
+    for (size_t i = 0; i < indexSet.size(); i++)
+    {
+        seqIndex = indexSet[i];
+        toRet.second.addImg(seq.imageAt(seqIndex));
+    }
 
-	return newImageSequence;
+
+    return toRet;
 
 }
 
