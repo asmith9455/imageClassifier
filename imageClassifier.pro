@@ -42,10 +42,10 @@ LIBS += C:/opencv_3_2_0/build/x64/vc14/lib/opencv_world320.lib\
 
 
 #add the opencvdll location to the system path for building the program
-QMAKE_EXTRA_TARGETS += customtarget1
-customtarget1.target = dummy
-customtarget1.commands = set PATH=C:\opencv_3_2_0\build\x64\vc14\bin;$(PATH)
-PRE_TARGETDEPS += dummy
+#QMAKE_EXTRA_TARGETS += customtarget1
+#customtarget1.target = dummy
+#customtarget1.commands = set PATH=C:\opencv_3_2_0\build\x64\vc14\bin;$(PATH)
+#PRE_TARGETDEPS += dummy
 
 
 }

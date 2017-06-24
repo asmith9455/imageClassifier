@@ -43,6 +43,9 @@ public:
 	virtual int getTileHeight() = 0;
 	virtual int getTileWidth() = 0;
 
+    virtual bool writeToFile(std::string filepath) = 0;
+    virtual bool readFromFile(std::string filepath) = 0;
+
 	class ClassifiedImage
 	{
 	public:

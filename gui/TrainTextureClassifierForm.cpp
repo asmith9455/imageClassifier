@@ -1,6 +1,6 @@
 #include "TrainTextureClassifierForm.h"
 #include "ui_TrainTextureClassifierForm.h"
-#include <ColourStatisticsAnalyzer.h>
+
 
 TrainClassifierForm::TrainClassifierForm(QWidget *parent) :
     QDialog(parent),
@@ -79,6 +79,10 @@ void TrainClassifierForm::updatePropertiesFromDb()
 
 void TrainClassifierForm::on_btn_generateImages_clicked()
 {
+    targetImgsForTraining.clear();
+    targetImgsNotForTraining.clear();
+    nonTargetImgsForTraining.clear();
+    nonTargetImgsNotForTraining.clear();
 
     //get the currently selected capture device
     QItemSelectionModel *select = ui->tableView_captureDevices->selectionModel();
@@ -160,16 +164,20 @@ void TrainClassifierForm::on_btn_generateImages_clicked()
 
     std::pair<ImageSequence, ImageSequence> tmpPair;
 
+
+    unsigned int randSeed = ui->lineEdit_rngSeed->text().toUInt();
+    bool useRandSeed = ui->checkBox_useRngSeed->isChecked();
+
     for (ImageSequence is : targetImgs)
     {
-        tmpPair = ImageSequence::getRandomImageSequence(is, trainingImagesFraction);
+        tmpPair = ImageSequence::getRandomImageSequence(is, trainingImagesFraction, useRandSeed, randSeed);
         targetImgsForTraining.push_back(tmpPair.first);
         targetImgsNotForTraining.push_back(tmpPair.second);
     }
 
     for (ImageSequence is : nonTargetImgs)
     {
-        tmpPair = ImageSequence::getRandomImageSequence(is, trainingImagesFraction);
+        tmpPair = ImageSequence::getRandomImageSequence(is, trainingImagesFraction, useRandSeed, randSeed);
         nonTargetImgsForTraining.push_back(tmpPair.first);
         nonTargetImgsNotForTraining.push_back(tmpPair.second);
     }
@@ -275,5 +283,10 @@ void TrainClassifierForm::on_btn_trainAndTest_clicked()
     ui->label_truePositivesTotal->setText("True Positives: " + QString::number(truePositivesOverallRate*100.0) + "%");
     ui->label_falsePositivesTotal->setText("False Positives: " + QString::number(falsePositivesOverallRate*100.0) + "%");
     ui->label_successRateTotal->setText("Success Rate: " + QString::number(successRate*100.0) + "%");
+
+}
+
+void TrainClassifierForm::on_btn_saveTrainingData_clicked()
+{
 
 }

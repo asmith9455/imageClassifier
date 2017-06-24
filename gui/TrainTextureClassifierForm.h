@@ -9,6 +9,7 @@
 #include <QSqlTableModel>
 #include <TrainingImageDbWrapper.h>
 #include <ImageSequence.h>
+#include <ColourStatisticsAnalyzer.h>
 
 namespace Ui {
 class TrainClassifierForm;
@@ -27,6 +28,8 @@ private slots:
 
     void on_btn_trainAndTest_clicked();
 
+    void on_btn_saveTrainingData_clicked();
+
 private:
     Ui::TrainClassifierForm *ui;
     void updatePropertiesFromDb();
@@ -38,6 +41,7 @@ private:
     std::vector<ImageSequence>  nonTargetImgsForTraining, nonTargetImgsNotForTraining;
     size_t numTargetImgsForTraining, numTargetImgsNotForTraining;
     size_t numNonTargetImgsForTraining, numNonTargetImgsNotForTraining;
+
 };
 
 #endif // TRAINCLASSIFIERFORM_H

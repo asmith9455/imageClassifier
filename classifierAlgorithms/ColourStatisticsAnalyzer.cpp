@@ -121,6 +121,8 @@ bool ColourStatisticsAnalyzer::isTarget(Mat img)
 	int tempR, tempG, tempB;
 	bool match = false;
 
+
+    //iterate through the histograms that represent each pre-cluster of colour histogram data
 	for (int i = 0; i < averageRgbHistograms.size(); i++)
 	{
 		tempR = RgbHistogram::similarityR(histo, averageRgbHistograms[i]);
@@ -155,6 +157,20 @@ int ColourStatisticsAnalyzer::getTileHeight()
 int ColourStatisticsAnalyzer::getTileWidth()
 {
 	return tileWidth;
+}
+
+bool ColourStatisticsAnalyzer::writeToFile(std::string filepath)
+{
+    //we need to write all of the averageRgbHistograms and the threshold data for each channel for each of the histograms to file
+
+
+
+    return false;
+}
+
+bool ColourStatisticsAnalyzer::readFromFile(std::string filepath)
+{
+    return false;
 }
 
 void ColourStatisticsAnalyzer::updateConstantImageSize()

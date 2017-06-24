@@ -28,7 +28,7 @@ public:
 
     static std::pair<ImageSequence, ImageSequence>
     getRandomImageSequence
-    (ImageSequence seq, double fractionToPreserve);
+    (ImageSequence seq, double fractionToPreserve, bool setSeed, unsigned int randSeed);
 
 	static bool imagesAreEqual(cv::Mat im1, cv::Mat im2);
 	static bool imagesSequencesAreEqual(ImageSequence im1, ImageSequence im2);

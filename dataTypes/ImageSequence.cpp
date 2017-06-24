@@ -69,8 +69,12 @@ void ImageSequence::addImgs(ImageSequence imseq)
 //images from the supplied ImageSeqeunce.
 std::pair<ImageSequence, ImageSequence>
 ImageSequence::getRandomImageSequence
-(ImageSequence seq, double fractionToPreserve)
+(ImageSequence seq, double fractionToPreserve, bool setSeed, unsigned int randSeed)
 {
+    if (setSeed)
+        srand (randSeed);
+
+
     std::pair<ImageSequence, ImageSequence> toRet;
     size_t randIndex;
     size_t seqIndex;

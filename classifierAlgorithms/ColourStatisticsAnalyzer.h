@@ -40,5 +40,8 @@ public:
 	virtual int getTileHeight();
 	virtual int getTileWidth();
 
+    virtual bool writeToFile(std::string filepath);
+    virtual bool readFromFile(std::string filepath);
+
 	void updateConstantImageSize();
 };
