@@ -1,5 +1,7 @@
 #include <ColourStatisticsAnalyzer.h>
 
+ColourStatisticsAnalyzer::ColourStatisticsAnalyzer(){}
+
 ColourStatisticsAnalyzer::ColourStatisticsAnalyzer(
     vector<ImageSequence> _imageSequences_target,
     vector<ImageSequence> _imageSequences_notTarget, double _safetyFactor) :
@@ -83,7 +85,7 @@ void ColourStatisticsAnalyzer::generateThresholds()
 			sumThresB += tmp;
 		}
 
-        // we can probably combine these double conversions with the calculations in the push back to avoid double alltogether
+        // TODO: we can probably combine these double conversions with the calculations in the push back to avoid double completely
 		double avgThresR = (double)sumThresR / (double)rgbHistograms[i].size();
 		double avgThresG = (double)sumThresG / (double)rgbHistograms[i].size();
 		double avgThresB = (double)sumThresB / (double)rgbHistograms[i].size();
@@ -162,15 +164,197 @@ int ColourStatisticsAnalyzer::getTileWidth()
 bool ColourStatisticsAnalyzer::writeToFile(std::string filepath)
 {
     //we need to write all of the averageRgbHistograms and the threshold data for each channel for each of the histograms to file
+    //using namespace tinyxml2;
 
+    tinyxml2::XMLDocument doc;
 
+    tinyxml2::XMLDeclaration * decl = doc.NewDeclaration("xml version=\"1.0\" encoding=\"UTF-8\"");
+    doc.LinkEndChild( decl );
+
+    tinyxml2::XMLElement *node1 = doc.NewElement("Texture_Classifier_Training_Data");
+
+    node1->SetAttribute("classifier", ColourStatisticsAnalyzer::xmlID);
+
+    for (size_t i = 0; i < averageRgbHistograms.size(); i++)
+    {
+        tinyxml2::XMLElement *node2 = doc.NewElement("Cluster");
+        node2->SetAttribute("index", (int)i);
+        tinyxml2::XMLElement *node3 = doc.NewElement("Average_Histogram_Values_R");
+        tinyxml2::XMLElement *node6 = doc.NewElement("Average_Histogram_Values_G");
+        tinyxml2::XMLElement *node7 = doc.NewElement("Average_Histogram_Values_B");
+        tinyxml2::XMLElement *node4 = doc.NewElement("Similarity_Thresholds");
+
+        for (int j = 0; j < 256; j++)
+        {
+            tinyxml2::XMLElement *node5 = doc.NewElement("R");
+            node5->SetAttribute("index", j);
+            node5->SetAttribute("value", averageRgbHistograms[i].accR[j]);
+            node3->InsertEndChild(node5);
+        }
+
+        for (int j = 0; j < 256; j++)
+        {
+            tinyxml2::XMLElement *node5 = doc.NewElement("G");
+            node5->SetAttribute("index", j);
+            node5->SetAttribute("value", averageRgbHistograms[i].accG[j]);
+            node6->InsertEndChild(node5);
+        }
+
+        for (int j = 0; j < 256; j++)
+        {
+            tinyxml2::XMLElement *node5 = doc.NewElement("B");
+            node5->SetAttribute("index", j);
+            node5->SetAttribute("value", averageRgbHistograms[i].accB[j]);
+            node7->InsertEndChild(node5);
+        }
+
+        tinyxml2::XMLElement * node8 = doc.NewElement("Similarity_Threshold");
+        node8->SetAttribute("R", this->minThresR[i]);
+        node4->InsertEndChild(node8);
+
+        node8 = doc.NewElement("Similarity_Threshold");
+        node8->SetAttribute("G", this->minThresG[i]);
+        node4->InsertEndChild(node8);
+
+        node8 = doc.NewElement("Similarity_Threshold");
+        node8->SetAttribute("B", this->minThresB[i]);
+        node4->InsertEndChild(node8);
+
+        node2->InsertEndChild(node3);
+        node2->InsertEndChild(node6);
+        node2->InsertEndChild(node7);
+        node2->InsertEndChild(node4);
+
+        node1->InsertEndChild(node2);
+    }
+
+    doc.LinkEndChild(node1);
+
+    doc.SaveFile(filepath.c_str());
 
     return false;
 }
 
 bool ColourStatisticsAnalyzer::readFromFile(std::string filepath)
 {
-    return false;
+    //XMLDocument doc;
+    //doc.LoadFile( "resources/dream.xml" );
+    //return doc.ErrorID();
+
+    tinyxml2::XMLDocument doc;
+    tinyxml2::XMLError eResult = doc.LoadFile(filepath.c_str());
+    if (eResult != tinyxml2::XML_SUCCESS) throw std::runtime_error("Could not parse the supplied XML document. Check the formatting in your browser.");
+
+    tinyxml2::XMLElement* titleElement = doc.FirstChildElement( "Texture_Classifier_Training_Data" );
+
+    if (titleElement == NULL) throw std::runtime_error("Invalid title element in XML document.");
+
+    const char* cID;
+    cID = titleElement->Attribute("classifierID");
+
+    std::string strID = std::string(cID);
+
+    if (strID != ColourStatisticsAnalyzer::xmlID) throw std::runtime_error("Attempted to parse training data from the wrong classifier.");
+
+    this->averageRgbHistograms.clear();
+    this->minThresR.clear();
+    this->minThresG.clear();
+    this->minThresB.clear();
+
+    tinyxml2::XMLElement* clusterPntr = titleElement->FirstChildElement("Cluster");
+
+    if (clusterPntr == NULL) throw std::runtime_error("Invalid title element in XML document.");
+
+    for (clusterPntr;
+         clusterPntr != NULL;
+         clusterPntr = clusterPntr->NextSiblingElement())
+    {
+        RgbHistogram histo;
+        //read the histogram values
+        tinyxml2::XMLElement* histoRPtr, *histoGPtr, *histoBPtr, *simPtr;
+
+
+
+        histoRPtr = clusterPntr->FirstChildElement("Average_Histogram_Values_R");
+        if (histoRPtr == NULL) throw std::runtime_error("Could not find the Average_Histogram_Values_R element.");
+
+        histoGPtr = clusterPntr->FirstChildElement("Average_Histogram_Values_G");
+        if (histoGPtr == NULL) throw std::runtime_error("Could not find the Average_Histogram_Values_G element.");
+
+        histoBPtr = clusterPntr->FirstChildElement("Average_Histogram_Values_B");
+        if (histoBPtr == NULL) throw std::runtime_error("Could not find the Average_Histogram_Values_B element.");
+
+        simPtr=clusterPntr->FirstChildElement("Similarity_Thresholds");
+        if (simPtr == NULL) throw std::runtime_error("Could not find the Similarity_Thresholds element.");
+
+
+
+        int counter = 0;
+        int tmpIndex =0;
+        for (tinyxml2::XMLElement* rValPtr =histoRPtr->FirstChildElement("R");
+             rValPtr != NULL;
+             rValPtr = rValPtr->NextSiblingElement())
+        {
+            rValPtr->QueryIntAttribute("index",&tmpIndex);
+            if (tmpIndex != counter) throw std::runtime_error("An index for a histogram is wrong.");
+            rValPtr->QueryIntAttribute("value", &(histo.accR[counter]));
+            counter++;
+        }
+
+        if (counter != 256)
+            throw std::runtime_error("There are not enough histogram r values in a cluster.");
+
+        counter = 0;
+
+        for (tinyxml2::XMLElement* gValPtr =histoGPtr->FirstChildElement("G");
+             gValPtr != NULL;
+             gValPtr = gValPtr->NextSiblingElement())
+        {
+            gValPtr->QueryIntAttribute("index",&tmpIndex);
+            if (tmpIndex != counter) throw std::runtime_error("An index for a histogram is wrong.");
+            gValPtr->QueryIntAttribute("value", &(histo.accG[counter]));
+            counter++;
+        }
+        if (counter != 256)
+            throw std::runtime_error("There are not enough histogram g values in a cluster.");
+
+        counter = 0;
+
+        for (tinyxml2::XMLElement* bValPtr =histoBPtr->FirstChildElement("B");
+             bValPtr != NULL;
+             bValPtr = bValPtr->NextSiblingElement())
+        {
+            bValPtr->QueryIntAttribute("index",&tmpIndex);
+            if (tmpIndex != counter) throw std::runtime_error("An index for a histogram is wrong.");
+            bValPtr->QueryIntAttribute("value", &(histo.accB[counter]));
+            counter++;
+        }
+
+        if (counter != 256)
+            throw std::runtime_error("There are not enough histogram b values in a cluster.");
+
+        averageRgbHistograms.push_back(histo);
+
+        tinyxml2::XMLElement* simValPtr = simPtr->FirstChildElement("Similarity_Threshold");
+
+        minThresR.push_back(0);
+        simValPtr->QueryIntAttribute("R", &minThresR.back());
+
+
+        simValPtr = simValPtr->NextSiblingElement();
+
+        minThresG.push_back(0);
+        simValPtr->QueryIntAttribute("G", &minThresG.back());
+
+
+        simValPtr = simValPtr->NextSiblingElement();
+
+        minThresB.push_back(0);
+        simValPtr->QueryIntAttribute("B", &minThresB.back());
+
+    }
+
+    return true;
 }
 
 void ColourStatisticsAnalyzer::updateConstantImageSize()

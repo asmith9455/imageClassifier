@@ -172,83 +172,29 @@ TextureClassifier::ClassifiedImage TextureClassifier::postProcessImage(TextureCl
 }
 
 
-//ImageClassifier::ClassifiedImage ImageClassifier::classifyImage(
-//	vector<ImageClassifier> classifiers,
-//	Mat imgToClassify,
-//	int tileWidth,
-//	int tileHeight,
-//	bool genBinaryImg,
-//	bool genColouredImg)
-//{
-//
-//	Mat img = imgToClassify.clone();
-//
-//
-//
-//	int numShiftsX = img.cols / tileWidth;
-//	int numShiftsY = img.rows / tileHeight;
-//
-//	Mat binImgMat = Mat(Size(numShiftsX, numShiftsY), CV_8U);
-//
-//	//BinaryImage binImg(numShiftsY, numShiftsX);
-//
-//	int xPos = 0, yPos = 0;
-//
-//	int bMapX = 0, bMapY = 0;
-//
-//
-//
-//	while (true)
-//	{
-//		while (true)
-//		{
-//
-//			Mat subImg = img(cv::Range(yPos, yPos + tileHeight - 1), cv::Range(xPos, xPos + tileWidth - 1));
-//
-//			//imshow("img", img);
-//			//waitKey(0);
-//			//destroyAllWindows();
-//
-//			bool isRoad = false;
-//			
-//			for(int i = 0; i < classifiers.size(); i++)
-//				isRoad = isRoad || classifiers[i].isRoad(subImg);
-//
-//			if (genColouredImg)
-//			{
-//				if (isRoad)
-//				{
-//					subImg.forEach<Point3_<uint8_t>>([&](Point3_<uint8_t>& pixel, const int position[]) -> void {
-//						pixel.y = 255;	//set to green
-//					});
-//				}
-//				else
-//				{
-//					subImg.forEach<Point3_<uint8_t>>([&](Point3_<uint8_t>& pixel, const int position[]) -> void {
-//						pixel.z = 255;	//set to red
-//					});
-//				}
-//			}
-//
-//			//binImg.setElement(bMapY, bMapX, isRoad);
-//
-//			binImgMat.at<uchar>(bMapY, bMapX) = (isRoad) ? 255 : 0;
-//
-//			bMapX++;
-//
-//			xPos = xPos + tileWidth;
-//			if (xPos + tileWidth > img.cols)
-//				break;
-//		}
-//		bMapX = 0;
-//		bMapY++;
-//		xPos = 0;
-//		yPos = yPos + tileHeight;
-//		if (yPos + tileHeight > img.rows)
-//			break;
-//	}
-//
-//	ImageClassifier::ClassifiedImage cImg(img, binImgMat);
-//
-//	return cImg;
-//}
+static std::shared_ptr<TextureClassifier> getClassifierFromFile(std::string filepath)
+{
+    tinyxml2::XMLDocument doc;
+    tinyxml2::XMLError eResult = doc.LoadFile(filepath.c_str());
+    if (eResult != tinyxml2::XML_SUCCESS) throw std::runtime_error("Could not parse the supplied XML document. Check the formatting in your browser.");
+
+
+
+    tinyxml2::XMLElement* titleElement = doc.FirstChildElement( "Texture_Classifier_Training_Data" );
+
+    TextureClassifier toRet;
+
+    const char* cID;
+    cID = titleElement->Attribute("classifierID");
+
+    std::string strID = std::string(cID);
+
+    if (strID == ColourStatisticsAnalyzer::xmlID)
+    {
+        ColourStatisticsAnalyzer tmp;
+        tmp.readFromFile(filepath);
+        toRet = tmp;
+    }
+
+    return toRet;
+}

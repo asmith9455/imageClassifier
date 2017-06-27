@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>966</width>
-    <height>605</height>
+    <width>990</width>
+    <height>610</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>870</x>
-     <y>550</y>
+     <x>900</x>
+     <y>570</y>
      <width>81</width>
      <height>32</height>
     </rect>
@@ -34,14 +34,14 @@
     <rect>
      <x>20</x>
      <y>510</y>
-     <width>341</width>
+     <width>261</width>
      <height>91</height>
     </rect>
    </property>
    <property name="title">
     <string>Colour Statistics Analyzer Settings</string>
    </property>
-   <widget class="QCheckBox" name="checkBox_colourStatisticsAnalyzer">
+   <widget class="QRadioButton" name="radioButton_colourStatisticsAnalyzer">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -357,175 +357,25 @@
      <bool>true</bool>
     </property>
    </widget>
-  </widget>
-  <widget class="QGroupBox" name="groupBox_4">
-   <property name="geometry">
-    <rect>
-     <x>710</x>
-     <y>50</y>
-     <width>241</width>
-     <height>81</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>Results (Testing on Training Tiles)</string>
-   </property>
-   <widget class="QLabel" name="label_7">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>221</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>False Positives:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_8">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>40</y>
-      <width>221</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>True Negatives:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_9">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>60</y>
-      <width>221</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Success Rate:</string>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QGroupBox" name="groupBox_5">
-   <property name="geometry">
-    <rect>
-     <x>710</x>
-     <y>140</y>
-     <width>241</width>
-     <height>81</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>Results (Testing on Untrained Tiles)</string>
-   </property>
-   <widget class="QLabel" name="label_10">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>40</y>
-      <width>221</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>False Positives:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_11">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>221</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>True Negatives:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_12">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>60</y>
-      <width>221</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Success Rate:</string>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QGroupBox" name="groupBox_6">
-   <property name="geometry">
-    <rect>
-     <x>710</x>
-     <y>230</y>
-     <width>241</width>
-     <height>81</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>Results (All Tiles)</string>
-   </property>
-   <widget class="QLabel" name="label_falsePositivesTotal">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>40</y>
-      <width>221</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>False Positives:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_truePositivesTotal">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>221</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>True Positives:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_successRateTotal">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>60</y>
-      <width>221</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Success Rate:</string>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QPushButton" name="btn_trainAndTest">
-   <property name="geometry">
-    <rect>
-     <x>710</x>
-     <y>20</y>
-     <width>111</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Train and Test</string>
-   </property>
+   <zorder>tableView_propertiesTarget</zorder>
+   <zorder>label_numNonTargetTiles</zorder>
+   <zorder>label_6</zorder>
+   <zorder>lineEdit_tileHeight</zorder>
+   <zorder>lineEdit_tileWidth</zorder>
+   <zorder>label_numTargetTiles</zorder>
+   <zorder>label_5</zorder>
+   <zorder>btn_generateImages</zorder>
+   <zorder>tableView_propertiesNonTarget</zorder>
+   <zorder>label_16</zorder>
+   <zorder>label_17</zorder>
+   <zorder>lineEdit_trainingImageFraction</zorder>
+   <zorder>label</zorder>
+   <zorder>label_numTargetTilesTraining</zorder>
+   <zorder>label_numNonTargetTilesTraining</zorder>
+   <zorder>lineEdit_rngSeed</zorder>
+   <zorder>label_3</zorder>
+   <zorder>checkBox_useRngSeed</zorder>
+   <zorder>groupBox_2</zorder>
   </widget>
   <widget class="QGroupBox" name="groupBox_7">
    <property name="geometry">
@@ -550,18 +400,239 @@
     </property>
    </widget>
   </widget>
-  <widget class="QPushButton" name="btn_saveTrainingData">
+  <widget class="QGroupBox" name="groupBox_2">
    <property name="geometry">
     <rect>
-     <x>840</x>
-     <y>320</y>
-     <width>111</width>
-     <height>21</height>
+     <x>710</x>
+     <y>140</y>
+     <width>271</width>
+     <height>321</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Save Training Data</string>
+   <property name="title">
+    <string>Testing</string>
    </property>
+   <widget class="QGroupBox" name="groupBox_6">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>230</y>
+      <width>251</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Results (All Tiles)</string>
+    </property>
+    <widget class="QLabel" name="label_falsePositivesTotal">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>221</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>False Positives:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_truePositivesTotal">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>221</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>True Positives:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_successRateTotal">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>221</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Success Rate:</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_4">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>251</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Results (Testing on Training Tiles)</string>
+    </property>
+    <widget class="QLabel" name="label_7">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>221</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>False Positives:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_8">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>221</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>True Negatives:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_9">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>221</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Success Rate:</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_5">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>140</y>
+      <width>251</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Results (Testing on Untrained Tiles)</string>
+    </property>
+    <widget class="QLabel" name="label_10">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>221</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>False Positives:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_11">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>221</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>True Negatives:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_12">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>221</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Success Rate:</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="btn_testClassifier">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>251</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Test Classifier</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_8">
+   <property name="geometry">
+    <rect>
+     <x>710</x>
+     <y>19</y>
+     <width>271</width>
+     <height>121</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>GroupBox</string>
+   </property>
+   <widget class="QPushButton" name="btn_saveTrainingData">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>90</y>
+      <width>111</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Save Training Data</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_trainFromGeneratedImages">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>251</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Train From Generated Images</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_trainFromFile">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>251</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Train From File</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

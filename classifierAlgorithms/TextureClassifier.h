@@ -4,6 +4,9 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <ImageSequence.h>
+#include <tinyxml2.h>
+#include <ColourStatisticsAnalyzer.h>
+#include <memory>
 
 //this class represents a generic texture classifier. that is, it decides whether or not a small rectangular image (a tile)
 //is of a particular type. training data is supplied in the form of vectors of image sequences, to allow for pre clustering
@@ -28,6 +31,8 @@ public:
     //and fewer false positives will occur.
     std::vector<ImageSequence> imageSequences_target;
     std::vector<ImageSequence> imageSequences_notTarget;
+
+    TextureClassifier(){}
 
     TextureClassifier(
         std::vector<ImageSequence> _imageSequences_target,
@@ -74,6 +79,8 @@ public:
     //the dilation closes holes (note that the dilation results in a larger binary image than the original, but with closed holes)
     //the second erosion return the regions of 1's in the binary image to their original size
 	ClassifiedImage postProcessImage(ClassifiedImage classifiedImg);
+
+    //static TextureClassifier& getClassifierFromFile(std::string filepath);
 
 	/*static ClassifiedImage classifyImage(
 		vector<ImageClassifier> classifiers,

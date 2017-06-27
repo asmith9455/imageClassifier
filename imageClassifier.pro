@@ -34,12 +34,13 @@ win32
 DEFINES+=Windows=1
 
 INCLUDEPATH +=  C:/opencv_3_2_0/build/include\
-                C:/sqlite3
+                C:/sqlite3\
+                C:/tinyxml2
 
 #link against opencv
 LIBS += C:/opencv_3_2_0/build/x64/vc14/lib/opencv_world320.lib\
-        C:/sqlite3/sqlite3.lib
-
+        C:/sqlite3/sqlite3.lib\
+        C:/tinyxml2/tinyxml2.lib
 
 #add the opencvdll location to the system path for building the program
 #QMAKE_EXTRA_TARGETS += customtarget1

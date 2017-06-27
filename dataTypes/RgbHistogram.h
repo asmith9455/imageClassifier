@@ -22,6 +22,7 @@ public:
 	int accG[256] = { 0 };
 	int accB[256] = { 0 };
 
+    RgbHistogram(){}
 	RgbHistogram(Mat img);
 	RgbHistogram(int _accR[], int _accG[], int _accB[]);
 	 

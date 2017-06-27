@@ -26,9 +26,13 @@ public:
 private slots:
     void on_btn_generateImages_clicked();
 
-    void on_btn_trainAndTest_clicked();
-
     void on_btn_saveTrainingData_clicked();
+
+    void on_btn_testClassifier_clicked();
+
+    void on_btn_trainFromGeneratedImages_clicked();
+
+    void on_btn_trainFromFile_clicked();
 
 private:
     Ui::TrainClassifierForm *ui;
@@ -39,8 +43,9 @@ private:
     //images and image counts
     std::vector<ImageSequence>  targetImgsForTraining, targetImgsNotForTraining;
     std::vector<ImageSequence>  nonTargetImgsForTraining, nonTargetImgsNotForTraining;
-    size_t numTargetImgsForTraining, numTargetImgsNotForTraining;
-    size_t numNonTargetImgsForTraining, numNonTargetImgsNotForTraining;
+    size_t numTargetImgsForTraining = 0, numTargetImgsNotForTraining = 0;
+    size_t numNonTargetImgsForTraining = 0, numNonTargetImgsNotForTraining = 0;
+    ColourStatisticsAnalyzer csa;
 
 };
 

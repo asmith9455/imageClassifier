@@ -195,36 +195,37 @@ std::vector<SegmentedImage<int>> TrainingImageDbWrapper::getSegmentedImagesWithS
 
 
     //now just need to fetch the image data for each image
-    for (size_t i = segImgs.size()-1; i >=0; i--)
-    {
-        query.prepare("SELECT captureDevice, image FROM images WHERE id = :W_id;");
-        query.bindValue(":W_id", segImgs[i].imgID);
-
-        if(!query.exec())
+    if (segImgs.size() > 0)
+        for (size_t i = segImgs.size()-1; i >=0; i--)
         {
-            database.close();
-            throw runtime_error("Error: " + query.lastError().text().toStdString());
-        }
+            query.prepare("SELECT captureDevice, image FROM images WHERE id = :W_id;");
+            query.bindValue(":W_id", segImgs[i].imgID);
 
-        if( query.next() )
-        {
-            int capDevID = query.value(0).toInt();
-            segImgs[i].captureDeviceID = capDevID;
-            if (capDevID == captureDeviceID)
+            if(!query.exec())
             {
-                segImgs[i].img
-                        = CvQt::qbytearray_2_mat(query.value(1).toByteArray());
-                //cv::imshow("test",segImgs[i].img);
-                //cv::waitKey(0);
-                //cv::destroyAllWindows();
+                database.close();
+                throw runtime_error("Error: " + query.lastError().text().toStdString());
             }
-            else
-                segImgs.erase(segImgs.begin() + i);
+
+            if( query.next() )
+            {
+                int capDevID = query.value(0).toInt();
+                segImgs[i].captureDeviceID = capDevID;
+                if (capDevID == captureDeviceID)
+                {
+                    segImgs[i].img
+                            = CvQt::qbytearray_2_mat(query.value(1).toByteArray());
+                    //cv::imshow("test",segImgs[i].img);
+                    //cv::waitKey(0);
+                    //cv::destroyAllWindows();
+                }
+                else
+                    segImgs.erase(segImgs.begin() + i);
+            }
+            //necessary because otherwise i will loop back around to the top of the range of size_t
+            if (i == 0)
+                break;
         }
-        //necessary because otherwise i will loop back around to the top of the range of size_t
-        if (i == 0)
-            break;
-    }
 
     return segImgs;
 }

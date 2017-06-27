@@ -22,85 +22,9 @@ ClassifyCameraStreamForm::~ClassifyCameraStreamForm()
 void ClassifyCameraStreamForm::startClassify()
 {
 #ifdef TX1
-    std::cout << "Reading image database... ";
-    vector<string> baseDir
-        =
-    {
-        "/home/ubuntu/image_database/image_database_objects/32x32"
-    };
-
-
-    vector<ImageSequence> imgSequences_notRoad, imgSequences_road;
-
-    int roadImageTotal = 0;
-    int notRoadImageTotal = 0;
-    int roadImageTotalForTraining = 0;
-
-    for (int i = 0; i < baseDir.size(); i++)
-    {
-#ifdef Windows
-        string notRoadDir = baseDir[i] + "\\notRoad";
-        string roadDir = baseDir[i] + "\\road";
-#endif
-
-#ifdef Linux
-        string notRoadDir = baseDir[i] + "/notRoad";
-        string roadDir = baseDir[i] + "/road";
-#endif
-
-        ImageSequence roadSeq(roadDir);
-        ImageSequence notRoadSeq(notRoadDir);
-
-        roadImageTotal += roadSeq.getimageCount();
-        notRoadImageTotal += notRoadSeq.getimageCount();
-
-        imgSequences_notRoad.push_back(notRoadSeq);
-        imgSequences_road.push_back(roadSeq);
-    }
-
-    vector<ImageSequence> imgSequences_road_reduced;
-
-    double fractionUsedForTraining = 1.0;
-
-    cout << "Using the following fraction of road images as training data: " << fractionUsedForTraining << std::endl;
-
-    for (int i = 0; i < imgSequences_road.size(); i++)
-    {
-        int numImgs = (int)(fractionUsedForTraining * (double)imgSequences_road[i].getimageCount());
-        ImageSequence imgSequence_road_reduced = ImageSequence::getRandomImageSequence(imgSequences_road[i], numImgs);
-        imgSequences_road_reduced.push_back(imgSequence_road_reduced);
-        roadImageTotalForTraining += imgSequence_road_reduced.getimageCount();
-    }
-
-
-    //imshow("orig", imgSequences_road[0].imageAt(0));
-    //imshow("new", imgSequences_road_reduced[0].imageAt(0));
-
-    //waitKey(0);                                          // Wait for a keystroke in the window
-    //destroyAllWindows();
 
 
 
-    cout << "Done." << std::endl;
-
-    cout << "Read a total of " << roadImageTotal << " road images." << std::endl;
-    cout << "Read a total of " << notRoadImageTotal << " notRoad images." << std::endl;
-
-    cout << "Selected a total of " << roadImageTotalForTraining << " road images for training." << std::endl;
-
-    if (roadImageTotal == 0)
-        throw runtime_error("Training Data not found.");
-
-
-    cout << "Initializing ColourStatisticsAnalyzer... ";
-    csaInitialized = true;
-    csa = new ColourStatisticsAnalyzer(imgSequences_road_reduced, imgSequences_notRoad, 0.1);
-
-
-    //cout << "csa 1 const image size: " << csa1.constImageSize() << std::endl;
-    //ic = new (ImageClassifier)(csa);
-
-    cout << "Training model (1)... ";
     csa->analyze();
     cout << "Done." << std::endl;
 

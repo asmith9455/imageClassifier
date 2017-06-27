@@ -206,13 +206,17 @@ void TrainClassifierForm::on_btn_generateImages_clicked()
 
 }
 
-void TrainClassifierForm::on_btn_trainAndTest_clicked()
+void TrainClassifierForm::on_btn_saveTrainingData_clicked()
 {
-    double safetyFactor = ui->lineEdit_safetyFactor->text().toDouble();
+    QString toSavePath = QFileDialog::getSaveFileName(this, tr("Choose the save location."),
+                               "C:/",
+                               tr("(*.xml)"));
 
-    ColourStatisticsAnalyzer csa(targetImgsForTraining, nonTargetImgsForTraining, safetyFactor);
+    csa.writeToFile(toSavePath.toStdString());
+}
 
-    csa.analyze();
+void TrainClassifierForm::on_btn_testClassifier_clicked()
+{
 
     bool r;
 
@@ -283,10 +287,35 @@ void TrainClassifierForm::on_btn_trainAndTest_clicked()
     ui->label_truePositivesTotal->setText("True Positives: " + QString::number(truePositivesOverallRate*100.0) + "%");
     ui->label_falsePositivesTotal->setText("False Positives: " + QString::number(falsePositivesOverallRate*100.0) + "%");
     ui->label_successRateTotal->setText("Success Rate: " + QString::number(successRate*100.0) + "%");
-
 }
 
-void TrainClassifierForm::on_btn_saveTrainingData_clicked()
+void TrainClassifierForm::on_btn_trainFromGeneratedImages_clicked()
 {
+    double safetyFactor = ui->lineEdit_safetyFactor->text().toDouble();
+
+    csa = ColourStatisticsAnalyzer (targetImgsForTraining, nonTargetImgsForTraining, safetyFactor);
+
+    csa.analyze();
+}
+
+void TrainClassifierForm::on_btn_trainFromFile_clicked()
+{
+    QString toReadPath = QFileDialog::getOpenFileName(this, tr("Select the training data to load."),
+                               "C:/",
+                               tr("(*.xml)"));
+
+    if (toReadPath == "")
+        return;
+
+    try
+    {
+        csa.readFromFile(toReadPath.toStdString());
+    }
+    catch (std::exception& e)
+    {
+        QMessageBox::critical(this, "Error", "Error reading training data. Error message is: "+QString(e.what()),
+            QMessageBox::Ok);
+        std::cerr << e.what() << std::endl;
+    }
 
 }

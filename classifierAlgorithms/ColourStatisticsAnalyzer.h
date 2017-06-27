@@ -4,9 +4,14 @@
 #include <ImageSequence.h>
 #include <RgbHistogram.h>
 #include <exception>
+#include <tinyxml2.h>
+#include <stdexcept>
+#include <string>
 
 class ColourStatisticsAnalyzer : public TextureClassifier
 {
+
+
 	double safetyFactor;
 	int tileWidth, tileHeight;
 
@@ -23,6 +28,10 @@ class ColourStatisticsAnalyzer : public TextureClassifier
     vector<RgbHistogram> generateRgbHistogramsForImageSequence(ImageSequence targetImageSequence);
 
 public:
+
+    static std::string xmlID = "Colour_Statistics_Analyzer";
+
+    ColourStatisticsAnalyzer();
 
 	ColourStatisticsAnalyzer(
         vector<ImageSequence> _imageSequences_target,
