@@ -121,3 +121,31 @@ std::vector<Contour<int>> ConverterMethods::getContourClassVectorFromString(QStr
     return cs;
 }
 
+std::shared_ptr<TextureClassifier> ConverterMethods::getClassifierFromFile(std::string filepath)
+{
+    tinyxml2::XMLDocument doc;
+    tinyxml2::XMLError eResult = doc.LoadFile(filepath.c_str());
+    if (eResult != tinyxml2::XML_SUCCESS) throw std::runtime_error("Could not parse the supplied XML document. Check the formatting in your browser.");
+
+
+
+    tinyxml2::XMLElement* titleElement = doc.FirstChildElement( "Texture_Classifier_Training_Data" );
+
+    std::shared_ptr<TextureClassifier> toRet;
+
+    const char* cID;
+    cID = titleElement->Attribute(TextureClassifier::getXmlAttributeName().c_str());
+
+    if (cID == NULL) throw std::runtime_error("Classifier attribute not found (cannot determine which type of classifier this is).");
+
+    std::string strID = std::string(cID);
+
+    if (strID == ColourStatisticsAnalyzer::getXmlID())
+    {
+        std::shared_ptr<ColourStatisticsAnalyzer> tmp = std::make_shared<ColourStatisticsAnalyzer>();
+        tmp->readFromFile(filepath);
+        toRet = static_pointer_cast<TextureClassifier>(tmp);
+    }
+
+    return toRet;
+}

@@ -173,7 +173,7 @@ bool ColourStatisticsAnalyzer::writeToFile(std::string filepath)
 
     tinyxml2::XMLElement *node1 = doc.NewElement("Texture_Classifier_Training_Data");
 
-    node1->SetAttribute("classifier", ColourStatisticsAnalyzer::xmlID);
+    node1->SetAttribute(TextureClassifier::getXmlAttributeName().c_str(), ColourStatisticsAnalyzer::getXmlID().c_str());
 
     for (size_t i = 0; i < averageRgbHistograms.size(); i++)
     {
@@ -220,6 +220,8 @@ bool ColourStatisticsAnalyzer::writeToFile(std::string filepath)
         node8->SetAttribute("B", this->minThresB[i]);
         node4->InsertEndChild(node8);
 
+
+
         node2->InsertEndChild(node3);
         node2->InsertEndChild(node6);
         node2->InsertEndChild(node7);
@@ -228,6 +230,10 @@ bool ColourStatisticsAnalyzer::writeToFile(std::string filepath)
         node1->InsertEndChild(node2);
     }
 
+    tinyxml2::XMLElement *node9 = doc.NewElement("Image_Tile_Size");
+    node9->SetAttribute("width", this->getTileWidth());
+    node9->SetAttribute("height", this->getTileHeight());
+    node1->InsertEndChild(node9);
     doc.LinkEndChild(node1);
 
     doc.SaveFile(filepath.c_str());
@@ -250,11 +256,13 @@ bool ColourStatisticsAnalyzer::readFromFile(std::string filepath)
     if (titleElement == NULL) throw std::runtime_error("Invalid title element in XML document.");
 
     const char* cID;
-    cID = titleElement->Attribute("classifierID");
+    cID = titleElement->Attribute(TextureClassifier::getXmlAttributeName().c_str());
+
+    if (cID == NULL) throw std::runtime_error("Classifier attribute not found (cannot determine which type of classifier this is).");
 
     std::string strID = std::string(cID);
 
-    if (strID != ColourStatisticsAnalyzer::xmlID) throw std::runtime_error("Attempted to parse training data from the wrong classifier.");
+    if (strID != ColourStatisticsAnalyzer::getXmlID()) throw std::runtime_error("Attempted to parse training data from the wrong classifier.");
 
     this->averageRgbHistograms.clear();
     this->minThresR.clear();
@@ -269,6 +277,10 @@ bool ColourStatisticsAnalyzer::readFromFile(std::string filepath)
          clusterPntr != NULL;
          clusterPntr = clusterPntr->NextSiblingElement())
     {
+        std::string ptrName = std::string(clusterPntr->Name());
+        if (ptrName == "Image_Tile_Size")
+            break;
+
         RgbHistogram histo;
         //read the histogram values
         tinyxml2::XMLElement* histoRPtr, *histoGPtr, *histoBPtr, *simPtr;
@@ -276,7 +288,8 @@ bool ColourStatisticsAnalyzer::readFromFile(std::string filepath)
 
 
         histoRPtr = clusterPntr->FirstChildElement("Average_Histogram_Values_R");
-        if (histoRPtr == NULL) throw std::runtime_error("Could not find the Average_Histogram_Values_R element.");
+        if (histoRPtr == NULL)
+            throw std::runtime_error("Could not find the Average_Histogram_Values_R element.");
 
         histoGPtr = clusterPntr->FirstChildElement("Average_Histogram_Values_G");
         if (histoGPtr == NULL) throw std::runtime_error("Could not find the Average_Histogram_Values_G element.");
@@ -354,7 +367,19 @@ bool ColourStatisticsAnalyzer::readFromFile(std::string filepath)
 
     }
 
+    int width=0, height=0;
+    tinyxml2::XMLElement* imgSizePtr = titleElement->FirstChildElement("Image_Tile_Size");
+    imgSizePtr->QueryIntAttribute("width", &width);
+    imgSizePtr->QueryIntAttribute("height", &height);
+    this->setTileSize(height, width);
+
     return true;
+}
+
+void ColourStatisticsAnalyzer::setTileSize(int height, int width)
+{
+    this->tileWidth = width;
+    this->tileHeight = height;
 }
 
 void ColourStatisticsAnalyzer::updateConstantImageSize()
@@ -381,4 +406,9 @@ void ColourStatisticsAnalyzer::updateConstantImageSize()
 
 	if (constantBoolW)
 		tileWidth = cols;
+}
+
+std::string ColourStatisticsAnalyzer::getXmlID()
+{
+    return "Colour_Statistics_Analyzer";
 }

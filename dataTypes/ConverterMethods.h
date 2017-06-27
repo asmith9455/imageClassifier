@@ -7,6 +7,10 @@
 #include <Contour.h>
 #include <ImageSequence.h>
 #include <SegmentedRegion.h>
+#include <TextureClassifier.h>
+#include <ColourStatisticsAnalyzer.h>
+#include <memory>
+#include <tinyxml2.h>
 
 class ConverterMethods
 {
@@ -55,6 +59,9 @@ public:
         }
         return imSeq;
     }
+
+    static std::shared_ptr<TextureClassifier> getClassifierFromFile(std::string filepath);
+
 };
 
 #endif // CONVERTERMETHODS_H

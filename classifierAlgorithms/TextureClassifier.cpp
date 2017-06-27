@@ -172,29 +172,3 @@ TextureClassifier::ClassifiedImage TextureClassifier::postProcessImage(TextureCl
 }
 
 
-static std::shared_ptr<TextureClassifier> getClassifierFromFile(std::string filepath)
-{
-    tinyxml2::XMLDocument doc;
-    tinyxml2::XMLError eResult = doc.LoadFile(filepath.c_str());
-    if (eResult != tinyxml2::XML_SUCCESS) throw std::runtime_error("Could not parse the supplied XML document. Check the formatting in your browser.");
-
-
-
-    tinyxml2::XMLElement* titleElement = doc.FirstChildElement( "Texture_Classifier_Training_Data" );
-
-    TextureClassifier toRet;
-
-    const char* cID;
-    cID = titleElement->Attribute("classifierID");
-
-    std::string strID = std::string(cID);
-
-    if (strID == ColourStatisticsAnalyzer::xmlID)
-    {
-        ColourStatisticsAnalyzer tmp;
-        tmp.readFromFile(filepath);
-        toRet = tmp;
-    }
-
-    return toRet;
-}

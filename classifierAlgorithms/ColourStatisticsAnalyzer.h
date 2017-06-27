@@ -29,7 +29,7 @@ class ColourStatisticsAnalyzer : public TextureClassifier
 
 public:
 
-    static std::string xmlID = "Colour_Statistics_Analyzer";
+    static std::string getXmlID();
 
     ColourStatisticsAnalyzer();
 
@@ -48,6 +48,9 @@ public:
 
 	virtual int getTileHeight();
 	virtual int getTileWidth();
+
+    void setTileSize(int height, int width);
+
 
     virtual bool writeToFile(std::string filepath);
     virtual bool readFromFile(std::string filepath);
