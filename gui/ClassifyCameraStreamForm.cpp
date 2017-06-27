@@ -14,25 +14,21 @@ ClassifyCameraStreamForm::~ClassifyCameraStreamForm()
     delete ui;
     if (timerInitialized)
         delete timer;
-    if (csaInitialized)
-        delete csa;
+    //if (csaInitialized)
+        //delete csa;
 }
 
 
 void ClassifyCameraStreamForm::startClassifyFromCameraStream(const char* streamSetting)
 {
 
-    QString toReadPath = QFileDialog::getOpenFileName(this, tr("Select the classifier training data to load."),
-                               "C:/",
-                               tr("(*.xml)"));
-
-
-
     cap = VideoCapture(streamSetting);
 
     //these options do not improve latency
     //cap.set(CV_CAP_PROP_BUFFERSIZE, 3);
     //cap.set(CV_CAP_PROP_FPS, 30);
+    if (timerInitialized)
+        delete timer;
 
     timerInitialized = true;
     timer = new QTimer(this);
@@ -178,6 +174,7 @@ void ClassifyCameraStreamForm::on_btn_pauseClassify_clicked()
     timer->stop();
     ui->btn_continueClassify->setEnabled(true);
     determineBackAndForwardBtnStates();
+    cap.release();
 }
 
 void ClassifyCameraStreamForm::on_btn_goBackOneImage_clicked()

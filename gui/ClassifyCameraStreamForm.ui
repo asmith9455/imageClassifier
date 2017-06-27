@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1051</width>
-    <height>762</height>
+    <height>632</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>950</x>
-     <y>720</y>
+     <x>920</x>
+     <y>580</y>
      <width>91</width>
      <height>32</height>
     </rect>
@@ -32,10 +32,10 @@
   <widget class="QLabel" name="label_classifiedImageRecoloured">
    <property name="geometry">
     <rect>
-     <x>530</x>
+     <x>410</x>
      <y>10</y>
-     <width>512</width>
-     <height>288</height>
+     <width>384</width>
+     <height>216</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -55,9 +55,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>310</y>
-     <width>512</width>
-     <height>288</height>
+     <y>240</y>
+     <width>384</width>
+     <height>216</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -78,8 +78,8 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>512</width>
-     <height>288</height>
+     <width>384</width>
+     <height>216</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -98,10 +98,10 @@
   <widget class="QLabel" name="label_classifiedImagePpRecoloured">
    <property name="geometry">
     <rect>
-     <x>530</x>
-     <y>310</y>
-     <width>512</width>
-     <height>288</height>
+     <x>410</x>
+     <y>240</y>
+     <width>384</width>
+     <height>216</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -121,7 +121,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>610</y>
+     <y>460</y>
      <width>191</width>
      <height>151</height>
     </rect>
@@ -212,8 +212,8 @@
    <property name="geometry">
     <rect>
      <x>210</x>
-     <y>610</y>
-     <width>291</width>
+     <y>460</y>
+     <width>361</width>
      <height>151</height>
     </rect>
    </property>
@@ -238,7 +238,7 @@
      <rect>
       <x>10</x>
       <y>40</y>
-      <width>141</width>
+      <width>181</width>
       <height>17</height>
      </rect>
     </property>
@@ -254,7 +254,7 @@
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>181</width>
+      <width>191</width>
       <height>17</height>
      </rect>
     </property>
@@ -284,7 +284,7 @@
    <widget class="QRadioButton" name="radioButton_res1280x720">
     <property name="geometry">
      <rect>
-      <x>190</x>
+      <x>240</x>
       <y>60</y>
       <width>91</width>
       <height>17</height>
@@ -300,7 +300,7 @@
    <widget class="QRadioButton" name="radioButton_res2592x1458">
     <property name="geometry">
      <rect>
-      <x>190</x>
+      <x>240</x>
       <y>40</y>
       <width>91</width>
       <height>17</height>
@@ -319,9 +319,9 @@
    <widget class="QLabel" name="label_camRes">
     <property name="geometry">
      <rect>
-      <x>190</x>
+      <x>240</x>
       <y>20</y>
-      <width>101</width>
+      <width>121</width>
       <height>16</height>
      </rect>
     </property>
@@ -368,8 +368,8 @@
   <widget class="QGroupBox" name="groupBox_3">
    <property name="geometry">
     <rect>
-     <x>510</x>
-     <y>610</y>
+     <x>580</x>
+     <y>470</y>
      <width>341</width>
      <height>151</height>
     </rect>
@@ -569,7 +569,7 @@
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>

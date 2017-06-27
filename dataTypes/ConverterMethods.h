@@ -22,7 +22,7 @@ public:
     static std::vector<std::vector<Point2<int>>> getContourVectorFromString(QString qstr);
 
     static Contour<int> getContourClassFromString(QString qstr);
-    static std::vector<Contour<int>> ConverterMethods::getContourClassVectorFromString(QString qstr);
+    static std::vector<Contour<int>> getContourClassVectorFromString(QString qstr);
 
     template<typename T>
     static ImageSequence getImageSequenceFromSegmentedRegion(

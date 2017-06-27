@@ -300,7 +300,7 @@ int test0003()
     for (int i = 0; i < imgSequences_target.size(); i++)
 	{
         int numImgs = (int)(fractionUsedForTraining * (double)imgSequences_target[i].getimageCount());
-        ImageSequence imgSequence_target_reduced = ImageSequence::getRandomImageSequence(imgSequences_target[i], numImgs);
+        ImageSequence imgSequence_target_reduced;// = ImageSequence::getRandomImageSequence(imgSequences_target[i], numImgs);
         imgSequences_target_reduced.push_back(imgSequence_target_reduced);
         targetImageTotalForTraining += imgSequence_target_reduced.getimageCount();
 	}
@@ -330,7 +330,7 @@ int test0003()
 
 
 	//std::cout << "csa 1 const image size: " << csa1.constImageSize() << std::endl;
-	ImageClassifier* ic = &csa1;
+    TextureClassifier* ic = &csa1;
 
 	std::cout << "Training model (1)... ";
 	csa1.analyze();
@@ -370,7 +370,7 @@ int test0003()
 
 		cap >> img; // get a new frame from camera
 
-        ImageClassifier::ClassifiedImage classImg = ic->classifyImage(img, true, true);
+        TextureClassifier::ClassifiedImage classImg = ic->classifyImage(img, true, true);
         resize(classImg.binaryImageMat, resizeBin, Size(960, 540), 0, 0, INTER_LINEAR);
         resize(classImg.colouredImage, resizeImg, Size(960, 540), 0, 0, INTER_LINEAR);
 

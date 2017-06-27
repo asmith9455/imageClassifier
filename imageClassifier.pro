@@ -26,9 +26,7 @@ INCLUDEPATH +=  $$PWD/classifierAlgorithms\
                 $$PWD/gui\
                 $$PWD/trainingDataManager
 
-win32
-
-{
+win32{
 
 
 DEFINES+=Windows=1
@@ -37,7 +35,7 @@ INCLUDEPATH +=  C:/opencv_3_2_0/build/include\
                 C:/sqlite3\
                 C:/tinyxml2
 
-#link against opencv
+#link against opencv, sqlite3, and tinyxml2
 LIBS += C:/opencv_3_2_0/build/x64/vc14/lib/opencv_world320.lib\
         C:/sqlite3/sqlite3.lib\
         C:/tinyxml2/tinyxml2.lib
@@ -56,9 +54,10 @@ DEFINES+=Linux=1
 DEFINES+=TX1=1      #comment out if not building on the TX1
 
 LIBS += -L/usr/lib -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc -lopencv_videoio
-
-LIBS += -lsqlite3
+LIBS += -L/usr/lib/aarch64-linux-gnu
+LIBS += -lsqlite3 -ltinyxml2
 }
+
 SOURCES += main.cpp\
         mainwindow.cpp \
     classifierAlgorithms/ColourStatisticsAnalyzer.cpp \
@@ -73,7 +72,6 @@ SOURCES += main.cpp\
     dataTypes/CvQt.cpp \
     gui/TrainTextureClassifierForm.cpp \
     trainingDataManager/TrainingImageDbWrapper.cpp \
-    dataTypes/ImageSequence.cpp \
     classifierAlgorithms/TextureClassifier.cpp \
     dataTypes/ConverterMethods.cpp
 
