@@ -83,6 +83,8 @@ private slots:
 
     void on_tableView_segmentedRegions_doubleClicked(const QModelIndex &index);
 
+    void on_btn_convertBgrToRgb_clicked();
+
 private:
     Ui::manageTrainingDataForm *ui;
     static int nullCallback(void *NotUsed, int argc, char **argv, char **azColName);

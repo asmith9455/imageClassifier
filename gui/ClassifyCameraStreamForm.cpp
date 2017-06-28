@@ -27,6 +27,8 @@ void ClassifyCameraStreamForm::startClassifyFromCameraStream(const char* streamS
     //these options do not improve latency
     //cap.set(CV_CAP_PROP_BUFFERSIZE, 3);
     //cap.set(CV_CAP_PROP_FPS, 30);
+
+
     if (timerInitialized)
         delete timer;
 
@@ -230,16 +232,30 @@ void ClassifyCameraStreamForm::on_btn_saveCurrentImageToDisk_clicked()
     std::string savePathPpBinary = savePath + "-pp_binary" + ext;
     std::string savePathPpRecoloured = savePath + "-pp_recoloured" + ext;
 
-    cv::imshow("test", this->imageToClassify);
-    cv::waitKey(0);
-    cv::destroyAllWindows();
+    cv::Mat img;
+
+
 
     if (ui->checkBox_saveOriginalImage->isChecked())
-        cv::imwrite(savePathOriginal, this->imageToClassify);
+    {
+        cv::cvtColor(this->imageToClassify, img, cv::COLOR_BGR2RGB);
+        cv::imwrite(savePathOriginal, img);
+    }
+
+
     if (ui->checkBox_saveRecolouredImage->isChecked())
-        cv::imwrite(savePathRecoloured, this->classImg.colouredImage);
+    {
+        cv::cvtColor(this->classImg.colouredImage, img, cv::COLOR_BGR2RGB);
+        cv::imwrite(savePathRecoloured, img);
+    }
     if (ui->checkBox_savePpBinary->isChecked())
+    {
         cv::imwrite(savePathPpBinary, this->classImgPP.binaryImageMat);
+    }
+
     if (ui->checkBox_savePpRecoloured->isChecked())
-        cv::imwrite(savePathPpRecoloured, this->classImgPP.colouredImage);
+    {
+        cv::cvtColor(this->classImgPP.colouredImage, img, cv::COLOR_BGR2RGB);
+        cv::imwrite(savePathPpRecoloured, img);
+    }
 }

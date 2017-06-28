@@ -1106,3 +1106,26 @@ void manageTrainingDataForm::on_tableView_segmentedRegions_doubleClicked(const Q
     updatePropertiesForSegmentedRegionsTableFromDb();
 
 }
+
+void manageTrainingDataForm::on_btn_convertBgrToRgb_clicked()
+{
+    cv::cvtColor(imgToStore, imgToStore, cv::COLOR_BGR2RGB);
+
+    //const cv::Mat tmp;
+
+    //QPixmap x = CvQt::mat_2_qpixmap_rgb888(tmp);
+
+    //ui->label_selectedPic->setPixmap(x);
+
+
+    ui->label_status->setText("Converted to RGB from BGR.");
+    ui->label_imageStatus->setText("Picture from disk (converted to RGB).");
+
+    if (ui->checkBox_saveConvertedImage->isChecked())
+    {
+        QString fileName = QFileDialog::getSaveFileName(this, tr("Select save directory and name for converted image."),
+                                   "C:/",
+                                   tr("(*.bmp)"));
+        cv::imwrite(fileName.toStdString(), imgToStore);
+    }
+}

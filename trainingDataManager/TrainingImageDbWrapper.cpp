@@ -5,7 +5,7 @@ TrainingImageDbWrapper::TrainingImageDbWrapper()
 
 }
 
-//for imp
+
 /*std::size_t operator()(std::vector<int> const& vec) const {
   std::size_t seed = vec.size();
   for(auto& i : vec) {
@@ -55,6 +55,8 @@ std::vector<ImageSequence> TrainingImageDbWrapper::getTilesWithSingleProperty
     for (auto it : combos)
     {
         ImageSequence iseq;
+        //need to somehow associate each image in this sequence with the original image itself or statistics that describe it
+        //if we go the statistics route, must be easily extensible because it is conceivable that different statistics will be required in the future
         for (std::pair<size_t, size_t> indexPair : it.second)
             if (segImgs[indexPair.first].segmentedRegions[indexPair.second].hasProperty(propertyID))
                 iseq.addImgs(

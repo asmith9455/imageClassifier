@@ -78,7 +78,7 @@
        <bool>false</bool>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tabWidgetPage1">
        <attribute name="title">
@@ -403,6 +403,32 @@
          <bool>true</bool>
         </property>
        </widget>
+       <widget class="QPushButton" name="btn_convertBgrToRgb">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>290</y>
+          <width>171</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Convert BGR to RGB</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_saveConvertedImage">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>280</y>
+          <width>141</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Save Converted Image</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="tabWidgetPage3">
        <attribute name="title">
@@ -626,8 +652,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>1579</x>
+     <y>650</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -642,8 +668,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>1579</x>
+     <y>650</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>

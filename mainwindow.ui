@@ -88,14 +88,10 @@
       </rect>
      </property>
      <property name="text">
-      <string>Classify Camera Stream</string>
+      <string>Classify Images</string>
      </property>
     </widget>
    </widget>
-   <zorder>groupBox</zorder>
-   <zorder>groupBox_2</zorder>
-   <zorder>groupBox_3</zorder>
-   <zorder>groupBox_3</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
