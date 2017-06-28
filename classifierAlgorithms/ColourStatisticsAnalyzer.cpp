@@ -63,6 +63,8 @@ void ColourStatisticsAnalyzer::generateThresholds()
 		int sumThresG = 0;
 		int sumThresB = 0;
 
+
+
 		int tmp;
 		for (int j = 0; j < rgbHistograms[i].size(); j++)
 		{
@@ -94,9 +96,18 @@ void ColourStatisticsAnalyzer::generateThresholds()
 		cout << sumThresR << ", " << sumThresG << ", " << sumThresB << std::endl;
 		cout << avgThresR << ", " << avgThresG << ", " << avgThresB << std::endl;
 
-		minThresR.push_back(( avgThresR - (double)tmpMinThresR)*safetyFactor + (double)tmpMinThresR);
-		minThresG.push_back((avgThresG - (double)tmpMinThresG)*safetyFactor + (double)tmpMinThresG);
-		minThresB.push_back((avgThresB - (double)tmpMinThresB)*safetyFactor + (double)tmpMinThresB);
+        if (rgbHistograms[i].size() == 0)
+        {
+            minThresR.push_back(INT_MAX);
+            minThresG.push_back(INT_MAX);
+            minThresB.push_back(INT_MAX);
+        }
+        else
+        {
+            minThresR.push_back(( avgThresR - (double)tmpMinThresR)*safetyFactor + (double)tmpMinThresR);
+            minThresG.push_back((avgThresG - (double)tmpMinThresG)*safetyFactor + (double)tmpMinThresG);
+            minThresB.push_back((avgThresB - (double)tmpMinThresB)*safetyFactor + (double)tmpMinThresB);
+        }
 
 	}
 
