@@ -74,7 +74,8 @@ SOURCES += main.cpp\
     trainingDataManager/TrainingImageDbWrapper.cpp \
     classifierAlgorithms/TextureClassifier.cpp \
     dataTypes/ConverterMethods.cpp \
-    dataTypes/ImageStatistics.cpp
+    dataTypes/ImageStatistics.cpp \
+    gui/TestRosCommunicationForm.cpp
 
 HEADERS  += mainwindow.h \
     classifierAlgorithms/ColourStatisticsAnalyzer.h \
@@ -95,12 +96,14 @@ HEADERS  += mainwindow.h \
     dataTypes/SegmentedImage.h \
     classifierAlgorithms/TextureClassifier.h \
     dataTypes/ConverterMethods.h \
-    dataTypes/ImageStatistics.h
+    dataTypes/ImageStatistics.h \
+    gui/TestRosCommunicationForm.h
 
 FORMS    += mainwindow.ui \
     trainingDataManager/manageTrainingDataForm.ui \
     gui/ClassifyCameraStreamForm.ui \
-    gui/TrainTextureClassifierForm.ui
+    gui/TrainTextureClassifierForm.ui \
+    gui/TestRosCommunicationForm.ui
 
 DISTFILES += \
     README.md

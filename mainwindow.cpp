@@ -32,3 +32,9 @@ void MainWindow::on_btn_trainTextureClassifier_clicked()
     TrainClassifierForm tcf;
     tcf.exec();
 }
+
+void MainWindow::on_pushButton_clicked()
+{
+    TestRosCommunicationForm trcf;
+    trcf.exec();
+}
