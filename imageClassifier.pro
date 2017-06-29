@@ -24,10 +24,10 @@ INCLUDEPATH +=  $$PWD/classifierAlgorithms\
                 $$PWD/system\
                 $$PWD/testing\
                 $$PWD/gui\
-                $$PWD/trainingDataManager
+                $$PWD/trainingDataManager\
+                $$PWD/featureDetection
 
 win32{
-
 
 DEFINES+=Windows=1
 
@@ -53,7 +53,7 @@ gcc*{
 DEFINES+=Linux=1
 DEFINES+=TX1=1      #comment out if not building on the TX1
 
-LIBS += -L/usr/lib -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc -lopencv_videoio
+LIBS += -L/usr/lib -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc -lopencv_videoio -lopencv_features2d
 LIBS += -L/usr/lib/aarch64-linux-gnu
 LIBS += -lsqlite3 -ltinyxml2
 }
@@ -75,7 +75,9 @@ SOURCES += main.cpp\
     classifierAlgorithms/TextureClassifier.cpp \
     dataTypes/ConverterMethods.cpp \
     dataTypes/ImageStatistics.cpp \
-    gui/TestRosCommunicationForm.cpp
+    gui/TestRosCommunicationForm.cpp \
+    featureDetection/stop_marker_detection.cpp \
+    featureDetection/generalFunc.cpp
 
 HEADERS  += mainwindow.h \
     classifierAlgorithms/ColourStatisticsAnalyzer.h \
@@ -97,7 +99,9 @@ HEADERS  += mainwindow.h \
     classifierAlgorithms/TextureClassifier.h \
     dataTypes/ConverterMethods.h \
     dataTypes/ImageStatistics.h \
-    gui/TestRosCommunicationForm.h
+    gui/TestRosCommunicationForm.h \
+    featureDetection/stop_marker_detection.h \
+    featureDetection/generalFunc.h
 
 FORMS    += mainwindow.ui \
     trainingDataManager/manageTrainingDataForm.ui \

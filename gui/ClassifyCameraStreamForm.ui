@@ -123,7 +123,7 @@
      <x>10</x>
      <y>460</y>
      <width>191</width>
-     <height>151</height>
+     <height>161</height>
     </rect>
    </property>
    <property name="title">
@@ -198,13 +198,26 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>120</y>
+      <y>140</y>
       <width>211</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
      <string>Time to Display:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_timeToDraw">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>120</y>
+      <width>211</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Time to Draw:</string>
     </property>
    </widget>
   </widget>
@@ -531,6 +544,19 @@
      <string>Continue</string>
     </property>
    </widget>
+  </widget>
+  <widget class="QCheckBox" name="checkBox_drawBoundingBox">
+   <property name="geometry">
+    <rect>
+     <x>820</x>
+     <y>390</y>
+     <width>221</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Draw Bounding Box</string>
+   </property>
   </widget>
  </widget>
  <resources/>

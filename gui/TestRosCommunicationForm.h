@@ -2,6 +2,7 @@
 #define TESTROSCOMMUNICATIONFORM_H
 
 #include <QDialog>
+//#include "ros/ros.h"
 
 namespace Ui {
 class TestRosCommunicationForm;
@@ -14,6 +15,9 @@ class TestRosCommunicationForm : public QDialog
 public:
     explicit TestRosCommunicationForm(QWidget *parent = 0);
     ~TestRosCommunicationForm();
+
+private slots:
+    void on_pushButton_clicked();
 
 private:
     Ui::TestRosCommunicationForm *ui;

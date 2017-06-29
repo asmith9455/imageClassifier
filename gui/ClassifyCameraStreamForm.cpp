@@ -83,9 +83,18 @@ void ClassifyCameraStreamForm::classifyAndDisplayImage()
     cv::cvtColor(imageToClassify, imageToClassify, CV_BGR2RGB);
     cv::cvtColor(classImg.colouredImage, classImg.colouredImage, CV_BGR2RGB);
     cv::cvtColor(classImgPP.colouredImage, classImgPP.colouredImage, CV_BGR2RGB);
-    cv::cvtColor(classImgPP.binaryImageMat, classImgPP.binaryImageMat, CV_GRAY2RGB);
+
 
     frameTime5 = std::chrono::high_resolution_clock::now();
+
+    if (ui->checkBox_drawBoundingBox->isChecked())
+    {
+        stop_marker_detection::detect_rectangleOnBinaryImage(classImgPP.binaryImageMat, imageToClassify);
+    }
+
+    cv::cvtColor(classImgPP.binaryImageMat, classImgPP.binaryImageMat, CV_GRAY2RGB);
+
+    frameTime6 = std::chrono::high_resolution_clock::now();
 
 
     ui->label_originalImage->setPixmap(QPixmap::fromImage(QImage(imageToClassify.data, imageToClassify.cols, imageToClassify.rows, imageToClassify.step, QImage::Format_RGB888)));
@@ -93,17 +102,17 @@ void ClassifyCameraStreamForm::classifyAndDisplayImage()
     ui->label_classifiedImagePpRecoloured->setPixmap(QPixmap::fromImage(QImage(classImgPP.colouredImage.data, classImgPP.colouredImage.cols, classImgPP.colouredImage.rows, classImgPP.colouredImage.step, QImage::Format_RGB888)));
     ui->label_classifiedImageRecoloured->setPixmap(QPixmap::fromImage(QImage(classImg.colouredImage.data, classImg.colouredImage.cols, classImg.colouredImage.rows, classImg.colouredImage.step, QImage::Format_RGB888)));
 
-    frameTime6 = std::chrono::high_resolution_clock::now();
+    frameTime7 = std::chrono::high_resolution_clock::now();
 
 
 
-    ui->label_processingFrameRate->setText("Processing Time: "+QString::number(std::chrono::duration_cast<std::chrono::milliseconds>(frameTime6 - frameTime1).count()) + " ms");
+    ui->label_processingFrameRate->setText("Processing Time: "+QString::number(std::chrono::duration_cast<std::chrono::milliseconds>(frameTime7 - frameTime1).count()) + " ms");
     ui->label_timeToGrabFrame->setText("Time to Grab Frame: "+QString::number(std::chrono::duration_cast<std::chrono::milliseconds>(frameTime2 - frameTime1).count()) + " ms");
-
     ui->label_timeToClassify->setText("Time to Classify: "+QString::number(std::chrono::duration_cast<std::chrono::milliseconds>(frameTime3 - frameTime2b).count()) + " ms");
     ui->label_timeToPostProcess->setText("Time to PostProcess: "+QString::number(std::chrono::duration_cast<std::chrono::milliseconds>(frameTime4 - frameTime3).count()) + " ms");
     ui->label_timeToConvert->setText("Time to Convert: "+QString::number(std::chrono::duration_cast<std::chrono::milliseconds>(frameTime5 - frameTime4).count()) + " ms");
-    ui->label_timeToDisplay->setText("Time to Display: "+QString::number(std::chrono::duration_cast<std::chrono::milliseconds>(frameTime6 - frameTime5).count()) + " ms");
+    ui->label_timeToDraw->setText("Time to Draw: " + QString::number(std::chrono::duration_cast<std::chrono::milliseconds>(frameTime6 - frameTime5).count()) + " ms");
+    ui->label_timeToDisplay->setText("Time to Display: "+QString::number(std::chrono::duration_cast<std::chrono::milliseconds>(frameTime7 - frameTime6).count()) + " ms");
 }
 
 void ClassifyCameraStreamForm::grabVideoFrame()

@@ -12,3 +12,8 @@ TestRosCommunicationForm::~TestRosCommunicationForm()
 {
     delete ui;
 }
+
+void TestRosCommunicationForm::on_pushButton_clicked()
+{
+    ui->label_commStatus->setText("Status: Communicating");
+}

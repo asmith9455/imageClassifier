@@ -25,6 +25,8 @@
 #include <ConverterMethods.h>
 #include <QMessageBox>
 
+#include <stop_marker_detection.h>
+
 
 namespace Ui {
 class ClassifyCameraStreamForm;
@@ -88,7 +90,7 @@ private:
     bool csaInitialized = false;
     ColourStatisticsAnalyzer* csa;
     double dif;
-    std::chrono::high_resolution_clock::time_point frameTime1, frameTime2, frameTime2b, frameTime3, frameTime4, frameTime5, frameTime6;
+    std::chrono::high_resolution_clock::time_point frameTime1, frameTime2, frameTime2b, frameTime3, frameTime4, frameTime5, frameTime6, frameTime7;
 
     TextureClassifier::ClassifiedImage classImg, classImgPP;
 
