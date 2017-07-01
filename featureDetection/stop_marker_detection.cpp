@@ -113,7 +113,14 @@ void detect_rectangleOnBinaryImage(cv::Mat binImg, cv::Mat& colImg) // add int t
 
     // Step 1: Find contours in image
         //cv::cvtColor(im, im, cv::COLOR_BGR2GRAY);			// Convert BGR to grayscale findContours
+    try
+    {
         cv::findContours(binImg.clone(), contour_arr, hierarch, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_NONE); // find all contours in image
+     }
+    catch(std::exception& e)
+    {
+        std::cerr<<"error in findcontours is: "<<e.what()<<std::endl;
+    }
         //cv::findContours(im, contour_arr, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE); // alt methods available, choose depending on process time
 
 

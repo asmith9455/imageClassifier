@@ -4,13 +4,14 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = imageClassifier
 TEMPLATE = app
 
+QT       += core gui
 QT += sql
 
 CONFIG += c++11
@@ -31,13 +32,21 @@ win32{
 
 DEFINES+=Windows=1
 
+
+
 INCLUDEPATH +=  C:/opencv_3_2_0/build/include\
                 C:/sqlite3\
                 C:/tinyxml2
 
 #link against opencv, sqlite3, and tinyxml2
-LIBS += C:/opencv_3_2_0/build/x64/vc14/lib/opencv_world320.lib\
-        C:/sqlite3/sqlite3.lib\
+
+#opencv functions will cause exceptions if the debug/release option specified
+#in qtcreator doesn't match the debug/release version of the library (which
+#in turn links the proper dll)
+debug: LIBS += C:/opencv_3_2_0/build/x64/vc14/lib/opencv_world320d.lib
+release: INCLUDEPATH += C:/opencv_3_2_0/build/x64/vc14/lib/opencv_world320.lib
+
+LIBS += C:/sqlite3/sqlite3.lib\
         C:/tinyxml2/tinyxml2.lib
 
 #add the opencvdll location to the system path for building the program
