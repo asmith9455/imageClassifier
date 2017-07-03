@@ -26,6 +26,8 @@ public:
     void addImg(cv::Mat img);
     void addImgs(ImageSequence imseq);
 
+    void clear();
+
     static std::pair<ImageSequence, ImageSequence>
     getRandomImageSequence
     (ImageSequence seq, double fractionToPreserve, bool setSeed, unsigned int randSeed);

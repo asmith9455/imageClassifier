@@ -14,7 +14,32 @@ TrainingImageDbWrapper::TrainingImageDbWrapper()
   return seed;
 }*/
 
-std::vector<ImageSequence> TrainingImageDbWrapper::getTilesWithSingleProperty
+ImageSequence TrainingImageDbWrapper::getTilesWithSingleProperty
+(QString dbFilePath, int captureDeviceID, int propertyID , int tileWidth, int tileHeight)
+{
+    std::vector<SegmentedImage<int>> segImgs
+            = TrainingImageDbWrapper::getSegmentedImagesWithSingleProperty(dbFilePath, captureDeviceID, propertyID);
+
+
+
+    ImageSequence iseq;
+
+    for (SegmentedImage<int> simg : segImgs)
+        for(SegmentedRegion<int> srgn : simg.segmentedRegions)
+            if (srgn.hasProperty(propertyID))
+                iseq.addImgs(
+                    ConverterMethods::
+                            getImageSequenceFromSegmentedRegion(simg.img, srgn, tileWidth, tileHeight));
+            else //note that the sql queries should guarantee that each seg region has the desired property
+                throw runtime_error("There is an error in the sql select logic. All the segmented regions should have the targetPropertyID.");
+
+
+
+    return iseq;
+}
+
+//gets a vector of image sequences that represent user-clustered
+std::vector<ImageSequence> TrainingImageDbWrapper::getPreClusteredTilesWithSingleProperty
 (QString dbFilePath, int captureDeviceID, int propertyID , int tileWidth, int tileHeight)
 {
     std::vector<SegmentedImage<int>> segImgs

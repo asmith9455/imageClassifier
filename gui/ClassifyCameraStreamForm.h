@@ -2,7 +2,7 @@
 #define CLASSIFYCAMERASTREAMFORM_H
 
 #include <QDialog>
-#include <ColourStatisticsAnalyzer.h>
+#include <ColourStatisticsAnalyzerRgb.h>
 #include <ImageSequence.h>
 
 #include <iostream>
@@ -88,7 +88,7 @@ private:
     cv::Mat imageToClassify;
     std::shared_ptr<TextureClassifier> ic;
     bool csaInitialized = false;
-    ColourStatisticsAnalyzer* csa;
+    ColourStatisticsAnalyzerRgb* csa;
     double dif;
     std::chrono::high_resolution_clock::time_point frameTime1, frameTime2, frameTime2b, frameTime3, frameTime4, frameTime5, frameTime6, frameTime7;
 

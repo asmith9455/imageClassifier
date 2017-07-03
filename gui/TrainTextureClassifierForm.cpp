@@ -84,6 +84,11 @@ void TrainClassifierForm::on_btn_generateImages_clicked()
     nonTargetImgsForTraining.clear();
     nonTargetImgsNotForTraining.clear();
 
+    targetImgsForTrainingNPC.clear();
+    targetImgsNotForTrainingNPC.clear();
+    nonTargetImgsForTrainingNPC.clear();
+    nonTargetImgsNotForTrainingNPC.clear();
+
     //get the currently selected capture device
     QItemSelectionModel *select = ui->tableView_captureDevices->selectionModel();
     if (select == NULL)
@@ -143,43 +148,81 @@ void TrainClassifierForm::on_btn_generateImages_clicked()
     QModelIndex index3 = select3->selectedRows().at(0); //get the first selected property
     int propertyNonTargetID = index3.sibling(index3.row(), 0).data().toInt();
 
+    std::vector<ImageSequence> targetImgs, nonTargetImgs;
+    ImageSequence targetImgsNPC, nonTargetImgsNPC;
+    usePreClustering = ui->checkBox_usePreClustering->isChecked();
+    if (usePreClustering)
+    {
+        //generate pre-clustered image sequences
+        targetImgs = TrainingImageDbWrapper::getPreClusteredTilesWithSingleProperty(
+                    dbPath,
+                    captureDeviceID,
+                    propertyTargetID,
+                    ui->lineEdit_tileWidth->text().toInt(),
+                    ui->lineEdit_tileHeight->text().toInt()
+                    );
 
-    std::vector<ImageSequence> targetImgs = TrainingImageDbWrapper::getTilesWithSingleProperty(
-                dbPath,
-                captureDeviceID,
-                propertyTargetID,
-                ui->lineEdit_tileWidth->text().toInt(),
-                ui->lineEdit_tileHeight->text().toInt()
-                );
+        nonTargetImgs = TrainingImageDbWrapper::getPreClusteredTilesWithSingleProperty(
+                    dbPath,
+                    captureDeviceID,
+                    propertyNonTargetID,
+                    ui->lineEdit_tileWidth->text().toInt(),
+                    ui->lineEdit_tileHeight->text().toInt()
+                    );
+    }
+    else
+    {
+        targetImgsNPC = TrainingImageDbWrapper::getTilesWithSingleProperty(
+                    dbPath,
+                    captureDeviceID,
+                    propertyTargetID,
+                    ui->lineEdit_tileWidth->text().toInt(),
+                    ui->lineEdit_tileHeight->text().toInt()
+                    );
 
-    std::vector<ImageSequence> nonTargetImgs = TrainingImageDbWrapper::getTilesWithSingleProperty(
-                dbPath,
-                captureDeviceID,
-                propertyNonTargetID,
-                ui->lineEdit_tileWidth->text().toInt(),
-                ui->lineEdit_tileHeight->text().toInt()
-                );
+        nonTargetImgsNPC = TrainingImageDbWrapper::getTilesWithSingleProperty(
+                    dbPath,
+                    captureDeviceID,
+                    propertyNonTargetID,
+                    ui->lineEdit_tileWidth->text().toInt(),
+                    ui->lineEdit_tileHeight->text().toInt()
+                    );
+    }
 
     float trainingImagesFraction = ui->lineEdit_trainingImageFraction->text().toFloat();
+    unsigned int randSeed = ui->lineEdit_rngSeed->text().toUInt();
+    bool useRandSeed = ui->checkBox_useRngSeed->isChecked();
+
 
     std::pair<ImageSequence, ImageSequence> tmpPair;
 
 
-    unsigned int randSeed = ui->lineEdit_rngSeed->text().toUInt();
-    bool useRandSeed = ui->checkBox_useRngSeed->isChecked();
 
-    for (ImageSequence is : targetImgs)
+    if (usePreClustering)
     {
-        tmpPair = ImageSequence::getRandomImageSequence(is, trainingImagesFraction, useRandSeed, randSeed);
-        targetImgsForTraining.push_back(tmpPair.first);
-        targetImgsNotForTraining.push_back(tmpPair.second);
+        for (ImageSequence is : targetImgs)
+        {
+            tmpPair = ImageSequence::getRandomImageSequence(is, trainingImagesFraction, useRandSeed, randSeed);
+            targetImgsForTraining.push_back(tmpPair.first);
+            targetImgsNotForTraining.push_back(tmpPair.second);
+        }
+
+        for (ImageSequence is : nonTargetImgs)
+        {
+            tmpPair = ImageSequence::getRandomImageSequence(is, trainingImagesFraction, useRandSeed, randSeed);
+            nonTargetImgsForTraining.push_back(tmpPair.first);
+            nonTargetImgsNotForTraining.push_back(tmpPair.second);
+        }
     }
-
-    for (ImageSequence is : nonTargetImgs)
+    else
     {
-        tmpPair = ImageSequence::getRandomImageSequence(is, trainingImagesFraction, useRandSeed, randSeed);
-        nonTargetImgsForTraining.push_back(tmpPair.first);
-        nonTargetImgsNotForTraining.push_back(tmpPair.second);
+        tmpPair = ImageSequence::getRandomImageSequence(targetImgsNPC, trainingImagesFraction, useRandSeed, randSeed);
+        targetImgsForTrainingNPC = tmpPair.first;
+        targetImgsNotForTrainingNPC = tmpPair.second;
+
+        tmpPair = ImageSequence::getRandomImageSequence(nonTargetImgsNPC, trainingImagesFraction, useRandSeed, randSeed);
+        nonTargetImgsForTrainingNPC = tmpPair.first;
+        nonTargetImgsNotForTrainingNPC = tmpPair.second;
     }
 
     numTargetImgsForTraining = 0;
@@ -187,16 +230,26 @@ void TrainClassifierForm::on_btn_generateImages_clicked()
     numNonTargetImgsForTraining = 0;
     numNonTargetImgsNotForTraining = 0;
 
-    for (size_t i = 0; i < targetImgsForTraining.size(); i++)
+    if (usePreClustering)
     {
-        numTargetImgsForTraining += targetImgsForTraining[i].getimageCount();
-        numTargetImgsNotForTraining += targetImgsNotForTraining[i].getimageCount();
-    }
+        for (size_t i = 0; i < targetImgsForTraining.size(); i++)
+        {
+            numTargetImgsForTraining += targetImgsForTraining[i].getimageCount();
+            numTargetImgsNotForTraining += targetImgsNotForTraining[i].getimageCount();
+        }
 
-    for (size_t i = 0; i < nonTargetImgsForTraining.size(); i++)
+        for (size_t i = 0; i < nonTargetImgsForTraining.size(); i++)
+        {
+            numNonTargetImgsForTraining += nonTargetImgsForTraining[i].getimageCount();
+            numNonTargetImgsNotForTraining += nonTargetImgsNotForTraining[i].getimageCount();
+        }
+    }
+    else
     {
-        numNonTargetImgsForTraining += nonTargetImgsForTraining[i].getimageCount();
-        numNonTargetImgsNotForTraining += nonTargetImgsNotForTraining[i].getimageCount();
+        numTargetImgsForTraining =targetImgsForTrainingNPC.getimageCount();
+        numTargetImgsNotForTraining = targetImgsNotForTrainingNPC.getimageCount();
+        numNonTargetImgsForTraining = nonTargetImgsForTrainingNPC.getimageCount();
+        numNonTargetImgsNotForTraining = nonTargetImgsNotForTrainingNPC.getimageCount();
     }
 
     ui->label_numTargetTiles->setText("Number of Target Tiles (Total): " + QString::number(numTargetImgsForTraining + numTargetImgsNotForTraining));
@@ -212,7 +265,7 @@ void TrainClassifierForm::on_btn_saveTrainingData_clicked()
                                "C:/",
                                tr("(*.xml)"));
 
-    csa.writeToFile(toSavePath.toStdString());
+    ic->writeToFile(toSavePath.toStdString());
 }
 
 void TrainClassifierForm::on_btn_testClassifier_clicked()
@@ -225,45 +278,81 @@ void TrainClassifierForm::on_btn_testClassifier_clicked()
     size_t numFalsePositivesForTrainedImages = 0;
     size_t numFalsePositivesForUntrainedImages = 0;
 
+    if (usePreClustering)
+    {
+        for (size_t i = 0; i < targetImgsForTraining.size(); i++)
+            for (size_t j = 0; j < targetImgsForTraining[i].getimageCount(); j++)
+            {
+                r = ic->isTarget(targetImgsForTraining[i].imageAt(j));
 
-    for (size_t i = 0; i < targetImgsForTraining.size(); i++)
-        for (size_t j = 0; j < targetImgsForTraining[i].getimageCount(); j++)
+                if (r)
+                    numTruePositivesForTrainedImages++;
+            }
+
+        for (size_t i = 0; i < targetImgsNotForTraining.size(); i++)
+            for (size_t j = 0; j < targetImgsNotForTraining[i].getimageCount(); j++)
+            {
+                r = ic->isTarget(targetImgsNotForTraining[i].imageAt(j));
+
+                if (r)
+                    numTruePositivesForUntrainedImages++;
+            }
+
+
+        for (size_t i = 0; i < nonTargetImgsForTraining.size(); i++)
+            for (size_t j = 0; j < nonTargetImgsForTraining[i].getimageCount(); j++)
+            {
+                r = ic->isTarget(nonTargetImgsForTraining[i].imageAt(j));
+
+                if (r)
+                    numFalsePositivesForTrainedImages++;
+            }
+
+
+        for (size_t i = 0; i < nonTargetImgsNotForTraining.size(); i++)
+            for (size_t j = 0; j < nonTargetImgsNotForTraining[i].getimageCount(); j++)
+            {
+                r = ic->isTarget(nonTargetImgsNotForTraining[i].imageAt(j));
+
+                if (r)
+                    numFalsePositivesForUntrainedImages++;
+            }
+    }
+    else
+    {
+
+        for (size_t j = 0; j < targetImgsForTrainingNPC.getimageCount(); j++)
         {
-            r = csa.isTarget(targetImgsForTraining[i].imageAt(j));
+            r = ic->isTarget(targetImgsForTrainingNPC.imageAt(j));
 
             if (r)
                 numTruePositivesForTrainedImages++;
         }
 
-    for (size_t i = 0; i < targetImgsNotForTraining.size(); i++)
-        for (size_t j = 0; j < targetImgsNotForTraining[i].getimageCount(); j++)
+        for (size_t j = 0; j < targetImgsNotForTrainingNPC.getimageCount(); j++)
         {
-            r = csa.isTarget(targetImgsNotForTraining[i].imageAt(j));
+            r = ic->isTarget(targetImgsNotForTrainingNPC.imageAt(j));
 
             if (r)
                 numTruePositivesForUntrainedImages++;
         }
 
-
-    for (size_t i = 0; i < nonTargetImgsForTraining.size(); i++)
-        for (size_t j = 0; j < nonTargetImgsForTraining[i].getimageCount(); j++)
+        for (size_t j = 0; j < nonTargetImgsForTrainingNPC.getimageCount(); j++)
         {
-            r = csa.isTarget(nonTargetImgsForTraining[i].imageAt(j));
+            r = ic->isTarget(nonTargetImgsForTrainingNPC.imageAt(j));
 
             if (r)
                 numFalsePositivesForTrainedImages++;
         }
 
-
-    for (size_t i = 0; i < nonTargetImgsNotForTraining.size(); i++)
-        for (size_t j = 0; j < nonTargetImgsNotForTraining[i].getimageCount(); j++)
+        for (size_t j = 0; j < nonTargetImgsNotForTrainingNPC.getimageCount(); j++)
         {
-            r = csa.isTarget(nonTargetImgsNotForTraining[i].imageAt(j));
+            r = ic->isTarget(nonTargetImgsNotForTrainingNPC.imageAt(j));
 
             if (r)
                 numFalsePositivesForUntrainedImages++;
         }
-
+    }
 
     size_t numTruePositivesTotal =(numTruePositivesForTrainedImages+numTruePositivesForUntrainedImages);
     size_t numTargetImgsTotal = (numTargetImgsForTraining+numTargetImgsNotForTraining);
@@ -293,9 +382,26 @@ void TrainClassifierForm::on_btn_trainFromGeneratedImages_clicked()
 {
     double safetyFactor = ui->lineEdit_safetyFactor->text().toDouble();
 
-    csa = ColourStatisticsAnalyzer (targetImgsForTraining, nonTargetImgsForTraining, safetyFactor);
 
-    csa.analyze();
+    if (usePreClustering && ui->radioButton_useColourStatisticsAnalyzer->isChecked())
+    {
+        std::shared_ptr<ColourStatisticsAnalyzerRgb> csa
+                = std::make_shared<ColourStatisticsAnalyzerRgb>
+                (ColourStatisticsAnalyzerRgb(targetImgsForTraining, nonTargetImgsForTraining, safetyFactor));
+
+        ic = static_pointer_cast<TextureClassifier>(csa);
+    }
+
+    else if (!usePreClustering && ui->radioButton_useColourStatisticsAnalyzer->isChecked())
+    {
+        std::shared_ptr<ColourStatisticsAnalyzerRgb> csa
+                = std::make_shared<ColourStatisticsAnalyzerRgb>
+                (ColourStatisticsAnalyzerRgb(targetImgsForTrainingNPC, nonTargetImgsForTrainingNPC, safetyFactor));
+
+        ic = static_pointer_cast<TextureClassifier>(csa);
+    }
+
+    ic->analyze();
 }
 
 void TrainClassifierForm::on_btn_trainFromFile_clicked()
@@ -309,7 +415,7 @@ void TrainClassifierForm::on_btn_trainFromFile_clicked()
 
     try
     {
-        csa.readFromFile(toReadPath.toStdString());
+        ic->readFromFile(toReadPath.toStdString());
     }
     catch (std::exception& e)
     {

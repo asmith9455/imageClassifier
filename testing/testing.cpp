@@ -90,10 +90,10 @@ int test0001()
 
 
 	std::cout << "Initializing ColourStatisticsAnalyzer... ";
-    ColourStatisticsAnalyzer csa1(imgSequences_target_reduced, imgSequences_notTarget, 0.1);
+    ColourStatisticsAnalyzerRgb csa1(imgSequences_target_reduced, imgSequences_notTarget, 0.1);
 
 
-    ColourStatisticsAnalyzer csa2(imgSequences_target_reduced, imgSequences_notTarget, 0.1);
+    ColourStatisticsAnalyzerRgb csa2(imgSequences_target_reduced, imgSequences_notTarget, 0.1);
 	std::cout << "Done." << std::endl;
 
     bool imgIsEqual = ImageSequence::imagesAreEqual(csa1.imageSequences_target[0].imageAt(0), csa2.imageSequences_target[0].imageAt(0));

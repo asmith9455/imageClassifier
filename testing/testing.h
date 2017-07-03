@@ -1,5 +1,5 @@
 #pragma once
-#include "ColourStatisticsAnalyzer.h"
+#include "ColourStatisticsAnalyzerRgb.h"
 #include "ImageSequence.h"
 
 #include <iostream>

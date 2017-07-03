@@ -403,32 +403,6 @@
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QPushButton" name="btn_convertBgrToRgb">
-        <property name="geometry">
-         <rect>
-          <x>200</x>
-          <y>290</y>
-          <width>171</width>
-          <height>23</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Convert BGR to RGB</string>
-        </property>
-       </widget>
-       <widget class="QCheckBox" name="checkBox_saveConvertedImage">
-        <property name="geometry">
-         <rect>
-          <x>200</x>
-          <y>280</y>
-          <width>141</width>
-          <height>17</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Save Converted Image</string>
-        </property>
-       </widget>
       </widget>
       <widget class="QWidget" name="tabWidgetPage3">
        <attribute name="title">

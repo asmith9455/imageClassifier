@@ -23,9 +23,9 @@ void RgbHistogram::fillAccumulators(Mat img)
 	{
 		for (int j = 0; j < img.cols; j++)
 		{
-			accR[img.at<Vec3b>(i, j)[0]]++;
+            accR[img.at<Vec3b>(i, j)[0]]++; //all images stored in the database are rgb
 			accG[img.at<Vec3b>(i, j)[1]]++;
-			accB[img.at<Vec3b>(i, j)[2]]++;
+            accB[img.at<Vec3b>(i, j)[2]]++;
 		}
 	}
 	
@@ -184,8 +184,8 @@ bool RgbHistogram::AreEqual(RgbHistogram h1, RgbHistogram h2)
 		tmpEqual = b1 && b2 && b3;
 
 		equal = equal && tmpEqual;
-		if (!equal)
-			cout << "ne" << std::endl;
+        if (!equal)
+            cout << "ne" << std::endl;
 	}
 
 	return equal;

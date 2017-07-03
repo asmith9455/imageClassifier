@@ -1,8 +1,27 @@
-#include <ColourStatisticsAnalyzer.h>
+#include <ColourStatisticsAnalyzerRgb.h>
 
-ColourStatisticsAnalyzer::ColourStatisticsAnalyzer(){}
+ColourStatisticsAnalyzerRgb::ColourStatisticsAnalyzerRgb(){}
 
-ColourStatisticsAnalyzer::ColourStatisticsAnalyzer(
+ColourStatisticsAnalyzerRgb::ColourStatisticsAnalyzerRgb(
+        ImageSequence _imageSequence_target,
+        ImageSequence _imageSequence_notTarget,
+        double _safetyFactor) : TextureClassifier(ImageSequence(), ImageSequence())
+{
+    std::vector<ImageSequence> tmp;
+    tmp.push_back(_imageSequence_target);
+
+    imageSequences_target = tmp;
+
+    tmp.clear();
+
+    tmp.push_back(_imageSequence_notTarget);
+
+    imageSequences_notTarget = tmp;
+
+    safetyFactor = _safetyFactor;
+}
+
+ColourStatisticsAnalyzerRgb::ColourStatisticsAnalyzerRgb(
     vector<ImageSequence> _imageSequences_target,
     vector<ImageSequence> _imageSequences_notTarget, double _safetyFactor) :
     TextureClassifier(_imageSequences_target, _imageSequences_notTarget)
@@ -10,7 +29,7 @@ ColourStatisticsAnalyzer::ColourStatisticsAnalyzer(
 	safetyFactor = _safetyFactor;
 }
 
-void ColourStatisticsAnalyzer::analyze()
+void ColourStatisticsAnalyzerRgb::analyze()
 {
 	updateConstantImageSize();
 	generateRgbHistogramsForImageSequences();
@@ -18,7 +37,7 @@ void ColourStatisticsAnalyzer::analyze()
 	generateThresholds();
 }
 
-void ColourStatisticsAnalyzer::generateAverageRgbHistograms()
+void ColourStatisticsAnalyzerRgb::generateAverageRgbHistograms()
 {
 	averageRgbHistograms.clear();
 
@@ -32,7 +51,7 @@ void ColourStatisticsAnalyzer::generateAverageRgbHistograms()
 	}
 }
 
-void ColourStatisticsAnalyzer::generateRgbHistogramsForImageSequences()
+void ColourStatisticsAnalyzerRgb::generateRgbHistogramsForImageSequences()
 {
 	rgbHistograms.clear();
 
@@ -46,7 +65,7 @@ void ColourStatisticsAnalyzer::generateRgbHistogramsForImageSequences()
 	}
 }
 
-void ColourStatisticsAnalyzer::generateThresholds()
+void ColourStatisticsAnalyzerRgb::generateThresholds()
 {
 
 	minThresR.clear();
@@ -115,7 +134,7 @@ void ColourStatisticsAnalyzer::generateThresholds()
 
 //generate histograms for training data generated from a particular image
 //(each image sequence contains training data from a particular image for automatic clustering purposes)
-vector<RgbHistogram> ColourStatisticsAnalyzer::generateRgbHistogramsForImageSequence(ImageSequence targetImageSequence)
+vector<RgbHistogram> ColourStatisticsAnalyzerRgb::generateRgbHistogramsForImageSequence(ImageSequence targetImageSequence)
 {
 	//currently generates only a single histogram for each image sequence
 	//(i.e. the vector returned will contain only 1 element).
@@ -128,7 +147,7 @@ vector<RgbHistogram> ColourStatisticsAnalyzer::generateRgbHistogramsForImageSequ
 
 }
 
-bool ColourStatisticsAnalyzer::isTarget(Mat img)
+bool ColourStatisticsAnalyzerRgb::isTarget(Mat img)
 {
 	RgbHistogram histo(img);
 	int tempR, tempG, tempB;
@@ -152,27 +171,27 @@ bool ColourStatisticsAnalyzer::isTarget(Mat img)
 	return match;
 }
 
-void ColourStatisticsAnalyzer::writeHistogramData(string filepath)
+void ColourStatisticsAnalyzerRgb::writeHistogramData(string filepath)
 {
 	RgbHistogram::writeHistosToFile(rgbHistograms, filepath);
 }
 
-void ColourStatisticsAnalyzer::writeAverageHistogramData(string filepath)
+void ColourStatisticsAnalyzerRgb::writeAverageHistogramData(string filepath)
 {
 	RgbHistogram::writeHistosToFile(averageRgbHistograms, filepath);
 }
 
-int ColourStatisticsAnalyzer::getTileHeight()
+int ColourStatisticsAnalyzerRgb::getTileHeight()
 {
 	return tileHeight;
 }
 
-int ColourStatisticsAnalyzer::getTileWidth()
+int ColourStatisticsAnalyzerRgb::getTileWidth()
 {
 	return tileWidth;
 }
 
-bool ColourStatisticsAnalyzer::writeToFile(std::string filepath)
+bool ColourStatisticsAnalyzerRgb::writeToFile(std::string filepath)
 {
     //we need to write all of the averageRgbHistograms and the threshold data for each channel for each of the histograms to file
     //using namespace tinyxml2;
@@ -184,7 +203,7 @@ bool ColourStatisticsAnalyzer::writeToFile(std::string filepath)
 
     tinyxml2::XMLElement *node1 = doc.NewElement("Texture_Classifier_Training_Data");
 
-    node1->SetAttribute(TextureClassifier::getXmlAttributeName().c_str(), ColourStatisticsAnalyzer::getXmlID().c_str());
+    node1->SetAttribute(TextureClassifier::getXmlAttributeName().c_str(), ColourStatisticsAnalyzerRgb::getXmlID().c_str());
 
     for (size_t i = 0; i < averageRgbHistograms.size(); i++)
     {
@@ -252,7 +271,7 @@ bool ColourStatisticsAnalyzer::writeToFile(std::string filepath)
     return false;
 }
 
-bool ColourStatisticsAnalyzer::readFromFile(std::string filepath)
+bool ColourStatisticsAnalyzerRgb::readFromFile(std::string filepath)
 {
     //XMLDocument doc;
     //doc.LoadFile( "resources/dream.xml" );
@@ -273,7 +292,7 @@ bool ColourStatisticsAnalyzer::readFromFile(std::string filepath)
 
     std::string strID = std::string(cID);
 
-    if (strID != ColourStatisticsAnalyzer::getXmlID()) throw std::runtime_error("Attempted to parse training data from the wrong classifier.");
+    if (strID != ColourStatisticsAnalyzerRgb::getXmlID()) throw std::runtime_error("Attempted to parse training data from the wrong classifier.");
 
     this->averageRgbHistograms.clear();
     this->minThresR.clear();
@@ -387,13 +406,13 @@ bool ColourStatisticsAnalyzer::readFromFile(std::string filepath)
     return true;
 }
 
-void ColourStatisticsAnalyzer::setTileSize(int height, int width)
+void ColourStatisticsAnalyzerRgb::setTileSize(int height, int width)
 {
     this->tileWidth = width;
     this->tileHeight = height;
 }
 
-void ColourStatisticsAnalyzer::updateConstantImageSize()
+void ColourStatisticsAnalyzerRgb::updateConstantImageSize()
 {
 	int constantSize = -1;
 	bool constantBoolW = true, constantBoolH = true;
@@ -419,7 +438,7 @@ void ColourStatisticsAnalyzer::updateConstantImageSize()
 		tileWidth = cols;
 }
 
-std::string ColourStatisticsAnalyzer::getXmlID()
+std::string ColourStatisticsAnalyzerRgb::getXmlID()
 {
     return "Colour_Statistics_Analyzer";
 }

@@ -83,8 +83,6 @@ private slots:
 
     void on_tableView_segmentedRegions_doubleClicked(const QModelIndex &index);
 
-    void on_btn_convertBgrToRgb_clicked();
-
 private:
     Ui::manageTrainingDataForm *ui;
     static int nullCallback(void *NotUsed, int argc, char **argv, char **azColName);
@@ -105,7 +103,7 @@ private:
 
     cv::Mat imgToStore;
 
-    cv::Mat imgToDrawOn, imgToDrawOnRGB;
+    cv::Mat imgToDrawOn;
     int imgToDrawOnId = -1;
     std::vector<Point2<int>> outerContour;
     std::vector<std::vector<Point2<int>>> innerContours;

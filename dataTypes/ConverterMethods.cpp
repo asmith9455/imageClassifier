@@ -140,9 +140,9 @@ std::shared_ptr<TextureClassifier> ConverterMethods::getClassifierFromFile(std::
 
     std::string strID = std::string(cID);
 
-    if (strID == ColourStatisticsAnalyzer::getXmlID())
+    if (strID == ColourStatisticsAnalyzerRgb::getXmlID())
     {
-        std::shared_ptr<ColourStatisticsAnalyzer> tmp = std::make_shared<ColourStatisticsAnalyzer>();
+        std::shared_ptr<ColourStatisticsAnalyzerRgb> tmp = std::make_shared<ColourStatisticsAnalyzerRgb>();
         tmp->readFromFile(filepath);
         toRet = static_pointer_cast<TextureClassifier>(tmp);
     }

@@ -62,6 +62,11 @@ void ClassifyCameraStreamForm::changeImageFromDisk()
     else if (currentMode == FROM_DISK_IMAGES)
     {
         imageToClassify = cv::imread(imagesFromDisk[currentImageFromDisk].toStdString());
+
+        //the read image is in BGR - all of the functions work with bgr images as is the standard with opencv
+
+        //cv::cvtColor(imageToClassify, imageToClassify, CV_BGR2RGB);
+
         currentImageFromDisk++;
         frameTime2 = std::chrono::high_resolution_clock::now();
         classifyAndDisplayImage();
@@ -121,6 +126,8 @@ void ClassifyCameraStreamForm::grabVideoFrame()
     frameTime1 = std::chrono::high_resolution_clock::now();
 
     cap >> imageToClassify; // get a new frame from camera
+
+    //cv::cvtColor(imageToClassify, imageToClassify, CV_BGR2RGB);
 
     frameTime2 = std::chrono::high_resolution_clock::now();
 

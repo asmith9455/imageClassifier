@@ -8,7 +8,7 @@
 #include <stdexcept>
 #include <string>
 
-class ColourStatisticsAnalyzer : public TextureClassifier
+class ColourStatisticsAnalyzerRgb : public TextureClassifier
 {
 
 
@@ -31,12 +31,19 @@ public:
 
     static std::string getXmlID();
 
-    ColourStatisticsAnalyzer();
+    ColourStatisticsAnalyzerRgb();
 
-	ColourStatisticsAnalyzer(
+    //note: internally preclustered data is treated the same way as non-preclustered data (just that
+    //non-preclustered data has only 1 cluster - all of the training images).
+	ColourStatisticsAnalyzerRgb(
         vector<ImageSequence> _imageSequences_target,
         vector<ImageSequence> _imageSequences_notTarget,
 		double _safetyFactor);
+
+    ColourStatisticsAnalyzerRgb(
+            ImageSequence _imageSequence_target,
+            ImageSequence _imageSequence_notTarget,
+            double _safetyFactor);
 
 	vector<vector<RgbHistogram>> rgbHistograms;
 	vector<RgbHistogram> averageRgbHistograms;

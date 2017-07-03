@@ -279,7 +279,7 @@ void manageTrainingDataForm::redrawSegmentedRegion()
 {
 
 
-    QPixmap tmpPixMap = QPixmap::fromImage(QImage(imgToDrawOnRGB.data, imgToDrawOnRGB.cols, imgToDrawOnRGB.rows, imgToDrawOnRGB.step, QImage::Format_RGB888));
+    QPixmap tmpPixMap = QPixmap::fromImage(QImage(imgToDrawOn.data, imgToDrawOn.cols, imgToDrawOn.rows, imgToDrawOn.step, QImage::Format_RGB888));
 
     QPainter tmp(&tmpPixMap);
     QPen pen(Qt::green, 10, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
@@ -433,9 +433,11 @@ void manageTrainingDataForm::on_btn_selectImageToAdd_clicked()
     //alpha channel is discarded
     imgToStore = cv::imread(fileName.toStdString(), cv::IMREAD_COLOR);
 
+    cv::cvtColor(imgToStore, imgToStore, cv::COLOR_BGR2RGB);
 
+    QPixmap tmpPixMap = QPixmap::fromImage(QImage(imgToStore.data, imgToStore.cols, imgToStore.rows, imgToStore.step, QImage::Format_RGB888));
 
-    ui->label_selectedPic->setPixmap(QPixmap(fileName));
+    ui->label_selectedPic->setPixmap(tmpPixMap);
 
 
     ui->label_status->setText("Loaded picture at " + fileName );
@@ -969,6 +971,7 @@ void manageTrainingDataForm::on_tableView_images_doubleClicked(const QModelIndex
 
     std::string title = "Image ID: "+ std::to_string(id) + ", Capture Device ID: " + std::to_string(capDevice);
     cv::resize(img,img,cv::Size(1280,720));
+    cv::cvtColor(img, img, cv::COLOR_RGB2BGR);
     cv::imshow(title,img);
     cv::waitKey(0);
     cv::destroyAllWindows();
@@ -981,13 +984,12 @@ void manageTrainingDataForm::on_tableView_imagesForSegRegions_doubleClicked(cons
     QByteArray bytes = index.sibling(index.row(), 1).data().toByteArray();
     //int capDevice = index.sibling(index.row(), 2).data().toInt();
 
+    //img has its colour channels ordered BGR
     cv::Mat img = CvQt::qbytearray_2_mat(bytes);
 
-    imgToDrawOn = img.clone();
+    imgToDrawOn = img.clone();  //BGR
     imgToDrawOnId = id;
-    cv::cvtColor(imgToDrawOn, imgToDrawOnRGB, CV_BGR2RGB);
 
-    cv::cvtColor(img, img, CV_BGR2RGB);
 
     ui->label_status->setText("Opened image with id "+QString::number(id)+" from the images table in " + database.databaseName());
 
@@ -1099,7 +1101,6 @@ void manageTrainingDataForm::on_tableView_segmentedRegions_doubleClicked(const Q
     {
         QByteArray imgArray = query.value(0).toByteArray();
         imgToDrawOn = CvQt::qbytearray_2_mat(imgArray);
-        cv::cvtColor(imgToDrawOn, imgToDrawOnRGB, CV_BGR2RGB);
         imgToDrawOnId = imgRef;
     }
 
@@ -1108,25 +1109,4 @@ void manageTrainingDataForm::on_tableView_segmentedRegions_doubleClicked(const Q
 
 }
 
-void manageTrainingDataForm::on_btn_convertBgrToRgb_clicked()
-{
-    cv::cvtColor(imgToStore, imgToStore, cv::COLOR_BGR2RGB);
 
-    //const cv::Mat tmp;
-
-    //QPixmap x = CvQt::mat_2_qpixmap_rgb888(tmp);
-
-    //ui->label_selectedPic->setPixmap(x);
-
-
-    ui->label_status->setText("Converted to RGB from BGR.");
-    ui->label_imageStatus->setText("Picture from disk (converted to RGB).");
-
-    if (ui->checkBox_saveConvertedImage->isChecked())
-    {
-        QString fileName = QFileDialog::getSaveFileName(this, tr("Select save directory and name for converted image."),
-                                   "C:/",
-                                   tr("(*.bmp)"));
-        cv::imwrite(fileName.toStdString(), imgToStore);
-    }
-}

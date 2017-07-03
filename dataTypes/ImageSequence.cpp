@@ -139,3 +139,8 @@ bool ImageSequence::imagesSequencesAreEqual(ImageSequence im1, ImageSequence im2
 
 	return match;
 }
+
+void ImageSequence::clear()
+{
+    images.clear();
+}

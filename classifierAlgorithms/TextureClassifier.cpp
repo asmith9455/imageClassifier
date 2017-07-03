@@ -8,6 +8,14 @@ TextureClassifier::TextureClassifier(
     imageSequences_notTarget = _imageSequences_notTarget;
 }
 
+TextureClassifier::TextureClassifier(
+    ImageSequence _imageSequence_target,
+    ImageSequence _imageSequence_notTarget)
+{
+    imageSequence_target = _imageSequence_target;
+    imageSequence_notTarget = _imageSequence_notTarget;
+}
+
 TextureClassifier::ClassifiedImage TextureClassifier::classifyImage(
 	cv::Mat imgToClassify,
 	bool genBinaryImg,
@@ -56,7 +64,7 @@ TextureClassifier::ClassifiedImage TextureClassifier::classifyImage(
 				else
 				{
 					subImg.forEach<cv::Point3_<uint8_t>>([&](cv::Point3_<uint8_t>& pixel, const int position[]) -> void {
-						pixel.z = 255;	//set to red
+                        pixel.z = 255;	//set to red
 					});
 				}
 			}
@@ -149,7 +157,7 @@ TextureClassifier::ClassifiedImage TextureClassifier::postProcessImage(TextureCl
 			else
 			{
 				subImg.forEach<cv::Point3_<uint8_t>>([&](cv::Point3_<uint8_t>& pixel, const int position[]) -> void {
-					pixel.z = 255;	//set to red
+                    pixel.z = 255;	//set to red
 				});
 			}
 

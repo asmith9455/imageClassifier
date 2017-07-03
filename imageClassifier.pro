@@ -69,7 +69,6 @@ LIBS += -lsqlite3 -ltinyxml2
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    classifierAlgorithms/ColourStatisticsAnalyzer.cpp \
     dataTypes/ImageSequence.cpp \
     dataTypes/Img.cpp \
     dataTypes/RgbHistogram.cpp \
@@ -86,10 +85,11 @@ SOURCES += main.cpp\
     dataTypes/ImageStatistics.cpp \
     gui/TestRosCommunicationForm.cpp \
     featureDetection/stop_marker_detection.cpp \
-    featureDetection/generalFunc.cpp
+    featureDetection/generalFunc.cpp \
+    classifierAlgorithms/ColourStatisticsAnalyzerRgb.cpp \
+    dataTypes/HsvHistogram.cpp
 
 HEADERS  += mainwindow.h \
-    classifierAlgorithms/ColourStatisticsAnalyzer.h \
     dataTypes/Img.h \
     dataTypes/RgbHistogram.h \
     system/SystemCall.h \
@@ -110,7 +110,9 @@ HEADERS  += mainwindow.h \
     dataTypes/ImageStatistics.h \
     gui/TestRosCommunicationForm.h \
     featureDetection/stop_marker_detection.h \
-    featureDetection/generalFunc.h
+    featureDetection/generalFunc.h \
+    classifierAlgorithms/ColourStatisticsAnalyzerRgb.h \
+    dataTypes/HsvHistogram.h
 
 FORMS    += mainwindow.ui \
     trainingDataManager/manageTrainingDataForm.ui \

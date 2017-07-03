@@ -24,7 +24,10 @@ class TrainingImageDbWrapper
 public:
     TrainingImageDbWrapper();
 
-    static std::vector<ImageSequence> getTilesWithSingleProperty
+    static ImageSequence getTilesWithSingleProperty
+    (QString dbFilePath, int captureDeviceID, int propertyID , int tileWidth, int tileHeight);
+
+    static std::vector<ImageSequence> getPreClusteredTilesWithSingleProperty
     (QString dbFilePath, int captureDeviceID, int propertyID , int tileWidth, int tileHeight);
 
     //returns a pre-clustered list of tiles for a given property (for example, using target property = "road"

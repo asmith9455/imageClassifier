@@ -9,7 +9,8 @@
 #include <QSqlTableModel>
 #include <TrainingImageDbWrapper.h>
 #include <ImageSequence.h>
-#include <ColourStatisticsAnalyzer.h>
+#include <ColourStatisticsAnalyzerRgb.h>
+#include <TextureClassifier.h>
 
 namespace Ui {
 class TrainClassifierForm;
@@ -35,6 +36,9 @@ private slots:
     void on_btn_trainFromFile_clicked();
 
 private:
+
+    bool usePreClustering = false;
+
     Ui::TrainClassifierForm *ui;
     void updatePropertiesFromDb();
     void updateCaptureDevicesFromDb();
@@ -43,9 +47,11 @@ private:
     //images and image counts
     std::vector<ImageSequence>  targetImgsForTraining, targetImgsNotForTraining;
     std::vector<ImageSequence>  nonTargetImgsForTraining, nonTargetImgsNotForTraining;
+    ImageSequence  targetImgsForTrainingNPC, targetImgsNotForTrainingNPC;
+    ImageSequence  nonTargetImgsForTrainingNPC, nonTargetImgsNotForTrainingNPC;
     size_t numTargetImgsForTraining = 0, numTargetImgsNotForTraining = 0;
     size_t numNonTargetImgsForTraining = 0, numNonTargetImgsNotForTraining = 0;
-    ColourStatisticsAnalyzer csa;
+    std::shared_ptr<TextureClassifier> ic;
 
 };
 

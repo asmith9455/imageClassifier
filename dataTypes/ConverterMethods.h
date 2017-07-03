@@ -8,7 +8,7 @@
 #include <ImageSequence.h>
 #include <SegmentedRegion.h>
 #include <TextureClassifier.h>
-#include <ColourStatisticsAnalyzer.h>
+#include <ColourStatisticsAnalyzerRgb.h>
 #include <memory>
 #include <tinyxml2.h>
 

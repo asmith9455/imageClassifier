@@ -19,6 +19,8 @@ class TextureClassifier
 {
 public:
 
+    bool useUserClusters = false;
+
     //typedef std::pair<std::string, ImageClassifier*> classifier;
 
     //we take in a vector of ImageSequences that might be pre-clustered
@@ -30,6 +32,9 @@ public:
     std::vector<ImageSequence> imageSequences_target;
     std::vector<ImageSequence> imageSequences_notTarget;
 
+    ImageSequence imageSequence_target;
+    ImageSequence imageSequence_notTarget;
+
     static std::string getXmlAttributeName()
     {
         return "textureClassifierID";
@@ -40,6 +45,10 @@ public:
     TextureClassifier(
         std::vector<ImageSequence> _imageSequences_target,
         std::vector<ImageSequence> _imageSequences_notTarget);
+
+    TextureClassifier(
+        ImageSequence _imageSequence_target,
+        ImageSequence _imageSequence_notTarget);
 
     //train the model using the supplied data
 	virtual void analyze() = 0;
