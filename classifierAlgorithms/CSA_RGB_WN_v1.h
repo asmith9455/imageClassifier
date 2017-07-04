@@ -7,7 +7,8 @@
 #include <tinyxml2.h>
 #include <stdexcept>
 #include <string>
-
+#include <numeric>
+#include <limits>
 
 //adaptation of ColourStatisticsAnalyzerRgb - also uses some information about colour change magnitude and uniformity
 //does not implement pre-clustering - assumed minimal benefit based on past experience
@@ -25,6 +26,10 @@ class CSA_RGB_WN_v1 : public TextureClassifier
     float rowAvgChange;
     float rowStdDevChange;
 
+    float minRatio, maxRatio;
+
+    std::vector<RgbHistogram> rgbHistograms;
+    RgbHistogram averageRgbHistogram;
 
     void generateAverageRgbHistogram();
     void generateRgbHistogramsForImageSequence();
@@ -48,11 +53,7 @@ public:
             ImageSequence _imageSequence_notTarget,
             double _safetyFactor);
 
-    std::vector<float> rowAvgChanges;
-    std::vector<float> rowStdDevChanges;
 
-    std::vector<RgbHistogram> rgbHistograms;
-    RgbHistogram averageRgbHistogram;
 
 	virtual void analyze();
     virtual bool isTarget(Mat img);

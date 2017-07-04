@@ -48,7 +48,7 @@ public:
 	vector<vector<RgbHistogram>> rgbHistograms;
 	vector<RgbHistogram> averageRgbHistograms;
 
-	virtual void analyze();
+    virtual void analyze();
     virtual bool isTarget(Mat img);
 	void writeHistogramData(string filepath);
 	void writeAverageHistogramData(string filepath);

@@ -401,6 +401,22 @@ void TrainClassifierForm::on_btn_trainFromGeneratedImages_clicked()
         ic = static_pointer_cast<TextureClassifier>(csa);
     }
 
+    else if (!usePreClustering && ui->radioButton_useCSA_RGB_WN_v1->isChecked())
+    {
+        double safetyFactor2 = ui->lineEdit_safetyFactor2->text().toDouble();
+
+        std::shared_ptr<CSA_RGB_WN_v1> tmp
+                = std::make_shared<CSA_RGB_WN_v1>
+                (CSA_RGB_WN_v1(targetImgsForTrainingNPC, nonTargetImgsForTrainingNPC, safetyFactor2));
+
+        ic = static_pointer_cast<TextureClassifier>(tmp);
+    }
+    else
+    {
+        QMessageBox::critical(this, "Error", "Pre-clustering mode not supported. ",
+            QMessageBox::Ok);
+    }
+
     ic->analyze();
 }
 

@@ -39,21 +39,85 @@ void CSA_RGB_WN_v1::generateRgbHistogramsForImageSequence()
 
 void CSA_RGB_WN_v1::generateChangeStats()
 {
+
+    std::vector<float> ratios;
+
+    float minAvg = (float)tileWidth + 2.0;
+
+
+    float maxAvg = -1.0,
+            minStdDev = (float)tileWidth + 2.0,
+            maxStdDev = -1.0;
+    minRatio = (float)tileWidth + 2.0;
+    maxRatio = -1.0;
+
     for (size_t k = 0; k < imageSequence_target.getimageCount(); k++)
     {
+        cv::Mat img = imageSequence_target.imageAt(k);
+        std::vector<float> tmpRatios;
         for (int i = 0; i < img.rows; i++)
         {
             //row statistics
             //maybe do ratio of positive changes to ratio of negative changes??
+
+            int prevVal = 0, numPos = 0, numNeg = 0;
+
             for (int j = 1; j < img.cols; j++)
             {
+                int pxVal = img.at<Vec3b>(i, j)[0];
 
-                accR[img.at<Vec3b>(i, j)[0]]++; //all images stored in the database are rgb
+                if (pxVal > prevVal)
+                    numPos++;
+                else if (pxVal < prevVal)
+                    numNeg++;
+
+                //accR[]++; //all images stored in the database are rgb
                 //accG[img.at<Vec3b>(i, j)[1]]++;
                 //accB[img.at<Vec3b>(i, j)[2]]++;
+
+                prevVal = pxVal;
             }
+
+            float r;
+            if (numNeg > 0)
+                r = (float) numPos / (float) numNeg;
+            else
+                r = (float) (this->tileWidth + 1); //"infinity"
+
+            if (r < minRatio)
+                minRatio = r;
+            if (r > maxRatio)
+                maxRatio = r;
+
+            ratios.push_back(r);
+            tmpRatios.push_back(r);
         }
+
+        float sum = std::accumulate(std::begin(tmpRatios), std::end(tmpRatios), 0.0);
+        float m =  sum / tmpRatios.size();
+
+        float accum = 0.0;
+        std::for_each (std::begin(tmpRatios), std::end(tmpRatios), [&](const float d) {
+            accum += (d - m) * (d - m);
+        });
+
+        double stdev = sqrt(accum / (tmpRatios.size()-1));
     }
+
+    float sum2 = std::accumulate(std::begin(ratios), std::end(ratios), 0.0);
+    float m2 =  sum2 / ratios.size();
+
+    float accum2 = 0.0;
+    std::for_each (std::begin(ratios), std::end(ratios), [&](const float d) {
+        accum2 += (d - m2) * (d - m2);
+    });
+
+    double stdev2 = sqrt(accum2 / (ratios.size()-1));
+
+    //use another safety factor or a different method of comparison here - also add some more statistics - this one was very simple and dropped false + rate by 5%
+    //minRatio = m2 - 4.0*stdev2;
+    //maxRatio = m2 + 4.0*stdev2;
+
 }
 
 void CSA_RGB_WN_v1::generateChangeThresholds()
@@ -134,6 +198,40 @@ bool CSA_RGB_WN_v1::isTarget(Mat img)
     if (tempR >= minThresR && tempG >= minThresG && tempB >= minThresB)
     {
         match = true;
+    }
+
+    for (int i = 0; i < img.rows; i++)
+    {
+        //row statistics
+        //maybe do ratio of positive changes to ratio of negative changes??
+
+        int prevVal = 0, numPos = 0, numNeg = 0;
+
+        for (int j = 1; j < img.cols; j++)
+        {
+            int pxVal = img.at<Vec3b>(i, j)[0];
+
+            if (pxVal > prevVal)
+                numPos++;
+            else if (pxVal < prevVal)
+                numNeg++;
+
+            //accR[]++; //all images stored in the database are rgb
+            //accG[img.at<Vec3b>(i, j)[1]]++;
+            //accB[img.at<Vec3b>(i, j)[2]]++;
+
+            prevVal = pxVal;
+        }
+
+        float r;
+        if (numNeg > 0)
+            r = (float) numPos / (float) numNeg;
+        else
+            r = (float) (this->tileWidth + 1); //"infinity"
+
+        if (!(r > minRatio &&  r < maxRatio))
+            match  = false;
+
     }
 
 	return match;
