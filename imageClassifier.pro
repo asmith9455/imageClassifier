@@ -87,7 +87,8 @@ SOURCES += main.cpp\
     featureDetection/stop_marker_detection.cpp \
     featureDetection/generalFunc.cpp \
     classifierAlgorithms/ColourStatisticsAnalyzerRgb.cpp \
-    dataTypes/HsvHistogram.cpp
+    dataTypes/HsvHistogram.cpp \
+    classifierAlgorithms/CSA_RGB_WN_v1.cpp
 
 HEADERS  += mainwindow.h \
     dataTypes/Img.h \
@@ -112,7 +113,8 @@ HEADERS  += mainwindow.h \
     featureDetection/stop_marker_detection.h \
     featureDetection/generalFunc.h \
     classifierAlgorithms/ColourStatisticsAnalyzerRgb.h \
-    dataTypes/HsvHistogram.h
+    dataTypes/HsvHistogram.h \
+    classifierAlgorithms/CSA_RGB_WN_v1.h
 
 FORMS    += mainwindow.ui \
     trainingDataManager/manageTrainingDataForm.ui \

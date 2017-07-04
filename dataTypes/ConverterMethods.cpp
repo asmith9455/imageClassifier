@@ -146,6 +146,12 @@ std::shared_ptr<TextureClassifier> ConverterMethods::getClassifierFromFile(std::
         tmp->readFromFile(filepath);
         toRet = static_pointer_cast<TextureClassifier>(tmp);
     }
+    else if (strID == CSA_RGB_WN_v1::getXmlID())
+    {
+        std::shared_ptr<CSA_RGB_WN_v1> tmp = std::make_shared<CSA_RGB_WN_v1>();
+        tmp->readFromFile(filepath);
+        toRet = static_pointer_cast<TextureClassifier>(tmp);
+    }
 
     return toRet;
 }

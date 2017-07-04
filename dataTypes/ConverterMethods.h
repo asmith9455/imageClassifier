@@ -9,6 +9,7 @@
 #include <SegmentedRegion.h>
 #include <TextureClassifier.h>
 #include <ColourStatisticsAnalyzerRgb.h>
+#include <CSA_RGB_WN_v1.h>
 #include <memory>
 #include <tinyxml2.h>
 

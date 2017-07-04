@@ -27,7 +27,7 @@ public:
 	RgbHistogram(int _accR[], int _accG[], int _accB[]);
 	 
 	static vector<RgbHistogram> getHistograms(ImageSequence imgSeq);
-	static vector<RgbHistogram> averageRgbHistogramSequence(vector<RgbHistogram>);
+    static vector<RgbHistogram> averageRgbHistogramSequence(vector<RgbHistogram>);
 	static void writeHistosToFile(vector<vector<RgbHistogram>>, string path);
 	static void writeHistosToFile(vector<RgbHistogram>, string path);
 	static int similarityR(RgbHistogram h1, RgbHistogram h2);
