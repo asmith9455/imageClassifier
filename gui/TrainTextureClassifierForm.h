@@ -11,6 +11,8 @@
 #include <ImageSequence.h>
 #include <ColourStatisticsAnalyzerRgb.h>
 #include <TextureClassifier.h>
+#include <CSA_RGB_shiftHisto.h>
+#include <CSA_RGB_WN_v1.h>
 
 namespace Ui {
 class TrainClassifierForm;

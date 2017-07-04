@@ -6,6 +6,8 @@
 #include "ImageSequence.h"
 #include <fstream>
 #include <iostream>
+#include <algorithm>
+#include <vector>
 
 using namespace cv;
 using namespace std;
@@ -18,14 +20,25 @@ class RgbHistogram
 
 public:
 
-	int accR[256] = { 0 };
-	int accG[256] = { 0 };
-	int accB[256] = { 0 };
+    std::vector<int> accR;
+    std::vector<int> accG;
+    std::vector<int> accB;
+
+    int meanBinR, meanBinB, meanBinG;
+
+    int numR, numG, numB;
 
     RgbHistogram(){}
 	RgbHistogram(Mat img);
 	RgbHistogram(int _accR[], int _accG[], int _accB[]);
 	 
+    void rotateMeanUsingRed(int newBinForMeanR);
+    void rotateLeft(int rotateAmountLeft);
+    void rotateRight(int rotateAmountRight);
+    int getSumAbsDifferenceR(RgbHistogram h);
+    int getSumAbsDifferenceG(RgbHistogram h);
+    int getSumAbsDifferenceB(RgbHistogram h);
+
 	static vector<RgbHistogram> getHistograms(ImageSequence imgSeq);
     static vector<RgbHistogram> averageRgbHistogramSequence(vector<RgbHistogram>);
 	static void writeHistosToFile(vector<vector<RgbHistogram>>, string path);

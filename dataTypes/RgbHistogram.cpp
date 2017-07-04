@@ -1,7 +1,12 @@
 #include "RgbHistogram.h"
+#include <algorithm>
 
 RgbHistogram::RgbHistogram(Mat img)
 {
+    accR = std::vector<int>(256,0);
+    accG = std::vector<int>(256,0);
+    accB = std::vector<int>(256,0);
+
 	fillAccumulators(img);
 }
 
@@ -19,22 +24,95 @@ RgbHistogram::RgbHistogram(int _accR[], int _accG[], int _accB[])
 void RgbHistogram::fillAccumulators(Mat img)
 {
 
+    meanBinB = 0;
+    meanBinR = 0;
+    meanBinG = 0;
+
+    numR = 0;
+    numG = 0;
+    numB = 0;
+
 	for (int i = 0; i < img.rows; i++)
 	{
 		for (int j = 0; j < img.cols; j++)
 		{
+            meanBinR += img.at<Vec3b>(i, j)[0];
+            meanBinB += img.at<Vec3b>(i, j)[1];
+            meanBinG += img.at<Vec3b>(i, j)[2];
+
+            numR++;
+            numG++;
+            numB++;
+
             accR[img.at<Vec3b>(i, j)[0]]++; //all images stored in the database are rgb
 			accG[img.at<Vec3b>(i, j)[1]]++;
             accB[img.at<Vec3b>(i, j)[2]]++;
 		}
 	}
-	
-	/*img.forEach<Pixel>([&](Pixel& pixel, const int position[]) -> void {
-		accR[pixel.x]++;
-		accG[pixel.y]++;
-		accB[pixel.z]++;
-	});*/
 
+    meanBinR = meanBinR / numR;
+    meanBinG = meanBinG / numG;
+    meanBinB = meanBinB / numB;
+
+}
+
+//rotate RGB components by the same amount, so that the
+//mean bin of the R component is as specified.
+void RgbHistogram::rotateMeanUsingRed(int newBinForMeanR)
+{
+    int leftShiftR = meanBinR - newBinForMeanR;
+
+    if (leftShiftR == 0)
+        return;
+
+    if (leftShiftR > 0)
+        rotateLeft(leftShiftR);
+    else
+        rotateRight(0-leftShiftR);
+}
+
+void RgbHistogram::rotateLeft(int rotateAmountLeft)
+{
+    std::rotate(accR.begin(), accR.begin() + rotateAmountLeft, accR.end());
+    std::rotate(accG.begin(), accG.begin() + rotateAmountLeft, accG.end());
+    std::rotate(accB.begin(), accB.begin() + rotateAmountLeft, accB.end());
+}
+
+void RgbHistogram::rotateRight(int rotateAmountRight)
+{
+    std::rotate(accR.rbegin(), accR.rbegin()+rotateAmountRight, accR.rend());
+    std::rotate(accG.rbegin(), accG.rbegin()+rotateAmountRight, accG.rend());
+    std::rotate(accB.rbegin(), accB.rbegin()+rotateAmountRight, accB.rend());
+}
+
+int RgbHistogram::getSumAbsDifferenceR(RgbHistogram h)
+{
+    int sumAbsDiffR = 0;
+
+    for(int i = 0; i < 256; i++)
+        sumAbsDiffR += abs(accR[i] - h.accR[i]);
+
+    return sumAbsDiffR;
+}
+
+int RgbHistogram::getSumAbsDifferenceG(RgbHistogram h)
+{
+    int sumAbsDiffG = 0;
+
+    for(int i = 0; i < 256; i++)
+        sumAbsDiffG += abs(accG[i] - h.accG[i]);
+
+    return sumAbsDiffG;
+}
+
+int RgbHistogram::getSumAbsDifferenceB(RgbHistogram h)
+{
+    int sumAbsDiffB = 0;
+
+    for(int i = 0; i < 256; i++)
+        sumAbsDiffB += abs(accB[i] - h.accB[i]);
+
+    return sumAbsDiffB;
 }
 
 vector<RgbHistogram> RgbHistogram::getHistograms(ImageSequence imgSeq)

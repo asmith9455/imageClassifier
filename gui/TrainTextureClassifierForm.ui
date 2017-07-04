@@ -706,6 +706,64 @@
       </property>
      </widget>
     </widget>
+    <widget class="QGroupBox" name="groupBox_10">
+     <property name="geometry">
+      <rect>
+       <x>550</x>
+       <y>10</y>
+       <width>261</width>
+       <height>91</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>CSA_RGB_shiftHisto</string>
+     </property>
+     <widget class="QRadioButton" name="radioButton_useCSA_RGB_shiftHisto">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>171</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Use CSA_RGB_shiftHisto</string>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_safetyFactor2_2">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>60</y>
+        <width>113</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>0.05</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_13">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>60</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Safety Factor</string>
+      </property>
+     </widget>
+    </widget>
    </widget>
   </widget>
   <widget class="QDialogButtonBox" name="buttonBox">
