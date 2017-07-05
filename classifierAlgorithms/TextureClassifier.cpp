@@ -43,7 +43,9 @@ TextureClassifier::ClassifiedImage TextureClassifier::classifyImage(
 		while (true)
 		{
 
-			cv::Mat subImg = img(cv::Range(yPos, yPos + tileHeight - 1), cv::Range(xPos, xPos + tileWidth - 1));
+            cv::Mat subImg = img(
+                        cv::Range(yPos, yPos + tileHeight - 1),
+                        cv::Range(xPos, xPos + tileWidth - 1));
 
 			//imshow("img", img);
 			//waitKey(0);

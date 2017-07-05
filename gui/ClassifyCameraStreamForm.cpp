@@ -6,6 +6,8 @@ ClassifyCameraStreamForm::ClassifyCameraStreamForm(QWidget *parent) :
     ui(new Ui::ClassifyCameraStreamForm)
 {
     ui->setupUi(this);
+    this->setWindowFlags(Qt::Window);
+    this->showMaximized();
     //startClassify();
 }
 
