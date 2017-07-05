@@ -6,596 +6,565 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1051</width>
-    <height>632</height>
+    <width>1114</width>
+    <height>691</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
-   <property name="geometry">
-    <rect>
-     <x>920</x>
-     <y>580</y>
-     <width>91</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Close</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_classifiedImageRecoloured">
-   <property name="geometry">
-    <rect>
-     <x>410</x>
-     <y>10</y>
-     <width>384</width>
-     <height>216</height>
-    </rect>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::Box</enum>
-   </property>
-   <property name="text">
-    <string>(Classified Image - Recoloured)</string>
-   </property>
-   <property name="scaledContents">
-    <bool>true</bool>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_classifiedImagePpBinary">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>240</y>
-     <width>384</width>
-     <height>216</height>
-    </rect>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::Box</enum>
-   </property>
-   <property name="text">
-    <string>(Classified Image - PostProcessed - Binary)</string>
-   </property>
-   <property name="scaledContents">
-    <bool>true</bool>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_originalImage">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>384</width>
-     <height>216</height>
-    </rect>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::Box</enum>
-   </property>
-   <property name="text">
-    <string>(Original Image)</string>
-   </property>
-   <property name="scaledContents">
-    <bool>true</bool>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_classifiedImagePpRecoloured">
-   <property name="geometry">
-    <rect>
-     <x>410</x>
-     <y>240</y>
-     <width>384</width>
-     <height>216</height>
-    </rect>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::Box</enum>
-   </property>
-   <property name="text">
-    <string>(Classified Image - PostProcessed - Recoloured)</string>
-   </property>
-   <property name="scaledContents">
-    <bool>true</bool>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QGroupBox" name="groupBox">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>460</y>
-     <width>191</width>
-     <height>161</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>Statistics</string>
-   </property>
-   <widget class="QLabel" name="label_timeToConvert">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>100</y>
-      <width>211</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Time to Convert:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_timeToPostProcess">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>80</y>
-      <width>211</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Time to PostProcess:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_timeToGrabFrame">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>40</y>
-      <width>211</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Time to Grab Frame:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_processingFrameRate">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>211</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Processing Time:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_timeToClassify">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>60</y>
-      <width>211</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Time to Classify:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_timeToDisplay">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>140</y>
-      <width>211</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Time to Display:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_timeToDraw">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>120</y>
-      <width>211</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Time to Draw:</string>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QGroupBox" name="groupBox_2">
-   <property name="geometry">
-    <rect>
-     <x>210</x>
-     <y>460</y>
-     <width>361</width>
-     <height>151</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>Classification Settings</string>
-   </property>
-   <widget class="QPushButton" name="btn_selectTrainingData">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>60</y>
-      <width>161</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Select Training Data XML</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="radioButton_classifyFromCamera">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>40</y>
-      <width>181</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Capture Camera Stream</string>
-    </property>
-    <attribute name="buttonGroup">
-     <string notr="true">buttonGroup</string>
-    </attribute>
-   </widget>
-   <widget class="QRadioButton" name="radioButton_classifyFromDisk">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>191</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Classify Image(s) From Disk</string>
-    </property>
-    <property name="checked">
-     <bool>true</bool>
-    </property>
-    <attribute name="buttonGroup">
-     <string notr="true">buttonGroup</string>
-    </attribute>
-   </widget>
-   <widget class="QPushButton" name="btn_selectImagesFromDisk">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>90</y>
-      <width>161</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Select Images To Classify</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="radioButton_res1280x720">
-    <property name="geometry">
-     <rect>
-      <x>240</x>
-      <y>60</y>
-      <width>91</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>1280x720</string>
-    </property>
-    <attribute name="buttonGroup">
-     <string notr="true">buttonGroup_2</string>
-    </attribute>
-   </widget>
-   <widget class="QRadioButton" name="radioButton_res2592x1458">
-    <property name="geometry">
-     <rect>
-      <x>240</x>
-      <y>40</y>
-      <width>91</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>2592x1458</string>
-    </property>
-    <property name="checked">
-     <bool>true</bool>
-    </property>
-    <attribute name="buttonGroup">
-     <string notr="true">buttonGroup_2</string>
-    </attribute>
-   </widget>
-   <widget class="QLabel" name="label_camRes">
-    <property name="geometry">
-     <rect>
-      <x>240</x>
-      <y>20</y>
-      <width>121</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Camera Resolution:</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btn_selectContinuousSaveLocation">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>120</y>
-      <width>161</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Select Continous Save Location</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="checkBox_saveOriginalImage_2">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>180</x>
-      <y>120</y>
-      <width>111</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Save Continuously</string>
-    </property>
-    <property name="checked">
-     <bool>false</bool>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QGroupBox" name="groupBox_3">
-   <property name="geometry">
-    <rect>
-     <x>580</x>
-     <y>470</y>
-     <width>341</width>
-     <height>151</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>Classification Controls</string>
-   </property>
-   <widget class="QPushButton" name="btn_saveCurrentImageToDisk">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>100</y>
-      <width>211</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Save Current Image to Disk</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btn_startClassify">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>91</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Start</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btn_pauseClassify">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>80</y>
-      <width>91</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Pause</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="checkBox_saveOriginalImage">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>20</y>
-      <width>121</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Save Original Image</string>
-    </property>
-    <property name="checked">
-     <bool>false</bool>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="checkBox_saveRecolouredImage">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>40</y>
-      <width>141</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Save Recoloured Image</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="checkBox_savePpBinary">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>60</y>
-      <width>181</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Save Post Processed Binary</string>
-    </property>
-    <property name="checked">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="checkBox_savePpRecoloured">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>80</y>
-      <width>181</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Save Post Processed Recoloured</string>
-    </property>
-    <property name="checked">
-     <bool>false</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btn_goBackOneImage">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>110</y>
-      <width>41</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>&lt;</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btn_goForwardOneImage">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>110</y>
-      <width>41</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>&gt;</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btn_continueClassify">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>50</y>
-      <width>91</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Continue</string>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QCheckBox" name="checkBox_drawBoundingBox">
-   <property name="geometry">
-    <rect>
-     <x>820</x>
-     <y>390</y>
-     <width>221</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Draw Bounding Box</string>
-   </property>
-  </widget>
+  <property name="sizeGripEnabled">
+   <bool>true</bool>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_3">
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout_2" rowstretch="3,1" columnstretch="2,3,3,2">
+     <property name="leftMargin">
+      <number>10</number>
+     </property>
+     <property name="topMargin">
+      <number>10</number>
+     </property>
+     <property name="rightMargin">
+      <number>10</number>
+     </property>
+     <property name="bottomMargin">
+      <number>10</number>
+     </property>
+     <item row="1" column="1">
+      <widget class="QGroupBox" name="groupBox_2">
+       <property name="title">
+        <string>Classification Settings</string>
+       </property>
+       <widget class="QPushButton" name="btn_selectTrainingData">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>60</y>
+          <width>161</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Select Training Data XML</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="radioButton_classifyFromCamera">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>40</y>
+          <width>181</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Capture Camera Stream</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">buttonGroup</string>
+        </attribute>
+       </widget>
+       <widget class="QRadioButton" name="radioButton_classifyFromDisk">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>191</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Classify Image(s) From Disk</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">buttonGroup</string>
+        </attribute>
+       </widget>
+       <widget class="QPushButton" name="btn_selectImagesFromDisk">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>90</y>
+          <width>161</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Select Images To Classify</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="radioButton_res1280x720">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>60</y>
+          <width>91</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>1280x720</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">buttonGroup_2</string>
+        </attribute>
+       </widget>
+       <widget class="QRadioButton" name="radioButton_res2592x1458">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>40</y>
+          <width>91</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>2592x1458</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">buttonGroup_2</string>
+        </attribute>
+       </widget>
+       <widget class="QLabel" name="label_camRes">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>20</y>
+          <width>121</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Camera Resolution:</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btn_selectContinuousSaveLocation">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>120</y>
+          <width>161</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Select Continous Save Location</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_saveOriginalImage_2">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>180</x>
+          <y>120</y>
+          <width>111</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Save Continuously</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QGroupBox" name="groupBox_3">
+       <property name="title">
+        <string>Classification Controls</string>
+       </property>
+       <widget class="QPushButton" name="btn_saveCurrentImageToDisk">
+        <property name="geometry">
+         <rect>
+          <x>120</x>
+          <y>100</y>
+          <width>171</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Save Current Image to Disk</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btn_startClassify">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>91</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Start</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btn_pauseClassify">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>80</y>
+          <width>91</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Pause</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_saveOriginalImage">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>120</x>
+          <y>20</y>
+          <width>121</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Save Original Image</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_saveRecolouredImage">
+        <property name="geometry">
+         <rect>
+          <x>120</x>
+          <y>40</y>
+          <width>141</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Save Recoloured Image</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_savePpBinary">
+        <property name="geometry">
+         <rect>
+          <x>120</x>
+          <y>60</y>
+          <width>181</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Save Post Processed Binary</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_savePpRecoloured">
+        <property name="geometry">
+         <rect>
+          <x>120</x>
+          <y>80</y>
+          <width>181</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Save Post Processed Recoloured</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btn_goBackOneImage">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>110</y>
+          <width>41</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>&lt;</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btn_goForwardOneImage">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>60</x>
+          <y>110</y>
+          <width>41</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>&gt;</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btn_continueClassify">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>50</y>
+          <width>91</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Continue</string>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item row="0" column="0" colspan="4">
+      <layout class="QGridLayout" name="gridLayout">
+       <property name="leftMargin">
+        <number>10</number>
+       </property>
+       <property name="topMargin">
+        <number>10</number>
+       </property>
+       <property name="rightMargin">
+        <number>10</number>
+       </property>
+       <property name="bottomMargin">
+        <number>10</number>
+       </property>
+       <property name="horizontalSpacing">
+        <number>10</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_originalImage">
+         <property name="frameShape">
+          <enum>QFrame::Box</enum>
+         </property>
+         <property name="text">
+          <string>(Original Image)</string>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_classifiedImageRecoloured">
+         <property name="frameShape">
+          <enum>QFrame::Box</enum>
+         </property>
+         <property name="text">
+          <string>(Classified Image - Recoloured)</string>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_classifiedImagePpBinary">
+         <property name="frameShape">
+          <enum>QFrame::Box</enum>
+         </property>
+         <property name="text">
+          <string>(Classified Image - PostProcessed - Binary)</string>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLabel" name="label_classifiedImagePpRecoloured">
+         <property name="frameShape">
+          <enum>QFrame::Box</enum>
+         </property>
+         <property name="text">
+          <string>(Classified Image - PostProcessed - Recoloured)</string>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="3">
+      <widget class="QGroupBox" name="groupBox_4">
+       <property name="title">
+        <string>Feature Detection</string>
+       </property>
+       <widget class="QCheckBox" name="checkBox_drawBoundingBox_2">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>71</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Get Curb</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_drawBoundingBox">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>40</y>
+          <width>121</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Draw Bounding Box</string>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QGroupBox" name="groupBox">
+       <property name="title">
+        <string>Statistics</string>
+       </property>
+       <widget class="QLabel" name="label_timeToConvert">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>100</y>
+          <width>211</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Time to Convert:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_timeToPostProcess">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>80</y>
+          <width>211</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Time to PostProcess:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_timeToGrabFrame">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>40</y>
+          <width>211</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Time to Grab Frame:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_processingFrameRate">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>211</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Processing Time:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_timeToClassify">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>60</y>
+          <width>211</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Time to Classify:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_timeToDisplay">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>140</y>
+          <width>211</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Time to Display:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_timeToDraw">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>120</y>
+          <width>211</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Time to Draw:</string>
+        </property>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>ClassifyCameraStreamForm</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>950</x>
-     <y>720</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>ClassifyCameraStreamForm</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>950</x>
-     <y>720</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_2"/>
  </buttongroups>
 </ui>

@@ -106,9 +106,9 @@ TextureClassifier::ClassifiedImage TextureClassifier::postProcessImage(TextureCl
 
 	//perform some post processing on the image to remove noise
 	int type = cv::MORPH_ELLIPSE;
-	int size1 = 1;
-	int size2 = 4;
-	int size3 = 3;
+    int size1 = 2; //describes how much to do the first erode
+    int size2 = 4; //dilate
+    int size3 = 2; //erode more
 
 	cv::Mat element1 = cv::getStructuringElement(type,
 		cv::Size(2 * size1 + 1, 2 * size1 + 1),

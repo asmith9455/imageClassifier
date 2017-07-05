@@ -3,26 +3,15 @@
 
 RgbHistogram::RgbHistogram()
 {
-    accR = std::vector<int>(256,0);
-    accG = std::vector<int>(256,0);
-    accB = std::vector<int>(256,0);
 }
 
 RgbHistogram::RgbHistogram(Mat img)
 {
-    accR = std::vector<int>(256,0);
-    accG = std::vector<int>(256,0);
-    accB = std::vector<int>(256,0);
-
 	fillAccumulators(img);
 }
 
 RgbHistogram::RgbHistogram(int _accR[], int _accG[], int _accB[])
 {
-    accR = std::vector<int>(256,0);
-    accG = std::vector<int>(256,0);
-    accB = std::vector<int>(256,0);
-
 	for (int i = 0; i < 256; i++)
 	{
 		accR[i] = _accR[i];
@@ -84,16 +73,16 @@ void RgbHistogram::rotateMeanUsingRed(int newBinForMeanR)
 
 void RgbHistogram::rotateLeft(int rotateAmountLeft)
 {
-    std::rotate(accR.begin(), accR.begin() + rotateAmountLeft, accR.end());
-    std::rotate(accG.begin(), accG.begin() + rotateAmountLeft, accG.end());
-    std::rotate(accB.begin(), accB.begin() + rotateAmountLeft, accB.end());
+    std::rotate(accR, accR + rotateAmountLeft, accR+256);
+    std::rotate(accG, accG + rotateAmountLeft, accG+256);
+    std::rotate(accB, accB + rotateAmountLeft, accB+256);
 }
 
 void RgbHistogram::rotateRight(int rotateAmountRight)
 {
-    std::rotate(accR.rbegin(), accR.rbegin()+rotateAmountRight, accR.rend());
-    std::rotate(accG.rbegin(), accG.rbegin()+rotateAmountRight, accG.rend());
-    std::rotate(accB.rbegin(), accB.rbegin()+rotateAmountRight, accB.rend());
+    std::rotate(accR+255, accR +255 - rotateAmountRight, accR-1);
+    std::rotate(accG+255, accG +255 - rotateAmountRight, accG-1);
+    std::rotate(accB+255, accB +255 - rotateAmountRight, accB-1);
 }
 
 int RgbHistogram::getSumAbsDifferenceR(RgbHistogram h)

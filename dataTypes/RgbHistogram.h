@@ -20,9 +20,9 @@ class RgbHistogram
 
 public:
 
-    std::vector<int> accR;
-    std::vector<int> accG;
-    std::vector<int> accB;
+    int accR[256] = {0};
+    int accG[256] = {0};
+    int accB[256] = {0};
 
     int meanBinR, meanBinB, meanBinG;
 
