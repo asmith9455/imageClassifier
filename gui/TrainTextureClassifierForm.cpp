@@ -360,6 +360,33 @@ void TrainClassifierForm::on_btn_testClassifier_clicked()
     size_t numFalsePositivesTotal = (numFalsePositivesForTrainedImages+numFalsePositivesForUntrainedImages);
     size_t numNonTargetImgsTotal = (numNonTargetImgsForTraining+numNonTargetImgsNotForTraining);
 
+
+    double truePositivesTrainingRate =
+            (double) numTruePositivesForTrainedImages
+            / (double) numTargetImgsForTraining;
+
+    double falsePositivesTrainingRate =
+            (double) (numFalsePositivesForTrainedImages)
+            / (double) (numNonTargetImgsForTraining);
+
+    double successRateTraining =
+            (double) (numTruePositivesForTrainedImages + numNonTargetImgsForTraining - numFalsePositivesForTrainedImages)
+            / (double) (numTargetImgsForTraining + numNonTargetImgsForTraining);
+
+    double truePositivesUntrainedRate =
+            (double) numTruePositivesForUntrainedImages
+            / (double) numTargetImgsNotForTraining;
+
+    double falsePositivesUntrainedRate =
+            (double) numFalsePositivesForUntrainedImages
+            / (double) numNonTargetImgsNotForTraining;
+
+    double successRateUntrained =
+            (double) (numTruePositivesForUntrainedImages + numNonTargetImgsNotForTraining - numFalsePositivesForUntrainedImages)
+            / (double) (numTargetImgsNotForTraining + numNonTargetImgsNotForTraining);
+
+
+
     double truePositivesOverallRate
             = (double) numTruePositivesTotal
             / (double) numTargetImgsTotal;
@@ -372,6 +399,14 @@ void TrainClassifierForm::on_btn_testClassifier_clicked()
     double successRate
             = (double)(numTruePositivesTotal+numNonTargetImgsTotal-numFalsePositivesTotal)
             / (double)(numTargetImgsTotal + numNonTargetImgsTotal);
+
+    ui->label_truePositivesRateTrained->setText("True Positives: " + QString::number(truePositivesTrainingRate*100) + "%");
+    ui->label_falsePositivesRateTrained->setText("False Positives: " + QString::number(falsePositivesTrainingRate*100) + "%");
+    ui->label_successRateTrained->setText("Success Rate: " + QString::number(successRateTraining*100) + "%");
+
+    ui->label_truePositivesRateUntrained->setText("True Positives: " + QString::number(truePositivesUntrainedRate*100) + "%");
+    ui->label_falsePositivesRateUntrained->setText("False Positives: " + QString::number(falsePositivesUntrainedRate*100) + "%");
+    ui->label_successRateUntrained->setText("Success Rate: " + QString::number(successRateUntrained*100) + "%");
 
     ui->label_truePositivesTotal->setText("True Positives: " + QString::number(truePositivesOverallRate*100.0) + "%");
     ui->label_falsePositivesTotal->setText("False Positives: " + QString::number(falsePositivesOverallRate*100.0) + "%");

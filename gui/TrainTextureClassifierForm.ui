@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -473,7 +473,7 @@
       <property name="title">
        <string>Results (Testing on Training Tiles)</string>
       </property>
-      <widget class="QLabel" name="label_7">
+      <widget class="QLabel" name="label_truePositivesRateTrained">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -483,10 +483,10 @@
         </rect>
        </property>
        <property name="text">
-        <string>False Positives:</string>
+        <string>True Positives:</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_8">
+      <widget class="QLabel" name="label_falsePositivesRateTrained">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -496,10 +496,10 @@
         </rect>
        </property>
        <property name="text">
-        <string>True Negatives:</string>
+        <string>False Positives:</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_9">
+      <widget class="QLabel" name="label_successRateTrained">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -525,7 +525,7 @@
       <property name="title">
        <string>Results (Testing on Untrained Tiles)</string>
       </property>
-      <widget class="QLabel" name="label_10">
+      <widget class="QLabel" name="label_falsePositivesRateUntrained">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -538,7 +538,7 @@
         <string>False Positives:</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_11">
+      <widget class="QLabel" name="label_truePositivesRateUntrained">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -548,10 +548,10 @@
         </rect>
        </property>
        <property name="text">
-        <string>True Negatives:</string>
+        <string>True Positives:</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_12">
+      <widget class="QLabel" name="label_successRateUntrained">
        <property name="geometry">
         <rect>
          <x>10</x>
