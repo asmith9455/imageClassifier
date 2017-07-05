@@ -12,6 +12,10 @@ RgbHistogram::RgbHistogram(Mat img)
 
 RgbHistogram::RgbHistogram(int _accR[], int _accG[], int _accB[])
 {
+    accR = std::vector<int>(256,0);
+    accG = std::vector<int>(256,0);
+    accB = std::vector<int>(256,0);
+
 	for (int i = 0; i < 256; i++)
 	{
 		accR[i] = _accR[i];

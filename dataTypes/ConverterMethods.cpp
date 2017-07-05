@@ -12,6 +12,59 @@ QString ConverterMethods::getStringFromContour(std::vector<Point2<int>> vec)
     return getStringFromContourVector(tmpVec);
 }
 
+cv::Mat ConverterMethods::getOpenCvTrainingDataFromImageSequences(std::vector<ImageSequence> seqs, int tileWidth, int tileHeight)
+{
+    int numImgs = 0;
+    for(ImageSequence is : seqs)
+        numImgs+=is.getimageCount();
+
+    int pixelsPerImg = tileWidth*tileHeight;
+
+    cv::Mat trainingImages(numImgs, pixelsPerImg, CV_32FC1);
+
+    int ctr = 0;
+    int column = 0;
+    for (ImageSequence is : seqs)
+    {
+        for(size_t i = 0; i < is.getimageCount(); i++)
+        {
+            cv::Mat img = is.imageAt(i);
+            cv::cvtColor(img, img, cv::COLOR_RGB2GRAY);
+            for (int j = 0; j<img.rows; j++)
+                for (int k = 0; k < img.cols; k++)
+                {
+                    //uchar val = img.at<cv::Vec3b>(j,k)[0];
+                    uchar val = img.at<uchar>(j,k);
+                    trainingImages.at<float>(ctr, column) = val;
+                    column++;
+                }
+            ctr++;
+            column = 0;
+        }
+    }
+
+    return trainingImages;
+}
+
+cv::Mat ConverterMethods::get1dMatFrom2dMat(cv::Mat mat2d)
+{
+    cv::Mat arrayFrom2D(1, mat2d.rows*mat2d.cols, CV_32FC1);
+
+    int column = 0;
+
+    cv::cvtColor(mat2d, mat2d, cv::COLOR_RGB2GRAY);
+    for (int j = 0; j<mat2d.rows; j++)
+        for (int k = 0; k < mat2d.cols; k++)
+        {
+            //uchar val = img.at<cv::Vec3b>(j,k)[0];
+            uchar val = mat2d.at<uchar>(j,k);
+            arrayFrom2D.at<float>(0, column) = val;
+            column++;
+        }
+
+    return arrayFrom2D;
+}
+
 QString ConverterMethods::getStringFromContourVector(std::vector<std::vector<Point2<int>>> vec)
 {
     QString tmp = "[";

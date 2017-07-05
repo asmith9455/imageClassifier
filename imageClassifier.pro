@@ -89,7 +89,8 @@ SOURCES += main.cpp\
     classifierAlgorithms/ColourStatisticsAnalyzerRgb.cpp \
     dataTypes/HsvHistogram.cpp \
     classifierAlgorithms/CSA_RGB_WN_v1.cpp \
-    classifierAlgorithms/CSA_RGB_shiftHisto.cpp
+    classifierAlgorithms/CSA_RGB_shiftHisto.cpp \
+    classifierAlgorithms/IMG_SVM.cpp
 
 HEADERS  += mainwindow.h \
     dataTypes/Img.h \
@@ -116,7 +117,8 @@ HEADERS  += mainwindow.h \
     classifierAlgorithms/ColourStatisticsAnalyzerRgb.h \
     dataTypes/HsvHistogram.h \
     classifierAlgorithms/CSA_RGB_WN_v1.h \
-    classifierAlgorithms/CSA_RGB_shiftHisto.h
+    classifierAlgorithms/CSA_RGB_shiftHisto.h \
+    classifierAlgorithms/IMG_SVM.h
 
 FORMS    += mainwindow.ui \
     trainingDataManager/manageTrainingDataForm.ui \

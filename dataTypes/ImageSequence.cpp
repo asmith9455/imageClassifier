@@ -34,6 +34,45 @@ cv::Mat ImageSequence::imageAt(size_t index)
 	return images[index];
 }
 
+size_t ImageSequence::getTileHeight()
+{
+    if (getimageCount() > 0)
+        return images[0].rows;
+}
+
+size_t ImageSequence::getTileWidth()
+{
+    if (getimageCount() > 0)
+        return images[0].cols;
+}
+
+cv::Mat ImageSequence::getOpenCvTrainingData()
+{
+    int pixelsPerImg = getTileHeight()*getTileWidth();
+
+    int numImgs = getimageCount();
+
+    cv::Mat trainingImages(numImgs, pixelsPerImg, CV_32FC1);
+
+    int ctr = 0;
+    int column = 0;
+    for(size_t i = 0; i < getimageCount(); i++)
+    {
+        cv::Mat img = imageAt(i);
+        for (int j = 0; j<img.rows; j++)
+            for (int k = 0; k < img.cols; k++)
+            {
+                uchar val = img.at<cv::Vec3b>(j,k)[0];
+                trainingImages.at<float>(ctr, column) = val;
+                column++;
+            }
+        ctr++;
+        column = 0;
+    }
+
+    return trainingImages;
+}
+
 std::string ImageSequence::imagePathAt(int index)
 {
 	return directory + "\\" + imageFileNames[index];

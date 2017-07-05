@@ -26,11 +26,16 @@ public:
     void addImg(cv::Mat img);
     void addImgs(ImageSequence imseq);
 
+    cv::Mat getOpenCvTrainingData();
+
     void clear();
 
     static std::pair<ImageSequence, ImageSequence>
     getRandomImageSequence
     (ImageSequence seq, double fractionToPreserve, bool setSeed, unsigned int randSeed);
+
+    size_t getTileHeight();
+    size_t getTileWidth();
 
 	static bool imagesAreEqual(cv::Mat im1, cv::Mat im2);
 	static bool imagesSequencesAreEqual(ImageSequence im1, ImageSequence im2);

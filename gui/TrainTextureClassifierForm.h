@@ -13,6 +13,7 @@
 #include <TextureClassifier.h>
 #include <CSA_RGB_shiftHisto.h>
 #include <CSA_RGB_WN_v1.h>
+#include <IMG_SVM.h>
 
 namespace Ui {
 class TrainClassifierForm;

@@ -159,7 +159,7 @@ void CSA_RGB_shiftHisto::generateHistoThresholds()
 
         tmp = averageRgbHistogram.getSumAbsDifferenceG(
                     rgbHistograms[j]);
-        if (tmp < maxThresG)
+        if (tmp > maxThresG)
             maxThresG = tmp;
 
         sumThresG += tmp;
@@ -167,7 +167,7 @@ void CSA_RGB_shiftHisto::generateHistoThresholds()
         tmp = averageRgbHistogram.getSumAbsDifferenceB(
                     rgbHistograms[j]);
 
-        if (tmp < maxThresB)
+        if (tmp > maxThresB)
             maxThresB = tmp;
 
         sumThresB += tmp;
@@ -211,7 +211,7 @@ bool CSA_RGB_shiftHisto::isTarget(Mat img)
     tempG = averageRgbHistogram.getSumAbsDifferenceG(histo);
     tempB = averageRgbHistogram.getSumAbsDifferenceB(histo);
 
-    if (tempR <= maxThresR && tempG <= maxThresG && tempB <= maxThresB)
+    if (tempR <= maxThresR && tempG <= maxThresG && tempB < maxThresB)
     {
         match = true;
     }
@@ -487,14 +487,18 @@ void CSA_RGB_shiftHisto::updateConstantImageSize()
 	{
         rows = imageSequences_target[0].imageAt(0).rows;
         cols = imageSequences_target[0].imageAt(0).cols;
+        for (int i = 0; i < imageSequences_target.size(); i++)
+            for (int j = 0; j < imageSequences_target[i].getimageCount(); j++)
+            {
+                constantBoolH = constantBoolH && imageSequences_target[i].imageAt(j).rows == rows;
+                constantBoolW = constantBoolW && imageSequences_target[i].imageAt(j).cols == cols;
+            }
 	}
-
-    for (int i = 0; i < imageSequences_target.size(); i++)
-        for (int j = 0; j < imageSequences_target[i].getimageCount(); j++)
-		{
-            constantBoolH = constantBoolH && imageSequences_target[i].imageAt(j).rows == rows;
-            constantBoolW = constantBoolW && imageSequences_target[i].imageAt(j).cols == cols;
-		}
+    else if (imageSequence_target.getimageCount() > 0)
+    {
+        rows = imageSequence_target.imageAt(0).rows;
+        cols = imageSequence_target.imageAt(0).cols;
+    }
 
 	if (constantBoolH)
 		tileHeight = rows;

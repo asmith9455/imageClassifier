@@ -380,8 +380,9 @@ void TrainClassifierForm::on_btn_testClassifier_clicked()
 
 void TrainClassifierForm::on_btn_trainFromGeneratedImages_clicked()
 {
-    double safetyFactor = ui->lineEdit_safetyFactor->text().toDouble();
 
+    double safetyFactor = ui->lineEdit_safetyFactor->text().toDouble();
+    usePreClustering = ui->checkBox_usePreClustering->isChecked();
 
     if (usePreClustering && ui->radioButton_useColourStatisticsAnalyzer->isChecked())
     {
@@ -418,6 +419,15 @@ void TrainClassifierForm::on_btn_trainFromGeneratedImages_clicked()
         std::shared_ptr<CSA_RGB_shiftHisto> tmp
                 = std::make_shared<CSA_RGB_shiftHisto>
                 (CSA_RGB_shiftHisto(targetImgsForTrainingNPC, nonTargetImgsForTrainingNPC, safetyFactor2));
+
+        ic = static_pointer_cast<TextureClassifier>(tmp);
+    }
+    else if (!usePreClustering && ui->radioButton_useIMG_SVM->isChecked())
+    {
+
+        std::shared_ptr<IMG_SVM> tmp
+                = std::make_shared<IMG_SVM>
+                (IMG_SVM(targetImgsForTrainingNPC, nonTargetImgsForTrainingNPC));
 
         ic = static_pointer_cast<TextureClassifier>(tmp);
     }
