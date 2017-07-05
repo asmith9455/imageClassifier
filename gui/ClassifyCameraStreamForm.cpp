@@ -101,11 +101,37 @@ void ClassifyCameraStreamForm::classifyAndDisplayImage()
 
     frameTime6 = std::chrono::high_resolution_clock::now();
 
+    int newWidth, newHeight;
+
+    if (ui->label_originalImage->pixmap() != NULL)
+        newWidth = ui->label_originalImage->pixmap()->height();
+    else
+        newWidth = ui->label_originalImage->width();
+
+    if (ui->label_originalImage->pixmap() != NULL)
+        newHeight = ui->label_originalImage->pixmap()->height();
+    else
+        newHeight = ui->label_originalImage->height();
+
+
+
+    cv::resize(imageToClassify, imageToClassify,
+               cv::Size(newWidth, newHeight), cv::INTER_AREA);
+    cv::resize(classImgPP.binaryImageMat, classImgPP.binaryImageMat,
+               cv::Size(newWidth, newHeight), cv::INTER_AREA);
+    cv::resize(classImg.colouredImage, classImg.colouredImage,
+               cv::Size(newWidth, newHeight), cv::INTER_AREA);
+    cv::resize(classImgPP.colouredImage, classImgPP.colouredImage,
+               cv::Size(newWidth, newHeight), cv::INTER_AREA);
+
+
 
     ui->label_originalImage->setPixmap(QPixmap::fromImage(QImage(imageToClassify.data, imageToClassify.cols, imageToClassify.rows, imageToClassify.step, QImage::Format_RGB888)));
     ui->label_classifiedImagePpBinary->setPixmap(QPixmap::fromImage(QImage(classImgPP.binaryImageMat.data, classImgPP.binaryImageMat.cols, classImgPP.binaryImageMat.rows, classImgPP.binaryImageMat.step, QImage::Format_RGB888)));
     ui->label_classifiedImagePpRecoloured->setPixmap(QPixmap::fromImage(QImage(classImgPP.colouredImage.data, classImgPP.colouredImage.cols, classImgPP.colouredImage.rows, classImgPP.colouredImage.step, QImage::Format_RGB888)));
     ui->label_classifiedImageRecoloured->setPixmap(QPixmap::fromImage(QImage(classImg.colouredImage.data, classImg.colouredImage.cols, classImg.colouredImage.rows, classImg.colouredImage.step, QImage::Format_RGB888)));
+
+    //ui->label_originalImage->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     frameTime7 = std::chrono::high_resolution_clock::now();
 

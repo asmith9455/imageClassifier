@@ -24,6 +24,7 @@
 #include <TextureClassifier.h>
 #include <ConverterMethods.h>
 #include <QMessageBox>
+#include <QSizePolicy>
 
 #include <stop_marker_detection.h>
 
