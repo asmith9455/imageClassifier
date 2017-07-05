@@ -1,6 +1,13 @@
 #include "RgbHistogram.h"
 #include <algorithm>
 
+RgbHistogram::RgbHistogram()
+{
+    accR = std::vector<int>(256,0);
+    accG = std::vector<int>(256,0);
+    accB = std::vector<int>(256,0);
+}
+
 RgbHistogram::RgbHistogram(Mat img)
 {
     accR = std::vector<int>(256,0);

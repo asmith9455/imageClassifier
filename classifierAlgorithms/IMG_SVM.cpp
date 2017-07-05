@@ -22,14 +22,13 @@ void IMG_SVM::analyze()
 
     cv::Mat labelsMat(labels);
 
-
     std::vector<ImageSequence> tmp = { imageSequence_target, imageSequence_notTarget};
 
     cv::Mat trainingImages = ConverterMethods::getOpenCvTrainingDataFromImageSequences(tmp, getTileWidth(), getTileHeight());
 
     this->svm = cvSVM::create();
     svm->setType(cvSVM::C_SVC);
-    svm->setKernel(cvSVM::LINEAR);
+    svm->setKernel(cvSVM::INTER);
     svm->setTermCriteria(cv::TermCriteria(cv::TermCriteria::MAX_ITER, 100, 1e-6));
 
     cv::Ptr<cv::ml::TrainData> td =

@@ -28,7 +28,7 @@ public:
 
     int numR, numG, numB;
 
-    RgbHistogram(){}
+    RgbHistogram();
 	RgbHistogram(Mat img);
 	RgbHistogram(int _accR[], int _accG[], int _accB[]);
 	 
