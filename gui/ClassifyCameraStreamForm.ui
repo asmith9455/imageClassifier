@@ -21,7 +21,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
    <item row="0" column="0" colspan="2">
-    <layout class="QGridLayout" name="gridLayout_2" rowstretch="10,0" columnstretch="0,0,0,0,0,0,0,0" rowminimumheight="0,160" columnminimumwidth="0,0,0,0,0,0,0,0">
+    <layout class="QGridLayout" name="gridLayout_2" rowstretch="10,0" columnstretch="0,0,0,0" rowminimumheight="0,160" columnminimumwidth="0,0,0,0">
      <property name="leftMargin">
       <number>10</number>
      </property>
@@ -321,8 +321,8 @@
          <rect>
           <x>10</x>
           <y>20</y>
-          <width>341</width>
-          <height>137</height>
+          <width>350</width>
+          <height>140</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_4" rowstretch="0,0,0,0,0" rowminimumheight="2,1,0,0,0">
@@ -347,14 +347,14 @@
             <string>Classify Image(s) From Disk</string>
            </property>
            <property name="checked">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
          <item row="4" column="0">
           <widget class="QPushButton" name="btn_selectContinuousSaveLocation">
            <property name="enabled">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="text">
             <string>Select Continous Save Location</string>
@@ -413,9 +413,9 @@
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="QCheckBox" name="checkBox_saveOriginalImage_2">
+          <widget class="QCheckBox" name="checkBox_saveOriginalImageContinuously">
            <property name="enabled">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="text">
             <string>Save Continuously</string>
@@ -583,6 +583,5 @@
  <connections/>
  <buttongroups>
   <buttongroup name="buttonGroup_2"/>
-  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>

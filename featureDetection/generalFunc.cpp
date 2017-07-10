@@ -1,4 +1,4 @@
-#include <generalFunc.h>
+#include "generalFunc.h"
 
 // performs a shift right operation on a std:vector and inserts a value into the open position
 std::vector<double> shift_right_insert(std::vector<double> vect, double val)
@@ -8,7 +8,6 @@ std::vector<double> shift_right_insert(std::vector<double> vect, double val)
 	{
 		storage[i + 1] = vect[i];
 	}
-
 	storage[0] = val;
 	return storage;
 }

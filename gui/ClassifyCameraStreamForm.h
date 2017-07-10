@@ -66,6 +66,8 @@ private slots:
 
     void on_btn_saveCurrentImageToDisk_clicked();
 
+    void on_btn_selectContinuousSaveLocation_clicked();
+
 private:
     enum ClassifyMode
     {
@@ -94,6 +96,9 @@ private:
     ColourStatisticsAnalyzerRgb* csa;
     double dif;
     std::chrono::high_resolution_clock::time_point frameTime1, frameTime2, frameTime2b, frameTime3, frameTime4, frameTime5, frameTime6, frameTime7;
+
+    QString continuousFileSavePath;
+    int saveCaptureContinuousCount = 0;
 
     TextureClassifier::ClassifiedImage classImg, classImgPP;
 

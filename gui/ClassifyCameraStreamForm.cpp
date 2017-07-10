@@ -38,6 +38,9 @@ void ClassifyCameraStreamForm::startClassifyFromCameraStream(const char* streamS
     timer = new QTimer(this);
 
     connect(timer, SIGNAL(timeout()), this, SLOT(grabVideoFrame()));
+
+    this->saveCaptureContinuousCount = 0;
+
     timer->start(300);
 
     return;
@@ -46,6 +49,7 @@ void ClassifyCameraStreamForm::startClassifyFromCameraStream(const char* streamS
 
 void ClassifyCameraStreamForm::startClassifyFromDisk()
 {
+    this->saveCaptureContinuousCount = 0;
     currentImageFromDisk = 0;
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(changeImageFromDisk()));
@@ -77,6 +81,17 @@ void ClassifyCameraStreamForm::changeImageFromDisk()
 
 void ClassifyCameraStreamForm::classifyAndDisplayImage()
 {
+
+    if (ui->checkBox_saveOriginalImageContinuously->isChecked())
+    {
+        QString fullpath = continuousFileSavePath + QString::number(saveCaptureContinuousCount) + ".bmp";
+        cv::Mat toWrite;
+        cv::cvtColor(imageToClassify, toWrite, cv::COLOR_BGR2RGB);
+        cv::imwrite(fullpath.toStdString(), toWrite);
+        saveCaptureContinuousCount++;
+    }
+
+
     frameTime2b = std::chrono::high_resolution_clock::now();
 
     classImg = ic->classifyImage(imageToClassify, true, true);
@@ -96,7 +111,7 @@ void ClassifyCameraStreamForm::classifyAndDisplayImage()
 
     if (ui->checkBox_drawBoundingBox->isChecked())
     {
-        stop_marker_detection::detect_rectangleOnBinaryImage(classImgPP.binaryImageMat, imageToClassify);
+        drawMaxRectDist(classImgPP.binaryImageMat, imageToClassify, 5.08, 96.11, ic->getTileHeight());
     }
 
     cv::cvtColor(classImgPP.binaryImageMat, classImgPP.binaryImageMat, CV_GRAY2RGB);
@@ -115,23 +130,24 @@ void ClassifyCameraStreamForm::classifyAndDisplayImage()
     else
         newHeight = ui->label_originalImage->height();
 
+    cv::Mat ogImg, ppBinImg, colImg, ppColImg;
 
 
-    cv::resize(imageToClassify, imageToClassify,
+    cv::resize(imageToClassify, ogImg,
                cv::Size(newWidth, newHeight), cv::INTER_AREA);
-    cv::resize(classImgPP.binaryImageMat, classImgPP.binaryImageMat,
+    cv::resize(classImgPP.binaryImageMat, ppBinImg,
                cv::Size(newWidth, newHeight), cv::INTER_AREA);
-    cv::resize(classImg.colouredImage, classImg.colouredImage,
+    cv::resize(classImg.colouredImage, colImg,
                cv::Size(newWidth, newHeight), cv::INTER_AREA);
-    cv::resize(classImgPP.colouredImage, classImgPP.colouredImage,
+    cv::resize(classImgPP.colouredImage, ppColImg,
                cv::Size(newWidth, newHeight), cv::INTER_AREA);
 
 
 
-    ui->label_originalImage->setPixmap(QPixmap::fromImage(QImage(imageToClassify.data, imageToClassify.cols, imageToClassify.rows, imageToClassify.step, QImage::Format_RGB888)));
-    ui->label_classifiedImagePpBinary->setPixmap(QPixmap::fromImage(QImage(classImgPP.binaryImageMat.data, classImgPP.binaryImageMat.cols, classImgPP.binaryImageMat.rows, classImgPP.binaryImageMat.step, QImage::Format_RGB888)));
-    ui->label_classifiedImagePpRecoloured->setPixmap(QPixmap::fromImage(QImage(classImgPP.colouredImage.data, classImgPP.colouredImage.cols, classImgPP.colouredImage.rows, classImgPP.colouredImage.step, QImage::Format_RGB888)));
-    ui->label_classifiedImageRecoloured->setPixmap(QPixmap::fromImage(QImage(classImg.colouredImage.data, classImg.colouredImage.cols, classImg.colouredImage.rows, classImg.colouredImage.step, QImage::Format_RGB888)));
+    ui->label_originalImage->setPixmap(QPixmap::fromImage(QImage(ogImg.data, ogImg.cols, ogImg.rows, ogImg.step, QImage::Format_RGB888)));
+    ui->label_classifiedImagePpBinary->setPixmap(QPixmap::fromImage(QImage(ppBinImg.data, ppBinImg.cols, ppBinImg.rows, ppBinImg.step, QImage::Format_RGB888)));
+    ui->label_classifiedImagePpRecoloured->setPixmap(QPixmap::fromImage(QImage(ppColImg.data, ppColImg.cols, ppColImg.rows, ppColImg.step, QImage::Format_RGB888)));
+    ui->label_classifiedImageRecoloured->setPixmap(QPixmap::fromImage(QImage(colImg.data, colImg.cols, colImg.rows, colImg.step, QImage::Format_RGB888)));
 
     //ui->label_originalImage->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
@@ -154,6 +170,10 @@ void ClassifyCameraStreamForm::grabVideoFrame()
     frameTime1 = std::chrono::high_resolution_clock::now();
 
     cap >> imageToClassify; // get a new frame from camera
+
+    cv::cvtColor(imageToClassify, imageToClassify, cv::COLOR_BGR2RGB);
+
+
 
     //cv::cvtColor(imageToClassify, imageToClassify, CV_BGR2RGB);
 
@@ -307,4 +327,13 @@ void ClassifyCameraStreamForm::on_btn_saveCurrentImageToDisk_clicked()
 void ClassifyCameraStreamForm::setImageClassifier(std::shared_ptr<TextureClassifier> _ic)
 {
     this->ic = _ic;
+}
+
+void ClassifyCameraStreamForm::on_btn_selectContinuousSaveLocation_clicked()
+{
+    QString savePath = QFileDialog::getSaveFileName(this, tr("Select the save location base file name."),
+                               "",
+                               tr("(*.*)"));
+
+    continuousFileSavePath = savePath + "-original_image";
 }

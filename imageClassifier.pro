@@ -62,7 +62,7 @@ gcc*{
 DEFINES+=Linux=1
 DEFINES+=TX1=1      #comment out if not building on the TX1
 
-LIBS += -L/usr/lib -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc -lopencv_videoio -lopencv_features2d
+LIBS += -L/usr/lib -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc -lopencv_videoio -lopencv_features2d -lopencv_ml
 LIBS += -L/usr/lib/aarch64-linux-gnu
 LIBS += -lsqlite3 -ltinyxml2
 }
@@ -73,7 +73,6 @@ SOURCES += main.cpp\
     dataTypes/Img.cpp \
     dataTypes/RgbHistogram.cpp \
     system/SystemCall.cpp \
-    testing/testing.cpp \
     trainingDataManager/manageTrainingDataForm.cpp \
     gui/ClickableLabel.cpp \
     gui/ClassifyCameraStreamForm.cpp \
@@ -84,20 +83,19 @@ SOURCES += main.cpp\
     dataTypes/ConverterMethods.cpp \
     dataTypes/ImageStatistics.cpp \
     gui/TestRosCommunicationForm.cpp \
-    featureDetection/stop_marker_detection.cpp \
-    featureDetection/generalFunc.cpp \
     classifierAlgorithms/ColourStatisticsAnalyzerRgb.cpp \
     dataTypes/HsvHistogram.cpp \
     classifierAlgorithms/CSA_RGB_WN_v1.cpp \
     classifierAlgorithms/CSA_RGB_shiftHisto.cpp \
     classifierAlgorithms/IMG_SVM.cpp \
-    classifierAlgorithms/CSA_RGB_WN_v2.cpp
+    classifierAlgorithms/CSA_RGB_WN_v2.cpp \
+    featureDetection/generalFunc.cpp \
+    featureDetection/stop_marker_detection.cpp
 
 HEADERS  += mainwindow.h \
     dataTypes/Img.h \
     dataTypes/RgbHistogram.h \
     system/SystemCall.h \
-    testing/testing.h \
     dataTypes/Point2.h \
     trainingDataManager/manageTrainingDataForm.h \
     gui/ClickableLabel.h \
@@ -113,14 +111,14 @@ HEADERS  += mainwindow.h \
     dataTypes/ConverterMethods.h \
     dataTypes/ImageStatistics.h \
     gui/TestRosCommunicationForm.h \
-    featureDetection/stop_marker_detection.h \
-    featureDetection/generalFunc.h \
     classifierAlgorithms/ColourStatisticsAnalyzerRgb.h \
     dataTypes/HsvHistogram.h \
     classifierAlgorithms/CSA_RGB_WN_v1.h \
     classifierAlgorithms/CSA_RGB_shiftHisto.h \
     classifierAlgorithms/IMG_SVM.h \
-    classifierAlgorithms/CSA_RGB_WN_v2.h
+    classifierAlgorithms/CSA_RGB_WN_v2.h \
+    featureDetection/generalFunc.h \
+    featureDetection/stop_marker_detection.h
 
 FORMS    += mainwindow.ui \
     trainingDataManager/manageTrainingDataForm.ui \
