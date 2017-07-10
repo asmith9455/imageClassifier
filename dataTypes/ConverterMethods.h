@@ -25,8 +25,10 @@ public:
     static Contour<int> getContourClassFromString(QString qstr);
     static std::vector<Contour<int>> getContourClassVectorFromString(QString qstr);
 
-    static cv::Mat getOpenCvTrainingDataFromImageSequences(std::vector<ImageSequence> seqs, int tileWidth, int tileHeight);
-    static cv::Mat get1dMatFrom2dMat(cv::Mat mat2d);
+    static cv::Mat getOpenCvGreyMatFromImageSequences(std::vector<ImageSequence> seqs, int tileWidth, int tileHeight);
+    static cv::Mat getOpenCvXyzMatFromImageSequences(std::vector<ImageSequence> seqs, int tileWidth, int tileHeight);
+    static cv::Mat get1dMatGreyFrom2dMat(cv::Mat mat2d);
+    static cv::Mat get1dMatXyzFrom2dMat(cv::Mat mat2d);
 
     template<typename T>
     static ImageSequence getImageSequenceFromSegmentedRegion(

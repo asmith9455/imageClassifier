@@ -8,6 +8,26 @@ TrainClassifierForm::TrainClassifierForm(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->comboBox_img_svm_grey_rgb->addItem("RGB");
+    ui->comboBox_img_svm_grey_rgb->addItem("GREY");
+
+    ui->comboBox_img_svm_svmType->addItem("C_SVC");
+    ui->comboBox_img_svm_svmType->addItem("NU_SVC");
+    ui->comboBox_img_svm_svmType->addItem("EPS_SVR");
+    ui->comboBox_img_svm_svmType->addItem("NU_SVR");
+
+    ui->comboBox_hog_svm_svmType->addItem("C_SVC");
+    ui->comboBox_hog_svm_svmType->addItem("NU_SVC");
+    ui->comboBox_hog_svm_svmType->addItem("EPS_SVR");
+    ui->comboBox_hog_svm_svmType->addItem("NU_SVR");
+
+    ui->comboBox_hog_svm_kernelType->addItem("LINEAR");
+    ui->comboBox_hog_svm_kernelType->addItem("POLY");
+    ui->comboBox_hog_svm_kernelType->addItem("RBF");
+    ui->comboBox_hog_svm_kernelType->addItem("SIGMOID");
+    ui->comboBox_hog_svm_kernelType->addItem("CHI2");
+    ui->comboBox_hog_svm_kernelType->addItem("INTER");
+
     dbPath = QFileDialog::getOpenFileName(this, tr("Select Image Database"),
                                "C:/",
                                tr("(*.sqlite)"));
@@ -459,10 +479,16 @@ void TrainClassifierForm::on_btn_trainFromGeneratedImages_clicked()
     }
     else if (!usePreClustering && ui->radioButton_useIMG_SVM->isChecked())
     {
+        IMG_SVM::ColourMode cmode;
+        if (ui->comboBox_img_svm_grey_rgb->currentText() == "GREY")
+            cmode = IMG_SVM::ColourMode::GREY;
+        else if (ui->comboBox_img_svm_grey_rgb->currentText() == "RGB")
+            cmode = IMG_SVM::ColourMode::RGB;
+
 
         std::shared_ptr<IMG_SVM> tmp
                 = std::make_shared<IMG_SVM>
-                (IMG_SVM(targetImgsForTrainingNPC, nonTargetImgsForTrainingNPC));
+                (IMG_SVM(targetImgsForTrainingNPC, nonTargetImgsForTrainingNPC, cmode));
 
         ic = static_pointer_cast<TextureClassifier>(tmp);
     }
@@ -495,4 +521,13 @@ void TrainClassifierForm::on_btn_trainFromFile_clicked()
         std::cerr << e.what() << std::endl;
     }
 
+}
+
+void TrainClassifierForm::on_btn_openImageClassifier_clicked()
+{
+
+    std::shared_ptr<ClassifyCameraStreamForm> tmp = std::make_shared<ClassifyCameraStreamForm>();
+    tmp->setImageClassifier(ic);
+    classifyForms.push_back(tmp);
+    tmp->show();
 }

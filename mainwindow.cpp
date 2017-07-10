@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "manageTrainingDataForm.h"
+
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -17,24 +17,28 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_btn_manageTrainingImages_clicked()
 {
-    manageTrainingDataForm w;
-    w.exec();
+    std::shared_ptr<manageTrainingDataForm> tmp = std::make_shared<manageTrainingDataForm>();
+    manageTrainingDataForms.push_back(tmp);
+    tmp->show();
 }
 
 void MainWindow::on_btn_classifyCameraStream_clicked()
 {
-    ClassifyCameraStreamForm ccsf;
-    ccsf.exec();
+    std::shared_ptr<ClassifyCameraStreamForm> tmp = std::make_shared<ClassifyCameraStreamForm>();
+    classifyCameraStreamForms.push_back(tmp);
+    tmp->show();
 }
 
 void MainWindow::on_btn_trainTextureClassifier_clicked()
 {
-    TrainClassifierForm tcf;
-    tcf.exec();
+    std::shared_ptr<TrainClassifierForm> tmp = std::make_shared<TrainClassifierForm>();
+    trainClassifierForms.push_back(tmp);
+    tmp->show();
 }
 
 void MainWindow::on_pushButton_clicked()
 {
-    TestRosCommunicationForm trcf;
-    trcf.exec();
+    std::shared_ptr<TestRosCommunicationForm> tmp = std::make_shared<TestRosCommunicationForm>();
+    rosCommForms.push_back(tmp);
+    tmp->show();
 }

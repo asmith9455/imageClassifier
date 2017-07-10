@@ -6,6 +6,7 @@
 #include <ClassifyCameraStreamForm.h>
 #include <TrainTextureClassifierForm.h>
 #include <TestRosCommunicationForm.h>
+#include <manageTrainingDataForm.h>
 
 namespace Ui {
 class MainWindow;
@@ -30,6 +31,11 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+
+    std::vector<std::shared_ptr<manageTrainingDataForm>> manageTrainingDataForms;
+    std::vector<std::shared_ptr<ClassifyCameraStreamForm>> classifyCameraStreamForms;
+    std::vector<std::shared_ptr<TrainClassifierForm>> trainClassifierForms;
+    std::vector<std::shared_ptr<TestRosCommunicationForm>> rosCommForms;
 };
 
 #endif // MAINWINDOW_H

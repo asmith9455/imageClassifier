@@ -958,11 +958,7 @@ void manageTrainingDataForm::on_tableView_images_doubleClicked(const QModelIndex
     QByteArray bytes = index.sibling(index.row(), 1).data().toByteArray();
     int capDevice = index.sibling(index.row(), 2).data().toInt();
 
-
-
     cv::Mat img = CvQt::qbytearray_2_mat(bytes);
-
-    cv::Mat img_bgr;
 
 
     ui->label_status->setText("Opened image with id "+QString::number(id)+" from the images table in " + database.databaseName());

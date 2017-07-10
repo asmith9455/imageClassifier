@@ -13,12 +13,19 @@
 //does not implement pre-clustering - assumed minimal benefit based on past experience
 class IMG_SVM : public TextureClassifier
 {
+public:
+    enum ColourMode{
+        GREY,
+        RGB
+    };
 private:
     typedef cv::ml::SVM cvSVM;
 
 	int tileWidth, tileHeight;
 
     cv::Ptr<cv::ml::SVM> svm;
+
+    ColourMode colourMode = ColourMode::GREY;
 
 public:
 
@@ -31,7 +38,9 @@ public:
 
     IMG_SVM(
             ImageSequence _imageSequence_target,
-            ImageSequence _imageSequence_notTarget);
+            ImageSequence _imageSequence_notTarget,
+            ColourMode _colourMode
+            );
 
 
 

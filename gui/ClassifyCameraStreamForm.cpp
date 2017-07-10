@@ -67,7 +67,7 @@ void ClassifyCameraStreamForm::changeImageFromDisk()
 
         //the read image is in BGR - all of the functions work with bgr images as is the standard with opencv
 
-        //cv::cvtColor(imageToClassify, imageToClassify, CV_BGR2RGB);
+        cv::cvtColor(imageToClassify, imageToClassify, CV_BGR2RGB);
 
         currentImageFromDisk++;
         frameTime2 = std::chrono::high_resolution_clock::now();
@@ -87,9 +87,9 @@ void ClassifyCameraStreamForm::classifyAndDisplayImage()
 
     frameTime4 = std::chrono::high_resolution_clock::now();
 
-    cv::cvtColor(imageToClassify, imageToClassify, CV_BGR2RGB);
-    cv::cvtColor(classImg.colouredImage, classImg.colouredImage, CV_BGR2RGB);
-    cv::cvtColor(classImgPP.colouredImage, classImgPP.colouredImage, CV_BGR2RGB);
+    //cv::cvtColor(imageToClassify, imageToClassify, CV_BGR2RGB);
+    //cv::cvtColor(classImg.colouredImage, classImg.colouredImage, CV_BGR2RGB);
+    //cv::cvtColor(classImgPP.colouredImage, classImgPP.colouredImage, CV_BGR2RGB);
 
 
     frameTime5 = std::chrono::high_resolution_clock::now();
@@ -302,4 +302,9 @@ void ClassifyCameraStreamForm::on_btn_saveCurrentImageToDisk_clicked()
         cv::cvtColor(this->classImgPP.colouredImage, img, cv::COLOR_BGR2RGB);
         cv::imwrite(savePathPpRecoloured, img);
     }
+}
+
+void ClassifyCameraStreamForm::setImageClassifier(std::shared_ptr<TextureClassifier> _ic)
+{
+    this->ic = _ic;
 }

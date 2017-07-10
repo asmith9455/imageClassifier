@@ -4,8 +4,10 @@ IMG_SVM::IMG_SVM(){}
 
 IMG_SVM::IMG_SVM(
         ImageSequence _imageSequence_target,
-        ImageSequence _imageSequence_notTarget) : TextureClassifier(_imageSequence_target, _imageSequence_notTarget)
+        ImageSequence _imageSequence_notTarget,
+        ColourMode _colourMode) : TextureClassifier(_imageSequence_target, _imageSequence_notTarget)
 {
+    colourMode = _colourMode;
 }
 
 void IMG_SVM::analyze()
@@ -24,12 +26,19 @@ void IMG_SVM::analyze()
 
     std::vector<ImageSequence> tmp = { imageSequence_target, imageSequence_notTarget};
 
-    cv::Mat trainingImages = ConverterMethods::getOpenCvTrainingDataFromImageSequences(tmp, getTileWidth(), getTileHeight());
+    cv::Mat trainingImages;
+
+    if (colourMode == ColourMode::GREY)
+        trainingImages = ConverterMethods::getOpenCvGreyMatFromImageSequences(tmp, getTileWidth(), getTileHeight());
+    else if (colourMode == ColourMode::RGB)
+        trainingImages = ConverterMethods::getOpenCvXyzMatFromImageSequences(tmp, getTileWidth(), getTileHeight());
+    else
+        throw std::runtime_error("unrecognized colour mode");
 
     this->svm = cvSVM::create();
     svm->setType(cvSVM::C_SVC);
-    svm->setKernel(cvSVM::INTER);
-    svm->setTermCriteria(cv::TermCriteria(cv::TermCriteria::MAX_ITER, 100, 1e-6));
+    svm->setKernel(cvSVM::RBF);
+    svm->setTermCriteria(cv::TermCriteria(cv::TermCriteria::MAX_ITER, 10000, 1e-6));
 
     cv::Ptr<cv::ml::TrainData> td =
             cv::ml::TrainData::create(trainingImages, cv::ml::ROW_SAMPLE, labelsMat);
@@ -39,7 +48,15 @@ void IMG_SVM::analyze()
 
 bool IMG_SVM::isTarget(cv::Mat img)
 {
-    cv::Mat mat1d = ConverterMethods::get1dMatFrom2dMat(img);
+    cv::Mat mat1d;
+
+    if (colourMode == ColourMode::GREY)
+        mat1d = ConverterMethods::get1dMatGreyFrom2dMat(img);
+    else if (colourMode == ColourMode::RGB)
+        mat1d = ConverterMethods::get1dMatXyzFrom2dMat(img);
+    else
+        throw std::runtime_error("unrecognized colour mode");
+
     float result = svm->predict(mat1d);
 
     if (result == 1.0)

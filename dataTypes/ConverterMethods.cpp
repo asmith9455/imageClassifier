@@ -12,7 +12,7 @@ QString ConverterMethods::getStringFromContour(std::vector<Point2<int>> vec)
     return getStringFromContourVector(tmpVec);
 }
 
-cv::Mat ConverterMethods::getOpenCvTrainingDataFromImageSequences(std::vector<ImageSequence> seqs, int tileWidth, int tileHeight)
+cv::Mat ConverterMethods::getOpenCvGreyMatFromImageSequences(std::vector<ImageSequence> seqs, int tileWidth, int tileHeight)
 {
     int numImgs = 0;
     for(ImageSequence is : seqs)
@@ -46,7 +46,42 @@ cv::Mat ConverterMethods::getOpenCvTrainingDataFromImageSequences(std::vector<Im
     return trainingImages;
 }
 
-cv::Mat ConverterMethods::get1dMatFrom2dMat(cv::Mat mat2d)
+cv::Mat ConverterMethods::getOpenCvXyzMatFromImageSequences(std::vector<ImageSequence> seqs, int tileWidth, int tileHeight)
+{
+    int numImgs = 0;
+    for(ImageSequence is : seqs)
+        numImgs+=is.getimageCount();
+
+    int pixelsPerImg = tileWidth*tileHeight;
+
+    cv::Mat trainingImages(numImgs, pixelsPerImg*3, CV_32FC1);
+
+    int ctr = 0;
+    int column = 0;
+    for (ImageSequence is : seqs)
+    {
+        for(size_t i = 0; i < is.getimageCount(); i++)
+        {
+            cv::Mat img = is.imageAt(i);
+            for (int j = 0; j<img.rows; j++)
+                for (int k = 0; k < img.cols; k++)
+                {
+                    //uchar val = img.at<cv::Vec3b>(j,k)[0];
+                    cv::Vec3b val = img.at<cv::Vec3b>(j,k);
+                    trainingImages.at<float>(ctr, column*3) = val[0];
+                    trainingImages.at<float>(ctr, column*3+1) = val[1];
+                    trainingImages.at<float>(ctr, column*3+2) = val[2];
+                    column++;
+                }
+            ctr++;
+            column = 0;
+        }
+    }
+
+    return trainingImages;
+}
+
+cv::Mat ConverterMethods::get1dMatGreyFrom2dMat(cv::Mat mat2d)
 {
     cv::Mat arrayFrom2D(1, mat2d.rows*mat2d.cols, CV_32FC1);
 
@@ -59,6 +94,26 @@ cv::Mat ConverterMethods::get1dMatFrom2dMat(cv::Mat mat2d)
             //uchar val = img.at<cv::Vec3b>(j,k)[0];
             uchar val = mat2d.at<uchar>(j,k);
             arrayFrom2D.at<float>(0, column) = val;
+            column++;
+        }
+
+    return arrayFrom2D;
+}
+
+cv::Mat ConverterMethods::get1dMatXyzFrom2dMat(cv::Mat mat2d)
+{
+    cv::Mat arrayFrom2D(1, mat2d.rows*mat2d.cols*3, CV_32FC1);
+
+    int column = 0;
+
+    for (int j = 0; j<mat2d.rows; j++)
+        for (int k = 0; k < mat2d.cols; k++)
+        {
+            //uchar val = img.at<cv::Vec3b>(j,k)[0];
+            cv::Vec3b val = mat2d.at<cv::Vec3b>(j,k);
+            arrayFrom2D.at<float>(0, column*3) = val[0];
+            arrayFrom2D.at<float>(0, column*3+1) = val[1];
+             arrayFrom2D.at<float>(0, column*3+2) = val[2];
             column++;
         }
 

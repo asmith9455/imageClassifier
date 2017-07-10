@@ -41,6 +41,8 @@ public:
     explicit ClassifyCameraStreamForm(QWidget *parent = 0);
     ~ClassifyCameraStreamForm();
 
+    void setImageClassifier(std::shared_ptr<TextureClassifier> ic);
+
 signals:
     void timeout();
 

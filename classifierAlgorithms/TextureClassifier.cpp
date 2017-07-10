@@ -44,8 +44,8 @@ TextureClassifier::ClassifiedImage TextureClassifier::classifyImage(
 		{
 
             cv::Mat subImg = img(
-                        cv::Range(yPos, yPos + tileHeight - 1),
-                        cv::Range(xPos, xPos + tileWidth - 1));
+                        cv::Range(yPos, yPos + tileHeight),
+                        cv::Range(xPos, xPos + tileWidth));
 
 			//imshow("img", img);
 			//waitKey(0);
@@ -66,7 +66,7 @@ TextureClassifier::ClassifiedImage TextureClassifier::classifyImage(
 				else
 				{
 					subImg.forEach<cv::Point3_<uint8_t>>([&](cv::Point3_<uint8_t>& pixel, const int position[]) -> void {
-                        pixel.z = 255;	//set to red
+                        pixel.x = 255;	//set to red
 					});
 				}
 			}
@@ -146,7 +146,7 @@ TextureClassifier::ClassifiedImage TextureClassifier::postProcessImage(TextureCl
 		while (true)
 		{
 
-			cv::Mat subImg = cImg.colouredImage(cv::Range(yPos, yPos + tileHeight - 1), cv::Range(xPos, xPos + tileWidth - 1));
+            cv::Mat subImg = cImg.colouredImage(cv::Range(yPos, yPos + tileHeight), cv::Range(xPos, xPos + tileWidth));
 
 			bool binImgTrue = cImg.binaryImageMat.at<uchar>(bMapY, bMapX) == 255;
 
@@ -159,7 +159,7 @@ TextureClassifier::ClassifiedImage TextureClassifier::postProcessImage(TextureCl
 			else
 			{
 				subImg.forEach<cv::Point3_<uint8_t>>([&](cv::Point3_<uint8_t>& pixel, const int position[]) -> void {
-                    pixel.z = 255;	//set to red
+                    pixel.x = 255;	//set to red
 				});
 			}
 

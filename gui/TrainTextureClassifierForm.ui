@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -351,7 +351,7 @@
        <x>700</x>
        <y>19</y>
        <width>271</width>
-       <height>121</height>
+       <height>151</height>
       </rect>
      </property>
      <property name="title">
@@ -361,7 +361,7 @@
       <property name="geometry">
        <rect>
         <x>150</x>
-        <y>90</y>
+        <y>120</y>
         <width>111</width>
         <height>21</height>
        </rect>
@@ -396,12 +396,25 @@
        <string>Train From File</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="btn_openImageClassifier">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>90</y>
+        <width>111</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Open Image Classifier</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="geometry">
       <rect>
        <x>700</x>
-       <y>140</y>
+       <y>180</y>
        <width>271</width>
        <height>321</height>
       </rect>
@@ -797,6 +810,78 @@
       <attribute name="buttonGroup">
        <string notr="true">buttonGroup</string>
       </attribute>
+     </widget>
+     <widget class="QComboBox" name="comboBox_img_svm_grey_rgb">
+      <property name="geometry">
+       <rect>
+        <x>158</x>
+        <y>20</y>
+        <width>81</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comboBox_img_svm_svmType">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>50</y>
+        <width>81</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_12">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>110</y>
+       <width>261</width>
+       <height>91</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>HOG_SVM</string>
+     </property>
+     <widget class="QRadioButton" name="radioButton_useIMG_SVM_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>101</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Use HOG_SVM</string>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comboBox_hog_svm_svmType">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>20</y>
+        <width>81</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comboBox_hog_svm_kernelType">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>50</y>
+        <width>81</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="currentText">
+       <string/>
+      </property>
      </widget>
     </widget>
    </widget>
